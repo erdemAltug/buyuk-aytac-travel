@@ -1,0 +1,9 @@
+{
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": ["*.mongodb.js"],
+  "rules": {
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
+} 
