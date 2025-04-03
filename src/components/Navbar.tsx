@@ -51,7 +51,7 @@ export default function Navbar() {
               <div className="relative h-16 w-16 mr-2">
                 <Image
                   src="/images/LOGO.png"
-                  alt="Büyük Aytaç Seyahat"
+                  alt="Büyük Aytaç Travel"
                   fill
                   className="object-contain object-center brightness-105"
                   priority

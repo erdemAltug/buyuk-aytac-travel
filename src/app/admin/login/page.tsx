@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -44,7 +45,8 @@ export default function AdminLogin() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Büyük Aytaç Seyahat</h1>
+          <Image src="/images/LOGO.png" alt="Logo" width={100} height={100} className="mx-auto" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Büyük Aytaç Travel</h1>
           <p className="text-gray-600">Yönetici Girişi</p>
         </div>
 

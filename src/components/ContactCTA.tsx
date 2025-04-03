@@ -6,10 +6,10 @@ export default function ContactCTA() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Hayalinizdeki Tatil İçin Bize Ulaşın
+            Hayalinizdeki Tatil İçin İletişime Geçin
           </h2>
-          <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-            Büyük Aytaç Seyahat ile unutulmaz bir tatil deneyimi yaşamak için hemen iletişime geçin.
+          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            Büyük Aytaç Travel ile unutulmaz bir tatil deneyimi yaşamak için hemen iletişime geçin.
             Size özel tur seçenekleri ve uygun fiyat garantisi sunuyoruz.
           </p>
           <Link 

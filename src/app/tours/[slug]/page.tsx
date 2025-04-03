@@ -139,47 +139,6 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
     );
   }
 
-  // Örnek program (gerçekte API'den gelecek)
-  const sampleProgram = [
-    {
-      day: "11 Nisan 2025, Cuma - 1. Gün",
-      title: "Hareket Günü",
-      description: "Siz değerli misafirlerimizi firmamızın belirlediği noktalardan alarak yola çıkıyoruz."
-    },
-    {
-      day: "12 Nisan 2025, Cumartesi - 2. Gün",
-      title: "Kapadokya Keşif Günü",
-      description: "Sabah erken saatlerde alacağımız kahvaltının ardından (ekstra) Hava koşullarına göre balonlar kalktığı takdirde sabah erken saatlerde Kapadokya'nın mistik atmosferiyle tanışmak üzere Aşk Vadisi'nde gerçekleşecek muhteşem bir balon seyrine katılıyoruz. (ekstra)\n\nKapadokya'nın mistik atmosferine adım atmak üzere Göreme Açık Hava Müzesi'ne gidiyoruz. Burada binlerce yıllık tarihi ve benzersiz kaya kiliselerini keşfederek bölgenin büyüleyici geçmişine tanıklık edeceksiniz. Daha sonra adrenalini yüksek bir macera için dileyen misafirlerimizle ATV'lere binip, Kapadokya'nın eşsiz doğasında unutulmaz bir gezintiye çıkabilir veya Kapadokya'nın ismini aldığı güzel atlarıyla huzurlu bir vadi gezisi yapabilirsiniz. (ekstra)\n\nSonrasında Kızılırmak üzerine kurulmuş sallanan köprüden yürüyüş yaparak Avanos'ta çömlek atölyelerinde ustaların elinden çıkan geleneksel çömlekleri inceleyerek bölgenin zanaatkarlık geleneğini yakından görüyoruz. Bölgenin eşsiz Onyx taşlarını inceleyip alışveriş yapma fırsatı bulacağımız Onyx atölyesi olacak.\n\nSonrasında büyüleyici kaya oluşumlarının yer aldığı Hayal Vadisi'nde keyifli bir yürüyüş yapıyoruz ve eşsiz doğanın büyüsüne kapılıyoruz. Hayal vadisinden sonra Ürgüp'e doğru yol alırken, panoramik olarak bölgenin sembolü Üç Güzelleri görüyor ve bölgenin ünlü şarap mahzenlerini ziyaret etme fırsatı yakalıyoruz. Burada Kapadokya'ya özgü üzümlerden yapılan şaraplar hakkında bilgi alma, şarap alışverişi yapma şansı yakalıyoruz.\n\nArdından, Kapadokya'nın doğasıyla bütünleşmiş Güvercinlik Vadisinde eşsiz fotoğraflar çekme fırsatı yakalıyoruz.\n\nGünün sonunda, Ortahisar kalesinin görkemli manzarasını süsleyen eşsiz eski Kapadokya evleri eşliğinde kahve molası vererek, otelimize doğru harekete geçiyoruz. Akşam yemeği ve konaklama otelimizde. (Dileyen misafirlerimiz ekstra olarak düzenlenecek Türk Gecesine katılabilir.)"
-    },
-    {
-      day: "13 Nisan 2025, Pazar - 3. Gün",
-      title: "Yeraltı Şehirleri ve İnanç Merkezleri",
-      description: "Otelde alınan kahvaltının ardından Uçhisar'da bulunan eski yerleşim alanını ziyaret ederek, Derinkuyu Yeraltı Şehri'ni keşfetmek için derinlere iniyoruz, tarihin gizemli koridorlarında zaman yolculuğu yapıyoruz. Burada vereceğimiz vaktin ardından volkanik bir oluşum olan Narlıgöl'ün etkileyici manzarası eşliğinde mola veriyoruz. Ardından Ihlara Vadisi'nde bulunan Cam Teras'tan muhteşem bir manzara eşliğinde dinlenme molası veriyoruz.\n\nSonrasında 13.yy'da tek bir kayadan oyularak yapılmış olan döneminin en büyük eğitim merkezi olan Selime Katedrali'ni ziyaret ediyoruz, bu benzersiz kaya kilisesinin içindeki tarihi freskleri ve mimari detayları keşfetme fırsatı buluyoruz. Programımızın bitişiyle birlikte geri dönüş yolumuza devam ediyor, bir sonraki Büyük Aytaç Travel organizasyonunda görüşmek dileğiyle vedalaşıyoruz."
-    }
-  ];
-
-  // Dahil olan hizmetler (gerçekte API'den gelecek)
-  const includedServices = [
-    "Profesyonel rehberlik hizmeti",
-    "2 gece otel konaklaması (3* veya butik otel)",
-    "Programda belirtilen tüm geziler ve transferler",
-    "Otelde 2 sabah kahvaltısı ve 1 akşam yemeği",
-    "Seyahat sigortası",
-    "Müze ve ören yeri giriş ücretleri"
-  ];
-
-  // Dahil olmayan hizmetler (gerçekte API'den gelecek)
-  const excludedServices = [
-    "Programda 'ekstra' olarak belirtilen tüm aktiviteler",
-    "Kapadokya balon turu (150-180€/kişi)",
-    "ATV turu (35-40€/kişi)",
-    "At turu (25-30€/kişi)",
-    "Türk Gecesi (40-50€/kişi)",
-    "Kişisel harcamalar",
-    "Öğle yemekleri",
-    "Programda belirtilmeyen öğünler"
-  ];
-
   return (
     <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -281,12 +240,16 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tur Programı</h2>
                 <div className="space-y-6">
-                  {sampleProgram.map((day, index) => (
-                    <div key={index} className="border-l-4 border-blue-400 pl-4">
-                      <h3 className="text-lg font-medium text-gray-900">{day.day}: {day.title}</h3>
-                      <p className="mt-1 text-gray-600">{day.description}</p>
-                    </div>
-                  ))}
+                  {tour.program && tour.program.length > 0 ? (
+                    tour.program.map((day, index) => (
+                      <div key={index} className="border-l-4 border-blue-400 pl-4">
+                        <h3 className="text-lg font-medium text-gray-900">{day.day}: {day.title}</h3>
+                        <p className="mt-1 text-gray-600 whitespace-pre-line">{day.description}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-600">Program bilgisi henüz eklenmemiştir.</p>
+                  )}
                 </div>
                 <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
                   <p className="text-sm text-yellow-800">
@@ -300,18 +263,26 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
             {activeTab === 'services' && (
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olan Hizmetler</h2>
-                <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-8">
-                  {includedServices.map((service, index) => (
-                    <li key={index}>{service}</li>
-                  ))}
-                </ul>
+                {tour.includedServices && tour.includedServices.length > 0 ? (
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-8">
+                    {tour.includedServices.map((service, index) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 mb-8">Dahil hizmetler bilgisi henüz eklenmemiştir.</p>
+                )}
                 
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olmayan Hizmetler</h2>
-                <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                  {excludedServices.map((service, index) => (
-                    <li key={index}>{service}</li>
-                  ))}
-                </ul>
+                {tour.excludedServices && tour.excludedServices.length > 0 ? (
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {tour.excludedServices.map((service, index) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600">Dahil olmayan hizmetler bilgisi henüz eklenmemiştir.</p>
+                )}
               </div>
             )}
           </div>

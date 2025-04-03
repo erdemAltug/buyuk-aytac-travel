@@ -1,23 +1,23 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Turlarımız | Çerkezköy'den Kalkan Yurtiçi ve Yurtdışı Turlar",
-  description: "Büyük Aytaç Seyahat'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
-  keywords: "Çerkezköy tur, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, TÜRSAB, seyahat acentesi, Tekirdağ tur",
+  title: "Turlar | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
+  description: "Büyük Aytaç Travel'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
+  keywords: "Çerkezköy turları, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, Kapadokya turu, İstanbul turu, Büyük Aytaç Travel",
   openGraph: {
-    title: "Turlarımız | Çerkezköy'den Kalkan Yurtiçi ve Yurtdışı Turlar",
-    description: "Büyük Aytaç Seyahat'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
-    url: 'https://www.buyukaytacseyahat.com/tours',
-    siteName: 'Büyük Aytaç Seyahat',
-    images: [
-      {
-        url: '/images/tours-banner.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Büyük Aytaç Seyahat Turlar',
-      },
-    ],
+    title: "Turlar | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
+    description: "Büyük Aytaç Travel'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
+    url: 'https://www.buyukaytactravel.com/tours',
+    siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
+    images: [
+      {
+        url: '/images/hero-banner.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Büyük Aytaç Travel Turlar',
+      },
+    ],
   },
 }; 
