@@ -17,6 +17,10 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -145,22 +149,22 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu, show/hide based on menu state */}
-      <div className={`${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} sm:hidden transition-all duration-300 overflow-hidden bg-white shadow-lg`} id="mobile-menu">
+      <div className={`${isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'} sm:hidden bg-white shadow-lg transition-all duration-300 overflow-y-auto`} id="mobile-menu">
         <div className="px-2 py-3 space-y-1">
-          <MobileNavLink href="/" label="Ana Sayfa" />
-          <MobileNavLink href="/tours?tourType=domestic" label="Yurtiçi Turları" />
-          <MobileNavLink href="/tours?tourType=international" label="Yurtdışı Turları" />
-          <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" />
-          <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" />
-          <MobileNavLink href="/annual-program" label="Yıllık Program" />
-          <MobileNavLink href="/contact" label="İletişim" />
+          <MobileNavLink href="/" label="Ana Sayfa" onClick={closeMenu} />
+          <MobileNavLink href="/tours?tourType=domestic" label="Yurtiçi Turları" onClick={closeMenu} />
+          <MobileNavLink href="/tours?tourType=international" label="Yurtdışı Turları" onClick={closeMenu} />
+          <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" onClick={closeMenu} />
+          <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" onClick={closeMenu} />
+          <MobileNavLink href="/annual-program" label="Yıllık Program" onClick={closeMenu} />
+          <MobileNavLink href="/contact" label="İletişim" onClick={closeMenu} />
         </div>
       </div>
     </nav>
   );
 }
 
-function MobileNavLink({ href, label }: { href: string; label: string }) {
+function MobileNavLink({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
   
@@ -172,6 +176,7 @@ function MobileNavLink({ href, label }: { href: string; label: string }) {
           ? 'bg-blue-50 text-blue-600'
           : 'text-gray-900 hover:bg-blue-50 hover:text-blue-600'
       } transition-colors duration-200`}
+      onClick={onClick}
     >
       {label}
     </Link>

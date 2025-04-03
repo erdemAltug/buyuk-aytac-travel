@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { submitContactForm } from '@/services/contactService';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -24,19 +25,12 @@ export default function ContactPage() {
     setError('');
     
     try {
-      // API endpoint bağlandığında burası güncellenecek
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
+      // API'ye isteği gönder
+      const response = await submitContactForm(formData);
       
-      // Simüle edilmiş başarılı cevap
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // if (!response.ok) throw new Error('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+      if (!response.success) {
+        throw new Error(response.message || 'Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+      }
       
       setSubmitted(true);
       setFormData({
@@ -92,7 +86,7 @@ export default function ContactPage() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                   />
                 </div>
                 
@@ -105,7 +99,7 @@ export default function ContactPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                   />
                 </div>
                 
@@ -117,7 +111,7 @@ export default function ContactPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                   />
                 </div>
                 
@@ -130,7 +124,7 @@ export default function ContactPage() {
                     rows={4}
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                   ></textarea>
                 </div>
                 
@@ -165,7 +159,7 @@ export default function ContactPage() {
               
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">E-posta</h3>
-                <p className="text-gray-600">info@buyukaytacseyahat.com</p>
+                <p className="text-gray-600">info@buyukaytactravel.com</p>
               </div>
               
               <div>
