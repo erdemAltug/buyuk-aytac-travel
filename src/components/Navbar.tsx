@@ -44,12 +44,12 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <div className="relative h-10 w-28 mr-2">
+              <div className="relative h-16 w-16 mr-2">
                 <Image
-                  src="https://buyukaytactravel.com/wp-content/uploads/2024/12/cropped-logo_page-0001-removebg-preview-3.png"
+                  src="/images/LOGO.png"
                   alt="Büyük Aytaç Seyahat"
                   fill
-                  className="object-contain"
+                  className="object-contain object-center brightness-105"
                   priority
                 />
               </div>
