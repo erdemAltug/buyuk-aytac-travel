@@ -8,12 +8,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="mb-10 md:mb-0">
             <div className="flex items-center mb-6">
-              <div className="relative h-16 w-48 mr-3">
+              <div className="relative h-24 w-40 mr-3">
                 <Image
-                  src="https://buyukaytactravel.com/wp-content/uploads/2024/12/cropped-logo_page-0001-removebg-preview-3.png"
+                  src="/images/LOGO.png"
                   alt="Büyük Aytaç Seyahat Logo"
                   fill
-                  className="object-contain"
+                  className="object-contain object-center brightness-110"
                 />
               </div>
             </div>
