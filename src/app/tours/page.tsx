@@ -38,7 +38,7 @@ function TourCard({ tour }: { tour: ITour }) {
           </div>
         </div>
         <div className="p-4">
-          <h3 className="text-xl font-semibold mb-2">{tour.name}</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">{tour.name}</h3>
           <p className="text-gray-600 mb-3 line-clamp-2">{tour.description}</p>
           <div className="flex justify-between items-center mb-3">
             <span className="text-blue-600 font-bold text-lg">{tour.price.toLocaleString('tr-TR')} ₺</span>
@@ -87,88 +87,76 @@ function TourCard({ tour }: { tour: ITour }) {
                 <p className="text-gray-700 mb-2">
                   <span className="font-semibold">Süre:</span> {tour.duration}
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 mb-2">
                   <span className="font-semibold">Fiyat:</span> {tour.price.toLocaleString('tr-TR')} ₺
                 </p>
               </div>
               
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Ad Soyad
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Adınız ve soyadınız"
-                  />
+              <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
+                <h4 className="text-blue-800 font-semibold text-lg mb-2">Rezervasyon Bilgilendirmesi</h4>
+                <p className="text-blue-700 mb-2">
+                  Rezervasyonunuzu yapmak için aşağıdaki yöntemlerden birini tercih edebilirsiniz:
+                </p>
+                <ul className="text-blue-700 list-disc pl-5 space-y-1">
+                  <li>Ofisimize gelerek yüz yüze görüşebilir ve nakit veya kredi kartı ile ödeme yapabilirsiniz.</li>
+                  <li>Telefonla arayarak rezervasyon yapabilir ve ödeme seçenekleri hakkında bilgi alabilirsiniz.</li>
+                </ul>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">Adres</p>
+                    <p className="text-sm text-gray-600">Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1, 59500 Çerkezköy/Tekirdağ</p>
+                  </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    E-posta
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="E-posta adresiniz"
-                  />
+
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">Telefon</p>
+                    <p className="text-sm text-gray-600">0530 060 95 59 / 0539 345 95 59</p>
+                  </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Telefon
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Telefon numaranız"
-                  />
+
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">E-posta</p>
+                    <p className="text-sm text-gray-600">buyukaytac59@gmail.com</p>
+                  </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                    Tarih
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  />
+
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-gray-900">Çalışma Saatleri</p>
+                    <p className="text-sm text-gray-600">
+                      Pazartesi - Cuma: 09:00 - 18:00<br />
+                      Cumartesi: 09:00 - 13:00<br />
+                      Pazar: Kapalı
+                    </p>
+                  </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="people" className="block text-sm font-medium text-gray-700 mb-1">
-                    Kişi Sayısı
-                  </label>
-                  <select
-                    id="people"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="1">1 Kişi</option>
-                    <option value="2">2 Kişi</option>
-                    <option value="3">3 Kişi</option>
-                    <option value="4">4 Kişi</option>
-                    <option value="5">5 Kişi</option>
-                    <option value="6+">6+ Kişi</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Notlar
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Eklemek istediğiniz notlar..."
-                  ></textarea>
-                </div>
-              </form>
+              </div>
             </div>
             
             <div className="bg-gray-50 px-6 py-4 flex justify-between">
@@ -176,18 +164,17 @@ function TourCard({ tour }: { tour: ITour }) {
                 onClick={closeModal}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
               >
-                İptal
+                Kapat
               </button>
-              <button 
-                onClick={() => {
-                  // Burada form verilerini işleyebilirsiniz
-                  alert('Rezervasyon talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.');
-                  closeModal();
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              <a 
+                href="tel:+905300609559"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
               >
-                Gönder
-              </button>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                Hemen Ara
+              </a>
             </div>
           </div>
         </div>

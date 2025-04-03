@@ -1,41 +1,79 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Hakkımızda | Büyük Aytaç Seyahat - Çerkezköy'ün Güvenilir Seyahat Acentesi",
+  description: "Büyük Aytaç Seyahat, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+  keywords: "Büyük Aytaç Seyahat, Çerkezköy seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü",
+  openGraph: {
+    title: "Hakkımızda | Büyük Aytaç Seyahat - Çerkezköy'ün Güvenilir Seyahat Acentesi",
+    description: "Büyük Aytaç Seyahat, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+    url: 'https://www.buyukaytacseyahat.com/about',
+    siteName: 'Büyük Aytaç Seyahat',
+    locale: 'tr_TR',
+    type: 'website',
+  },
+};
+
 export default function AboutPage() {
   return (
-    <main className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Hakkımızda</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Büyük Aytaç Seyahat ile Türkiye&apos;nin güzelliklerini keşfedin
-          </p>
-        </div>
-        
-        <div className="bg-white shadow-md rounded-lg p-6 md:p-8 lg:p-10 mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Şirketimiz</h2>
-          <p className="text-gray-600 mb-6">
-            Büyük Aytaç Seyahat, 2005 yılından bu yana Türkiye&apos;nin en güzel yerlerini keşfetme tutkusuyla faaliyet gösteren bir seyahat acentesidir. 
-            Müşteri memnuniyetini her şeyin üstünde tutan yaklaşımımızla, her yıl binlerce misafiri ağırlıyor ve onlara unutulmaz seyahat deneyimleri sunuyoruz.
-          </p>
-          <p className="text-gray-600 mb-6">
-            İstanbul merkezli şirketimiz, deneyimli rehberlerimiz, konforlu araçlarımız ve özenle seçilmiş konaklama tesislerimizle misafirlerimize en iyi hizmeti 
-            sunmayı hedeflemektedir. Türkiye&apos;nin her köşesine uzanan turlarımızla, tarihi, kültürel ve doğal güzellikleri keşfetme fırsatı sunuyoruz.
-          </p>
-        </div>
-        
-        <div className="bg-white shadow-md rounded-lg p-6 md:p-8 lg:p-10 mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Misyonumuz</h2>
-          <p className="text-gray-600">
-            Misyonumuz, müşterilerimize güvenli, konforlu ve unutulmaz seyahat deneyimleri sunarak, Türkiye&apos;nin eşsiz güzelliklerini tanıtmak ve 
-            kültürel mirasına saygı duyarak sürdürülebilir turizm anlayışını benimsemektir. Her müşterimizin beklentilerinin ötesinde bir hizmet sunmayı ve 
-            onların seyahat anılarına değer katmayı hedefliyoruz.
-          </p>
-        </div>
-        
-        <div className="bg-white shadow-md rounded-lg p-6 md:p-8 lg:p-10">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Vizyonumuz</h2>
-          <p className="text-gray-600">
-            Vizyonumuz, Türkiye&apos;nin önde gelen seyahat acentelerinden biri olarak, yenilikçi ve kaliteli hizmet anlayışımızla sektörde öncü olmak, 
-            müşterilerimizin güvenini kazanmak ve sürdürülebilir turizm prensiplerine bağlı kalarak ülkemizin turizm değerlerini en iyi şekilde temsil etmektir.
-          </p>
+    <main className="pt-28 pb-16 min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="p-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Hakkımızda</h1>
+            
+            <div className="prose max-w-none">
+              <p className="text-lg text-gray-700 mb-6">
+                <strong>Büyük Aytaç Seyahat</strong>, Çerkezköy&apos;de hizmet veren, TÜRSAB belgesine sahip profesyonel bir seyahat acentesidir. Müşteri memnuniyetini ön planda tutarak, kaliteli ve güvenilir tur hizmetleri sunmaktayız.
+              </p>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Vizyonumuz</h2>
+              <p className="text-gray-700 mb-6">
+                Müşterilerimize unutulmaz seyahat deneyimleri yaşatmak ve sektörde güvenilirliğin simgesi olmak.
+              </p>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Misyonumuz</h2>
+              <p className="text-gray-700 mb-6">
+                Yurtiçi ve yurtdışında en kaliteli ve güvenilir tur hizmetini, en uygun fiyatlarla sunarak müşterilerimizin beklentilerini aşmak.
+              </p>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Değerlerimiz</h2>
+              <ul className="list-disc pl-5 text-gray-700 mb-6">
+                <li className="mb-2">Müşteri memnuniyeti odaklı hizmet anlayışı</li>
+                <li className="mb-2">Güvenilirlik ve şeffaflık</li>
+                <li className="mb-2">Profesyonellik ve tecrübe</li>
+                <li className="mb-2">Yenilikçilik ve sürekli gelişim</li>
+                <li className="mb-2">Sosyal sorumluluk ve çevre bilinci</li>
+              </ul>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Neden Biz?</h2>
+              <p className="text-gray-700 mb-6">
+                <strong>Büyük Aytaç Seyahat</strong> olarak, sizlere sunduğumuz avantajlar:
+              </p>
+              <ul className="list-disc pl-5 text-gray-700 mb-6">
+                <li className="mb-2">TÜRSAB güvencesi ile profesyonel hizmet</li>
+                <li className="mb-2">Deneyimli ve uzman rehberler</li>
+                <li className="mb-2">Konforlu ve güvenli ulaşım araçları</li>
+                <li className="mb-2">Özenle seçilmiş konaklama tesisleri</li>
+                <li className="mb-2">Uygun fiyat garantisi</li>
+                <li className="mb-2">7/24 müşteri desteği</li>
+              </ul>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">İletişim</h2>
+              <p className="text-gray-700">
+                Bizimle iletişime geçmek veya sorularınız için aşağıdaki bilgilerden bize ulaşabilirsiniz:
+              </p>
+              <p className="text-gray-700 mb-2">
+                <strong>Adres:</strong> Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1, 59500 Çerkezköy/Tekirdağ
+              </p>
+              <p className="text-gray-700 mb-2">
+                <strong>Telefon:</strong> 0530 060 95 59 / 0539 345 95 59
+              </p>
+              <p className="text-gray-700">
+                <strong>E-posta:</strong> info@buyukaytac.com
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>
