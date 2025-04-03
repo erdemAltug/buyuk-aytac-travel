@@ -50,7 +50,7 @@ function TourCard({ tour }: { tour: ITour }) {
         </div>
         
         {/* Tour Name */}
-        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1">
+        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg">
           {tour.name}
         </h3>
       </div>

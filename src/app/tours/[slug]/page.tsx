@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { getTourBySlug } from '@/services/tourService';
 import { ITour } from '@/models/Tour';
-import Link from 'next/link';
 
 export default function TourDetail({ params }: { params: { slug: string } }) {
   const [tour, setTour] = useState<ITour | null>(null);
