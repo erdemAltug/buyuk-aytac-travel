@@ -1,7 +1,11 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { getTours } from '@/services/tourService';
+import { ITour } from '@/models/Tour';
 
 interface SocialIcon {
   name: string;
@@ -10,6 +14,25 @@ interface SocialIcon {
 }
 
 export default function Footer() {
+  const [popularTours, setPopularTours] = useState<ITour[]>([]);
+  const [toursLoading, setToursLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPopularTours = async () => {
+      try {
+        // Aktif turları getir ve son 5 tanesini göster
+        const tours = await getTours({ isActive: true });
+        setPopularTours(tours.slice(0, 5));
+        setToursLoading(false);
+      } catch (error) {
+        console.error('Footer turları yüklenirken hata:', error);
+        setToursLoading(false);
+      }
+    };
+
+    fetchPopularTours();
+  }, []);
+
   const socialLinks: SocialIcon[] = [
     {
       name: 'Facebook',
@@ -53,10 +76,6 @@ export default function Footer() {
     {
       name: 'Ana Sayfa',
       href: '/',
-    },
-    {
-      name: 'Destinasyonlar',
-      href: '/destinations',
     },
     {
       name: 'Turlar',
@@ -130,15 +149,23 @@ export default function Footer() {
               Popüler Turlarımız
             </h3>
             <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/tours/adana-portakal-cicegi-festivali-turu"
-                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
-                >
-                  <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
-                  Adana Portakal Çiçeği Festivali
-                </Link>
-              </li>
+              {toursLoading ? (
+                <li className="text-gray-400">Yükleniyor...</li>
+              ) : popularTours.length > 0 ? (
+                popularTours.map((tour) => (
+                  <li key={tour._id?.toString()}>
+                    <Link
+                      href={`/tours/${tour.slug}`}
+                      className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
+                    >
+                      <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
+                      {tour.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-400">Henüz tur bulunmuyor</li>
+              )}
             </ul>
           </div>
           

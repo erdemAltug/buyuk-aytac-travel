@@ -144,8 +144,7 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">{tour.name}</h1>
           <p className="text-lg text-gray-600">
-            {tour.destinationId && typeof tour.destinationId === 'object' && 'name' in tour.destinationId ? 
-              (tour.destinationId.name as string) : ''}
+            {tour.destination}
             <span className="mx-2">•</span>
             <span>{tour.duration}</span>
           </p>
@@ -153,15 +152,16 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
         
         {/* Tur Görseli */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          <div className="relative h-[500px] w-full">
+          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
             {!imageError ? (
               <Image
                 src={tour.image}
                 alt={tour.name}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                 onError={() => setImageError(true)}
+                priority
               />
             ) : (
               <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">

@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { IDestination } from './Destination';
 
 export enum TourType {
   DOMESTIC = 'domestic',
@@ -18,7 +17,7 @@ export interface ITour extends Document {
   slug: string;
   duration: string;
   price: number;
-  destinationId: mongoose.Types.ObjectId | IDestination;
+  destination: string;
   tourType: TourType;
   accommodationType: AccommodationType;
   startDate?: Date;  // Tur başlangıç tarihi
@@ -42,9 +41,8 @@ const TourSchema: Schema = new Schema(
     },
     duration: { type: String, required: true },
     price: { type: Number, required: true },
-    destinationId: { 
-      type: Schema.Types.ObjectId, 
-      ref: 'Destination', 
+    destination: { 
+      type: String, 
       required: true 
     },
     tourType: { 
