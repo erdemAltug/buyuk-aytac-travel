@@ -49,4 +49,15 @@ DestinationSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.models.Destination || mongoose.model<IDestination>('Destination', DestinationSchema); 
+// Model zaten varsa onu kullan, yoksa oluştur
+let Destination: mongoose.Model<IDestination>;
+
+// Mongoose modeli tanımlanmışsa
+if (mongoose.models && mongoose.models.Destination) {
+  Destination = mongoose.models.Destination as mongoose.Model<IDestination>;
+} else {
+  // Model henüz tanımlanmamışsa oluştur
+  Destination = mongoose.model<IDestination>('Destination', DestinationSchema);
+}
+
+export default Destination; 

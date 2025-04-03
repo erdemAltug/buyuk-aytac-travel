@@ -5,78 +5,72 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
-
-// Örnek turlar verisi (gerçek uygulamada API'den gelecek)
-const demoTours = [
-  {
-    id: 'istanbul-klasik',
-    name: 'İstanbul Klasik Turu',
-    duration: '2 Gün',
-    price: '₺2,500',
-    description: "İstanbul'un en önemli tarihi yerlerini keşfedin. Ayasofya, Topkapı Sarayı ve Kapalıçarşı dahil.",
-    image: '/tours/istanbul-classic.jpg',
-    status: 'active',
-  },
-  {
-    id: 'kapadokya-balon',
-    name: 'Kapadokya Balon Turu',
-    duration: '3 Gün',
-    price: '₺4,200',
-    description: "Nefes kesici manzaralar için sıcak hava balonu dahil tam Kapadokya deneyimi.",
-    image: '/tours/cappadocia-balloon.jpg',
-    status: 'active',
-  },
-  {
-    id: 'ege-sahilleri',
-    name: 'Ege Sahilleri Turu',
-    duration: '5 Gün',
-    price: '₺5,800',
-    description: "Türkiye'nin muhteşem Ege kıyısı boyunca antik kentler ve masmavi koylarda unutulmaz bir tatil.",
-    image: '/tours/aegean-coast.jpg',
-    status: 'active',
-  },
-  {
-    id: 'guneydogu-lezzetleri',
-    name: 'Güneydoğu Lezzetleri',
-    duration: '4 Gün',
-    price: '₺3,900',
-    description: "Gaziantep, Şanlıurfa ve Mardin'de Türkiye'nin en zengin mutfak kültürünü ve tarihi dokusunu keşfedin.",
-    image: '/tours/southeast-flavors.jpg',
-    status: 'inactive',
-  },
-];
+import { getTours, deleteTour, updateTour } from '@/services/tourService';
+import { ITour } from '@/models/Tour';
+import Image from 'next/image';
 
 export default function AdminTours() {
   const [isLoading, setIsLoading] = useState(true);
-  const [tours, setTours] = useState(demoTours);
+  const [tours, setTours] = useState<ITour[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
   
-  // Check if admin is logged in
+  // Admin girişini kontrol et
   useEffect(() => {
     const checkAuth = () => {
       const isLoggedIn = localStorage.getItem('adminLoggedIn');
       if (!isLoggedIn) {
         router.push('/admin/login');
       } else {
-        setIsLoading(false);
+        fetchTours();
       }
     };
     
     checkAuth();
   }, [router]);
   
-  const handleStatusChange = (tourId: string, newStatus: string) => {
-    // Gerçek uygulamada burada API çağrısı yapılacak
-    setTours(tours.map(tour => 
-      tour.id === tourId ? { ...tour, status: newStatus } : tour
-    ));
+  // MongoDB'den turları çek
+  const fetchTours = async () => {
+    try {
+      const data = await getTours();
+      setTours(data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Turları getirme hatası:', err);
+      setError('Turları yüklerken bir hata oluştu');
+      setIsLoading(false);
+    }
   };
   
-  const handleDeleteTour = (tourId: string) => {
-    // Gerçek uygulamada burada API çağrısı yapılacak
+  const handleStatusChange = async (tourId: string, isActive: boolean) => {
+    try {
+      const tourToUpdate = tours.find(tour => tour._id?.toString() === tourId);
+      if (!tourToUpdate) return;
+      
+      // Veritabanında aktiflik durumunu güncelle
+      await updateTour(tourToUpdate.slug, { isActive } as Partial<ITour>);
+      
+      // UI'ı güncelle
+      setTours(tours.map(tour => 
+        tour._id?.toString() === tourId ? { ...tour, isActive } : tour
+      ));
+    } catch (err) {
+      console.error('Durum güncelleme hatası:', err);
+      alert('Durum güncellenirken bir hata oluştu');
+    }
+  };
+  
+  const handleDeleteTour = async (tourId: string, slug: string) => {
     if (window.confirm('Bu turu silmek istediğinize emin misiniz?')) {
-      setTours(tours.filter(tour => tour.id !== tourId));
+      try {
+        await deleteTour(slug);
+        // UI'dan kaldır
+        setTours(tours.filter(tour => tour._id?.toString() !== tourId));
+      } catch (err) {
+        console.error('Tur silme hatası:', err);
+        alert('Tur silinirken bir hata oluştu');
+      }
     }
   };
   
@@ -89,6 +83,14 @@ export default function AdminTours() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-600">{error}</div>
       </div>
     );
   }
@@ -159,16 +161,27 @@ export default function AdminTours() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredTours.map((tour) => (
-                  <tr key={tour.id}>
+                  <tr key={tour._id?.toString()}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 relative rounded overflow-hidden">
-                          <div className="absolute inset-0 bg-gray-200"></div>
-                          {/* Gerçek uygulamada burada <Image> komponenti kullanılacak */}
+                          <Image
+                            src={tour.image}
+                            alt={tour.name}
+                            fill
+                            className="object-cover"
+                            sizes="40px"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/placeholder-image.jpg';
+                            }}
+                          />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">{tour.name}</div>
-                          <div className="text-sm text-gray-500 truncate max-w-md">{tour.description}</div>
+                          <div className="text-sm text-gray-500 truncate max-w-md">
+                            {tour.description.length > 100 ? `${tour.description.substring(0, 100)}...` : tour.description}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -176,14 +189,14 @@ export default function AdminTours() {
                       <div className="text-sm text-gray-900">{tour.duration}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{tour.price}</div>
+                      <div className="text-sm text-gray-900">₺{tour.price.toLocaleString('tr-TR')}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select
-                        value={tour.status}
-                        onChange={(e) => handleStatusChange(tour.id, e.target.value)}
+                        value={tour.isActive ? 'active' : 'inactive'}
+                        onChange={(e) => handleStatusChange(tour._id?.toString() || '', e.target.value === 'active')}
                         className={`block w-full rounded-md text-sm font-medium px-2 py-1 border ${
-                          tour.status === 'active' 
+                          tour.isActive
                             ? 'text-green-800 bg-green-100 border-green-200' 
                             : 'text-red-800 bg-red-100 border-red-200'
                         }`}
@@ -195,13 +208,13 @@ export default function AdminTours() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex space-x-2">
                         <Link
-                          href={`/admin/tours/edit/${tour.id}`}
+                          href={`/admin/tours/edit/${tour.slug}`}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           Düzenle
                         </Link>
                         <button
-                          onClick={() => handleDeleteTour(tour.id)}
+                          onClick={() => handleDeleteTour(tour._id?.toString() || '', tour.slug)}
                           className="text-red-600 hover:text-red-900"
                         >
                           Sil
