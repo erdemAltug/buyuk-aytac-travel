@@ -6,8 +6,7 @@ const API_URL = '/api/tours';
 // Tüm turları getir
 export const getTours = async (params?: { 
   isActive?: boolean;
-  destinationId?: string;
-  destinationSlug?: string;
+  destination?: string;
   tourType?: string;
   accommodationType?: string;
 }): Promise<ITour[]> => {
@@ -21,12 +20,8 @@ export const getTours = async (params?: {
         queryParams.append('isActive', params.isActive.toString());
       }
       
-      if (params.destinationId) {
-        queryParams.append('destinationId', params.destinationId);
-      }
-      
-      if (params.destinationSlug) {
-        queryParams.append('destinationSlug', params.destinationSlug);
+      if (params.destination) {
+        queryParams.append('destination', params.destination);
       }
       
       if (params.tourType) {
@@ -73,7 +68,7 @@ export const createTour = async (data: Partial<ITour>): Promise<ITour> => {
   }
 };
 
-// Turu güncelle
+// Tur güncelle
 export const updateTour = async (slug: string, data: Partial<ITour>): Promise<ITour> => {
   try {
     const response = await axios.put(`${API_URL}/${slug}`, data);
@@ -84,7 +79,7 @@ export const updateTour = async (slug: string, data: Partial<ITour>): Promise<IT
   }
 };
 
-// Turu sil
+// Tur sil
 export const deleteTour = async (slug: string): Promise<void> => {
   try {
     await axios.delete(`${API_URL}/${slug}`);

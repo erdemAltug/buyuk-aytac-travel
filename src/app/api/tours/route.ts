@@ -1,30 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Tour from '@/models/Tour';
-import Destination from '@/models/Destination';
 
 // Tüm turları getir
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const isActive = searchParams.get('isActive');
-    const destinationId = searchParams.get('destinationId');
-    const destinationSlug = searchParams.get('destinationSlug');
+    const destination = searchParams.get('destination');
     const tourType = searchParams.get('tourType');
     const accommodationType = searchParams.get('accommodationType');
     
     await dbConnect();
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: { isActive?: boolean; destinationId?: any; tourType?: string; accommodationType?: string } = {};
+    const query: { isActive?: boolean; destination?: string; tourType?: string; accommodationType?: string } = {};
     
     // İsteğe bağlı filtreler
     if (isActive !== null) {
       query.isActive = isActive === 'true';
     }
     
-    if (destinationId) {
-      query.destinationId = destinationId;
+    if (destination) {
+      query.destination = destination;
     }
     
     // Tur tipi filtresi (yurtiçi/yurtdışı)
@@ -37,21 +35,8 @@ export async function GET(req: NextRequest) {
       query.accommodationType = accommodationType;
     }
     
-    // Eğer destinasyon slug'ı ile filtreleme yapılacaksa
-    if (destinationSlug) {
-      const destination = await Destination.findOne({ slug: destinationSlug });
-      if (destination) {
-        query.destinationId = destination._id;
-      } else {
-        // Eğer böyle bir destinasyon yoksa boş array dön
-        return NextResponse.json([], { status: 200 });
-      }
-    }
-    
-    // Turları getir ve destinasyonları populate et
-    const tours = await Tour.find(query)
-      .populate('destinationId')
-      .sort({ createdAt: -1 });
+    // Turları getir
+    const tours = await Tour.find(query).sort({ createdAt: -1 });
     
     return NextResponse.json(tours, { status: 200 });
   } catch (error) {
@@ -71,18 +56,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     
     // Gerekli alanları kontrol et
-    if (!body.name || !body.description || !body.image || !body.duration || !body.price || !body.destinationId) {
+    if (!body.name || !body.description || !body.image || !body.duration || !body.price || !body.destination) {
       return NextResponse.json(
         { error: 'İsim, açıklama, görsel, süre, fiyat ve destinasyon zorunludur' },
-        { status: 400 }
-      );
-    }
-    
-    // Destinasyon ID'sinin geçerli olup olmadığını kontrol et
-    const destination = await Destination.findById(body.destinationId);
-    if (!destination) {
-      return NextResponse.json(
-        { error: 'Geçersiz destinasyon ID' },
         { status: 400 }
       );
     }
@@ -113,16 +89,17 @@ export async function POST(req: NextRequest) {
       slug,
       duration: body.duration,
       price: body.price,
-      destinationId: body.destinationId,
+      destination: body.destination,
+      tourType: body.tourType,
+      accommodationType: body.accommodationType,
+      startDate: body.startDate,
+      endDate: body.endDate,
       isActive: body.isActive !== undefined ? body.isActive : true,
     });
     
     await tour.save();
     
-    // Kaydedilen turu destinasyon bilgisiyle birlikte getir
-    const savedTour = await Tour.findById(tour._id).populate('destinationId');
-    
-    return NextResponse.json(savedTour, { status: 201 });
+    return NextResponse.json(tour, { status: 201 });
   } catch (error) {
     console.error('Tour POST Error:', error);
     return NextResponse.json(

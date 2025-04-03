@@ -4,11 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
-import { getDestinations } from '@/services/destinationService';
 import { createTour } from '@/services/tourService';
 import { uploadFile } from '@/services/uploadService';
-import { IDestination } from '@/models/Destination';
-import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import { TourType, AccommodationType } from '@/models/Tour';
 
 // Form input sınıflarını güncelle
 const inputClass = "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-2";
@@ -18,14 +16,13 @@ const buttonClass = "flex justify-center rounded-md bg-blue-600 px-3 py-1.5 text
 export default function AddNewTour() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [destinations, setDestinations] = useState<IDestination[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    destinationId: '',
+    destination: '',
     duration: '',
     price: '',
     image: null as File | null,
@@ -38,19 +35,8 @@ export default function AddNewTour() {
   });
   
   useEffect(() => {
-    const fetchDestinations = async () => {
-      try {
-        const data = await getDestinations();
-        setDestinations(data);
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Destinasyonları getirme hatası:', err);
-        setError('Destinasyonlar yüklenirken bir hata oluştu');
-        setIsLoading(false);
-      }
-    };
-    
-    fetchDestinations();
+    // Artık destinasyon verileri çekmeye gerek yok
+    setIsLoading(false);
   }, []);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -84,7 +70,7 @@ export default function AddNewTour() {
     setError('');
     
     // Form validation
-    if (!formData.name || !formData.description || !formData.destinationId || !formData.duration || !formData.price) {
+    if (!formData.name || !formData.description || !formData.destination || !formData.duration || !formData.price) {
       alert('Lütfen tüm zorunlu alanları doldurun');
       setSubmitting(false);
       return;
@@ -108,7 +94,7 @@ export default function AddNewTour() {
       const tourData = {
         name: formData.name,
         description: formData.description,
-        destinationId: formData.destinationId,
+        destination: formData.destination,
         duration: formData.duration,
         price: parseFloat(formData.price.replace(/[^\d.]/g, '')), // Fiyatı temizle ve sayıya çevir
         image: uploadResponse.url,
@@ -120,9 +106,7 @@ export default function AddNewTour() {
       };
       
       // 3. Turu kaydet
-      // API string olarak destinationId kabul ediyor, ancak tip kontrolünü geçmek için
-      // Partial<ITour> & { destinationId: string } şeklinde belirtiyoruz
-      await createTour(tourData as Partial<ITour> & { destinationId: string });
+      await createTour(tourData);
       
       // 4. Başarı durumunda turlar sayfasına yönlendir
       router.push('/admin/tours');
@@ -176,22 +160,16 @@ export default function AddNewTour() {
               
               {/* Destinasyon */}
               <div className="mb-4">
-                <label htmlFor="destinationId" className={labelClass}>Destinasyon</label>
-                <select
-                  id="destinationId"
-                  name="destinationId"
-                  value={formData.destinationId}
+                <label htmlFor="destination" className={labelClass}>Destinasyon</label>
+                <input
+                  type="text"
+                  id="destination"
+                  name="destination"
+                  value={formData.destination}
                   onChange={handleChange}
                   className={inputClass}
                   required
-                >
-                  <option value="">Seçiniz</option>
-                  {destinations.map((destination) => (
-                    <option key={destination._id?.toString()} value={destination._id?.toString()}>
-                      {destination.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
               
               {/* Tur Süresi */}

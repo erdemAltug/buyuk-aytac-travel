@@ -1,17 +1,21 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
   return (
     <div className="relative h-[100vh] w-full bg-navy-900 text-white overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-center bg-cover"
-        style={{
-          backgroundImage: `url("https://buyukaytactravel.com/wp-content/uploads/2024/12/bintur_header.jpg")`,
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-indigo-900/60"></div>
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-banner.jpg"
+          alt="Hero Banner"
+          fill
+          className="object-cover object-center brightness-75"
+          priority
+          quality={100}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/50"></div>
       </div>
       
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
@@ -22,18 +26,20 @@ export default function Hero() {
           <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light">
             Profesyonel rehberler eşliğinde, güvenli ve konforlu bir şekilde yeni yerler keşfedin.
           </p>
+          
           <div className="flex flex-wrap gap-4">
-            <Link href="/tours" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition duration-300 inline-flex items-center transform hover:scale-105">
+            <Link 
+              href="/tours"
+              className="px-6 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+            >
               Tüm Turlarımız
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </Link>
-            <Link href="/tours/domestic" className="bg-transparent border-2 border-white hover:bg-white/10 text-white font-semibold py-4 px-8 rounded-full inline-flex items-center transition duration-300 transform hover:scale-105">
+            
+            <Link 
+              href="/tours/domestic"
+              className="px-6 py-3 rounded-full bg-white text-blue-800 font-medium hover:bg-blue-50 transition-colors duration-300 shadow-lg hover:shadow-xl"
+            >
               Yurtiçi Turlar
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </Link>
           </div>
         </div>

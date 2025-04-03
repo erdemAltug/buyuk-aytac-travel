@@ -144,8 +144,7 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">{tour.name}</h1>
           <p className="text-lg text-gray-600">
-            {tour.destinationId && typeof tour.destinationId === 'object' && 'name' in tour.destinationId ? 
-              (tour.destinationId.name as string) : ''}
+            {tour.destination}
             <span className="mx-2">•</span>
             <span>{tour.duration}</span>
           </p>
@@ -153,15 +152,16 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
         
         {/* Tur Görseli */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          <div className="relative h-[500px] w-full">
+          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
             {!imageError ? (
               <Image
                 src={tour.image}
                 alt={tour.name}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                 onError={() => setImageError(true)}
+                priority
               />
             ) : (
               <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
@@ -274,18 +274,18 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">İletişim Bilgileri</h3>
                 <p className="mb-1 text-gray-600">
-                  <span className="font-semibold">Telefon:</span> +90 555 123 45 67
+                  <span className="font-semibold">Telefon:</span> 0530 060 95 59 / 0539 345 95 59
                 </p>
                 <p className="mb-1 text-gray-600">
-                  <span className="font-semibold">Email:</span> info@buyukaytactravel.com
+                  <span className="font-semibold">Email:</span> buyukaytac59@gmail.com
                 </p>
                 <p className="mb-4 text-gray-600">
-                  <span className="font-semibold">Adres:</span> İstanbul, Türkiye
+                  <span className="font-semibold">Adres:</span> Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1, 59500 Çerkezköy/Tekirdağ
                 </p>
                 
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Ödeme Şartları</h3>
                 <p className="text-gray-600 mb-4">
-                  Ön rezervasyon için %30 ödeme yapılmalıdır. Kalan bakiye tur başlangıcından 7 gün önce ödenmelidir.
+                0530 060 95 59 / 0539 345 95 59 numaralarından veya ofisimizden ödeme yapabilirsiniz.
                 </p>
               </div>
               
