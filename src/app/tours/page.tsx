@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
 import { ITour } from '@/models/Tour';
+import { useSearchParams } from 'next/navigation';
 
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
@@ -196,16 +197,53 @@ function TourCard({ tour }: { tour: ITour }) {
 }
 
 export default function ToursPage() {
-  const [tours, setTours] = useState<ITour[]>([]);
+  const [filteredTours, setFilteredTours] = useState<ITour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filterTitle, setFilterTitle] = useState('Tüm Turlarımız');
+  
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        const data = await getTours();
-        setTours(data);
+        
+        // URL'den parametreleri al
+        const tourType = searchParams.get('tourType');
+        const accommodationType = searchParams.get('accommodationType');
+        
+        // Filtre parametreleri varsa API çağrısına ekle
+        const params: {
+          isActive?: boolean;
+          tourType?: string;
+          accommodationType?: string;
+        } = { isActive: true };
+        
+        if (tourType) {
+          params.tourType = tourType;
+        }
+        
+        if (accommodationType) {
+          params.accommodationType = accommodationType;
+        }
+        
+        const data = await getTours(params);
+        setFilteredTours(data);
+        
+        // Başlığı ayarla
+        if (tourType === 'domestic') {
+          setFilterTitle('Yurtiçi Turlarımız');
+        } else if (tourType === 'international') {
+          setFilterTitle('Yurtdışı Turlarımız');
+        } else if (accommodationType === 'with_accommodation') {
+          setFilterTitle('Konaklamalı Turlarımız');
+        } else if (accommodationType === 'daily') {
+          setFilterTitle('Günübirlik Turlarımız');
+        } else {
+          setFilterTitle('Tüm Turlarımız');
+        }
+        
         setLoading(false);
       } catch (err) {
         console.error('Turları getirme hatası:', err);
@@ -215,7 +253,7 @@ export default function ToursPage() {
     };
 
     fetchTours();
-  }, []);
+  }, [searchParams]);  // searchParams değiştiğinde useEffect yeniden çalışacak
 
   // Yükleme durumu
   if (loading) {
@@ -223,7 +261,7 @@ export default function ToursPage() {
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Turlarımız</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Yükleniyor...
             </p>
@@ -251,8 +289,8 @@ export default function ToursPage() {
     return (
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Turlarımız</h1>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
             <p className="text-red-500">{error}</p>
           </div>
         </div>
@@ -261,14 +299,14 @@ export default function ToursPage() {
   }
 
   // Veri yoksa yedek içerik göster
-  if (tours.length === 0) {
+  if (filteredTours.length === 0) {
     return (
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Turlarımız</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Şu anda gösterilecek tur bulunmuyor.
+              Bu kategoride gösterilecek tur bulunmuyor.
             </p>
           </div>
         </div>
@@ -280,14 +318,14 @@ export default function ToursPage() {
     <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Turlarımız</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tours.map((tour) => (
+          {filteredTours.map((tour) => (
             <TourCard key={tour._id?.toString()} tour={tour} />
           ))}
         </div>
