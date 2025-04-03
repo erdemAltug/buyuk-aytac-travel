@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero';
+import SearchSection from '@/components/SearchSection';
 import ToursByType from '@/components/ToursByType';
 import { TourType, AccommodationType } from '@/models/Tour';
 
@@ -6,6 +7,9 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      
+      {/* Search Section */}
+      <SearchSection />
       
       {/* Yurtiçi Turları */}
       <ToursByType 

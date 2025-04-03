@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="relative h-[100vh] w-full bg-navy-900 text-white overflow-hidden">
+    <div className="relative h-[100vh] w-full overflow-hidden">
       <div className="absolute inset-0">
         <Image
           src="/images/hero-banner.jpg"
@@ -15,15 +15,15 @@ export default function Hero() {
           priority
           quality={100}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-indigo-900/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-indigo-900/40"></div>
       </div>
       
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div>
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight text-white">
             Yeni Yerler, Yeni Maceralar
           </h1>
-          <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light">
+          <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light text-white">
             Profesyonel rehberler eşliğinde, güvenli ve konforlu bir şekilde yeni yerler keşfedin.
           </p>
           
@@ -45,7 +45,7 @@ export default function Hero() {
         </div>
       </div>
       
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-blue-900/50 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-transparent to-transparent"></div>
     </div>
   );
 } 
