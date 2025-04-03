@@ -60,23 +60,30 @@ export default function Navbar() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden sm:flex sm:items-center">
-            <div className="flex bg-white/70 backdrop-blur-sm rounded-full shadow-sm px-1 py-0.5">
-              <NavLink href="/" label="Ana Sayfa" isLight={isHomepage && !scrolled} />
-              <NavLink href="/tours/domestic" label="Yurtiçi" isLight={isHomepage && !scrolled} />
-              <NavLink href="/tours/international" label="Yurtdışı" isLight={isHomepage && !scrolled} />
-              <NavLink href="/tours/daily" label="Günübirlik" isLight={isHomepage && !scrolled} />
-              <NavLink href="/tours/overnight" label="Konaklamalı" isLight={isHomepage && !scrolled} />
-              <NavLink href="/annual-program" label="Yıllık Program" isLight={isHomepage && !scrolled} />
-              <NavLink href="/about" label="Hakkımızda" isLight={isHomepage && !scrolled} />
-              <NavLink href="/contact" label="İletişim" isLight={isHomepage && !scrolled} />
-            </div>
-            
-            <Link 
-              href="/contact" 
-              className={`ml-2 px-3 py-1.5 rounded-full font-medium text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg transform hover:scale-105 transition-all duration-300`}
+          <div className="hidden md:ml-6 md:flex md:space-x-8">
+            <Link
+              href="/"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Bize Ulaşın
+              Ana Sayfa
+            </Link>
+            <Link
+              href="/tours"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Turlar
+            </Link>
+            <Link
+              href="/about"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Hakkımızda
+            </Link>
+            <Link
+              href="/contact"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              İletişim
             </Link>
           </div>
 
@@ -123,43 +130,12 @@ export default function Navbar() {
       <div className={`${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} sm:hidden transition-all duration-300 overflow-hidden bg-white shadow-lg`} id="mobile-menu">
         <div className="px-2 py-3 space-y-1">
           <MobileNavLink href="/" label="Ana Sayfa" />
-          <MobileNavLink href="/tours/domestic" label="Yurtiçi Turlar" />
-          <MobileNavLink href="/tours/international" label="Yurtdışı Turlar" />
-          <MobileNavLink href="/tours/daily" label="Günübirlik Turlar" />
-          <MobileNavLink href="/tours/overnight" label="Konaklamalı Turlar" />
-          <MobileNavLink href="/annual-program" label="Yıllık Program" />
+          <MobileNavLink href="/tours" label="Turlar" />
           <MobileNavLink href="/about" label="Hakkımızda" />
           <MobileNavLink href="/contact" label="İletişim" />
-          
-          <Link 
-            href="/contact" 
-            className="block w-full mt-4 text-center px-4 py-2 rounded-md font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600"
-          >
-            Bize Ulaşın
-          </Link>
         </div>
       </div>
     </nav>
-  );
-}
-
-function NavLink({ href, label, isLight }: { href: string; label: string; isLight: boolean }) {
-  const pathname = usePathname();
-  const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
-  
-  return (
-    <Link 
-      href={href} 
-      className={`group px-2.5 py-1.5 rounded-full text-xs font-medium ${
-        isActive 
-          ? 'bg-blue-100 text-blue-700'
-          : isLight
-            ? 'text-gray-900 hover:bg-white/50 hover:text-blue-600'
-            : 'text-gray-900 hover:bg-blue-50 hover:text-blue-600'
-      } transition-colors duration-300 mx-0.5`}
-    >
-      {label}
-    </Link>
   );
 }
 

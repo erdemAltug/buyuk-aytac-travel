@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
-import Destination from '@/models/Destination';
 import Tour from '@/models/Tour';
 import { TourType, AccommodationType } from '@/models/Tour';
 
@@ -8,24 +7,10 @@ import { TourType, AccommodationType } from '@/models/Tour';
 export async function GET() {
   try {
     await dbConnect();
-
+    
     // İlk olarak mevcut tüm verileri temizleyelim
-    await Destination.deleteMany({});
     await Tour.deleteMany({});
-
-    // Örnek destinasyonlar ekleyelim
-    const destinations = await Destination.insertMany([
-      {
-        name: 'Adana',
-        slug: 'adana',
-        description: 'Türkiye\'nin güneyinde bulunan Adana, zengin mutfağı, tarihi yapıları ve kültürel etkinlikleriyle öne çıkan bir şehirdir. Özellikle Portakal Çiçeği Festivali gibi önemli etkinliklere ev sahipliği yapmaktadır.',
-        image: '/destinations/adana.jpg',
-        isActive: true,
-      },
-    ]);
-
-    const adana = destinations.find(d => d.slug === 'adana');
-
+    
     const tours = await Tour.insertMany([
       {
         name: 'Adana Portakal Çiçeği Festivali Turu',
@@ -46,7 +31,7 @@ Telefon: 0530 060 95 59 & 0539 345 95 59`,
         image: '/images/adana-cicek-festivali.jpeg',
         duration: '3 Gün 2 Gece',
         price: 5000,
-        destinationId: adana?._id,
+        destination: 'Adana',
         tourType: TourType.DOMESTIC,
         accommodationType: AccommodationType.WITH_ACCOMMODATION,
         startDate: new Date('2025-04-04'),
@@ -55,9 +40,8 @@ Telefon: 0530 060 95 59 & 0539 345 95 59`,
       }
     ]);
 
-    return NextResponse.json({
+    return NextResponse.json({ 
       message: 'Örnek veriler başarıyla eklendi',
-      destinationsCount: destinations.length,
       toursCount: tours.length
     }, { status: 200 });
   } catch (error) {
