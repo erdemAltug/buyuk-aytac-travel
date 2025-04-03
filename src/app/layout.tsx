@@ -16,8 +16,57 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Büyük Aytaç Seyahat - Türkiye'nin En İyi Tur Deneyimleri",
-  description: "Büyük Aytaç Seyahat ile Türkiye'nin ve dünyanın güzelliklerini keşfedin. En uygun fiyatlı tur paketleri ve özel seyahat fırsatları.",
+  title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+  description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+  keywords: "Çerkezköy tur, Çerkezköy seyahat, Çerkezköy tur şirketi, Tekirdağ tur, yurtiçi tur, yurtdışı tur, günübirlik turlar, konaklamalı turlar, Kapadokya turu, Karadeniz turu, Alaçatı turu, TÜRSAB seyahat acentesi, Çerkezköy gezi",
+  authors: [{ name: "Büyük Aytaç Seyahat" }],
+  creator: "Büyük Aytaç Seyahat",
+  publisher: "Büyük Aytaç Seyahat",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://www.buyukaytacseyahat.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    url: 'https://www.buyukaytacseyahat.com',
+    siteName: 'Büyük Aytaç Seyahat',
+    images: [
+      {
+        url: '/images/LOGO.png',
+        width: 1200,
+        height: 630,
+        alt: 'Büyük Aytaç Seyahat Logo',
+      },
+    ],
+    locale: 'tr_TR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    images: ['/images/LOGO.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  category: 'travel',
+  verification: {
+    google: 'google-site-verification-code', // Google Search Console doğrulama kodu ekleyin
+  },
 };
 
 export default function RootLayout({

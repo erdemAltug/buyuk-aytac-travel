@@ -94,6 +94,59 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Structured data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'TravelAgency',
+              name: 'Büyük Aytaç Seyahat',
+              image: 'https://www.buyukaytacseyahat.com/images/LOGO.png',
+              '@id': 'https://www.buyukaytacseyahat.com',
+              url: 'https://www.buyukaytacseyahat.com',
+              telephone: '+905300609559',
+              priceRange: '₺₺',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1',
+                addressLocality: 'Çerkezköy',
+                addressRegion: 'Tekirdağ',
+                postalCode: '59500',
+                addressCountry: 'TR'
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 41.2861,  // Çerkezköy koordinatları
+                longitude: 28.0058
+              },
+              openingHoursSpecification: [
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: [
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                  ],
+                  opens: '09:00',
+                  closes: '18:00'
+                },
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: 'Saturday',
+                  opens: '09:00',
+                  closes: '13:00'
+                }
+              ],
+              sameAs: [
+                'https://www.facebook.com/buyukaytacseyahat',
+                'https://www.instagram.com/buyukaytacseyahat'
+              ]
+            })
+          }}
+        />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="mb-10 md:mb-0">
             <div className="flex items-center mb-6">
