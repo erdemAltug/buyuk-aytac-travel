@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
@@ -196,7 +196,8 @@ function TourCard({ tour }: { tour: ITour }) {
   );
 }
 
-export default function ToursPage() {
+// SearchParams'ı kullanacak bir bileşen oluşturuyoruz
+function TourList() {
   const [filteredTours, setFilteredTours] = useState<ITour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -253,82 +254,86 @@ export default function ToursPage() {
     };
 
     fetchTours();
-  }, [searchParams]);  // searchParams değiştiğinde useEffect yeniden çalışacak
+  }, [searchParams]);
 
   // Yükleme durumu
   if (loading) {
     return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Yükleniyor...
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
-                <div className="h-60 bg-gray-200 animate-pulse"></div>
-                <div className="p-4">
-                  <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2 mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse w-1/4"></div>
-                </div>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Yükleniyor...
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
+              <div className="h-60 bg-gray-200 animate-pulse"></div>
+              <div className="p-4">
+                <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-1/4"></div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
     );
   }
 
   // Hata durumu
   if (error) {
     return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
-            <p className="text-red-500">{error}</p>
-          </div>
-        </div>
-      </main>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
+        <p className="text-red-500">{error}</p>
+      </div>
     );
   }
 
   // Veri yoksa yedek içerik göster
   if (filteredTours.length === 0) {
     return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Bu kategoride gösterilecek tur bulunmuyor.
-            </p>
-          </div>
-        </div>
-      </main>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Bu kategoride gösterilecek tur bulunmuyor.
+        </p>
+      </div>
     );
   }
 
   return (
+    <>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredTours.map((tour) => (
+          <TourCard key={tour._id?.toString()} tour={tour} />
+        ))}
+      </div>
+    </>
+  );
+}
+
+// Suspense ile sarılmış ana bileşeni döndüren ana sayfa
+export default function ToursPage() {
+  return (
     <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTours.map((tour) => (
-            <TourCard key={tour._id?.toString()} tour={tour} />
-          ))}
-        </div>
+        <Suspense fallback={
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Turlar Yükleniyor...</h1>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
+          </div>
+        }>
+          <TourList />
+        </Suspense>
       </div>
     </main>
   );
