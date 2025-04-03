@@ -53,7 +53,7 @@ export default function AdminTours() {
       
       // UI'ı güncelle
       setTours(tours.map(tour => 
-        tour._id?.toString() === tourId ? { ...tour, isActive } : tour
+        tour._id?.toString() === tourId ? { ...tour, isActive } as ITour : tour
       ));
     } catch (err) {
       console.error('Durum güncelleme hatası:', err);

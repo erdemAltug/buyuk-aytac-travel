@@ -23,10 +23,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'buyukaytactravel.com',
-        port: '',
         pathname: '/wp-content/uploads/**',
       },
     ],
+    domains: ['buyukaytactravel.com'],
   },
 };
 
