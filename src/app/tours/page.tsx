@@ -63,15 +63,16 @@ function TourCard({ tour }: { tour: ITour }) {
 
       {/* Rezervasyon Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto overflow-hidden">
-            <div className="flex justify-between items-center border-b px-6 py-4">
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto overflow-hidden max-h-[90vh] relative">
+            <div className="sticky top-0 z-10 flex justify-between items-center border-b px-6 py-4 bg-white">
               <h3 className="text-lg font-semibold text-gray-900">
                 Rezervasyon: {tour.name}
               </h3>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-gray-400 hover:text-gray-500 p-2.5 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Kapat"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -79,7 +80,7 @@ function TourCard({ tour }: { tour: ITour }) {
               </button>
             </div>
             
-            <div className="px-6 py-4">
+            <div className="px-6 py-4 overflow-y-auto max-h-[60vh] md:max-h-[calc(90vh-120px)]">
               <div className="mb-4">
                 <p className="text-gray-700 mb-2">
                   <span className="font-semibold">Tur:</span> {tour.name}
@@ -159,18 +160,18 @@ function TourCard({ tour }: { tour: ITour }) {
               </div>
             </div>
             
-            <div className="bg-gray-50 px-6 py-4 flex justify-between">
+            <div className="sticky bottom-0 bg-gray-50 px-6 py-4 flex flex-col sm:flex-row justify-between gap-3 border-t">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                className="order-2 sm:order-1 w-full sm:w-auto px-4 py-2.5 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors font-medium"
               >
                 Kapat
               </button>
               <a 
                 href="tel:+905300609559"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
+                className="order-1 sm:order-2 w-full sm:w-auto px-4 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center font-medium"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
                 Hemen Ara
