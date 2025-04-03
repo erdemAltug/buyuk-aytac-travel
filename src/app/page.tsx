@@ -67,11 +67,13 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">TÜRSAB Üyesi</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Büyük Aytaç Seyahat, Türkiye Seyahat Acentaları Birliği (TÜRSAB) üyesi olarak, 
-                tüm yasal gereklilikleri karşılayan, güvenilir bir seyahat acentasıdır. 
-                TÜRSAB belgeli acentalarla çalışmak, seyahatlerinizin güvence altında olduğu anlamına gelir.
-              </p>
+              <div className="prose prose-lg max-w-none text-gray-600">
+                <p>
+                  Büyük Aytaç Travel, Türkiye Seyahat Acentaları Birliği (TÜRSAB) üyesi olarak, 
+                  tüm yasal gereklilikleri karşılayan, güvenilir bir seyahat acentasıdır. 
+                  TÜRSAB belgeli acentalarla çalışmak, seyahatlerinizin güvence altında olduğu anlamına gelir.
+                </p>
+              </div>
               <div className="flex items-center space-x-2">
                 <span className="text-blue-600">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

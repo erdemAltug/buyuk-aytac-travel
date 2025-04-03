@@ -31,7 +31,10 @@ export default function AddNewTour() {
     tourType: TourType.DOMESTIC,
     accommodationType: AccommodationType.WITH_ACCOMMODATION,
     startDate: '',
-    endDate: ''
+    endDate: '',
+    program: [{ day: '', title: '', description: '' }],
+    includedServices: [''],
+    excludedServices: [''],
   });
   
   useEffect(() => {
@@ -102,7 +105,10 @@ export default function AddNewTour() {
         tourType: formData.tourType,
         accommodationType: formData.accommodationType,
         startDate: formData.startDate ? new Date(formData.startDate) : undefined,
-        endDate: formData.endDate ? new Date(formData.endDate) : undefined
+        endDate: formData.endDate ? new Date(formData.endDate) : undefined,
+        program: formData.program.filter(item => item.day && item.title && item.description),
+        includedServices: formData.includedServices.filter(item => item.trim() !== ''),
+        excludedServices: formData.excludedServices.filter(item => item.trim() !== ''),
       };
       
       // 3. Turu kaydet
@@ -116,6 +122,87 @@ export default function AddNewTour() {
       setError('Tur eklenirken bir hata oluştu: ' + (err instanceof Error ? err.message : 'Bilinmeyen hata'));
       setSubmitting(false);
     }
+  };
+  
+  // Program günü ekleme fonksiyonu
+  const handleAddProgramDay = () => {
+    setFormData(prev => ({
+      ...prev,
+      program: [...prev.program, { day: '', title: '', description: '' }]
+    }));
+  };
+
+  // Program günü çıkarma fonksiyonu
+  const handleRemoveProgramDay = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      program: prev.program.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Program güncelleme fonksiyonu
+  const handleProgramChange = (index: number, field: string, value: string) => {
+    const updatedProgram = [...formData.program];
+    updatedProgram[index] = { ...updatedProgram[index], [field]: value };
+    
+    setFormData(prev => ({
+      ...prev,
+      program: updatedProgram
+    }));
+  };
+
+  // Dahil olan hizmetleri ekleme fonksiyonu
+  const handleAddIncludedService = () => {
+    setFormData(prev => ({
+      ...prev,
+      includedServices: [...prev.includedServices, '']
+    }));
+  };
+
+  // Dahil olan hizmet çıkarma fonksiyonu
+  const handleRemoveIncludedService = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      includedServices: prev.includedServices.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Dahil olan hizmet güncelleme fonksiyonu
+  const handleIncludedServiceChange = (index: number, value: string) => {
+    const updatedServices = [...formData.includedServices];
+    updatedServices[index] = value;
+    
+    setFormData(prev => ({
+      ...prev,
+      includedServices: updatedServices
+    }));
+  };
+
+  // Dahil olmayan hizmetleri ekleme fonksiyonu
+  const handleAddExcludedService = () => {
+    setFormData(prev => ({
+      ...prev,
+      excludedServices: [...prev.excludedServices, '']
+    }));
+  };
+
+  // Dahil olmayan hizmet çıkarma fonksiyonu
+  const handleRemoveExcludedService = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      excludedServices: prev.excludedServices.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Dahil olmayan hizmet güncelleme fonksiyonu
+  const handleExcludedServiceChange = (index: number, value: string) => {
+    const updatedServices = [...formData.excludedServices];
+    updatedServices[index] = value;
+    
+    setFormData(prev => ({
+      ...prev,
+      excludedServices: updatedServices
+    }));
   };
   
   if (isLoading) {
@@ -274,6 +361,154 @@ export default function AddNewTour() {
                   className={inputClass}
                   required
                 ></textarea>
+              </div>
+              
+              {/* Tur Programı */}
+              <div className="mb-6">
+                <label className={labelClass}>Tur Programı</label>
+                <div className="space-y-4">
+                  {formData.program.map((day, index) => (
+                    <div key={index} className="border p-4 rounded-md">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-medium text-gray-900">Gün {index + 1}</h4>
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveProgramDay(index)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div>
+                          <label htmlFor={`day-${index}`} className="block text-xs font-medium text-gray-700">Gün Bilgisi</label>
+                          <input
+                            type="text"
+                            id={`day-${index}`}
+                            value={day.day}
+                            onChange={(e) => handleProgramChange(index, 'day', e.target.value)}
+                            placeholder="Örn: 11 Nisan 2025, Cuma - 1. Gün"
+                            className={inputClass}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`title-${index}`} className="block text-xs font-medium text-gray-700">Başlık</label>
+                          <input
+                            type="text"
+                            id={`title-${index}`}
+                            value={day.title}
+                            onChange={(e) => handleProgramChange(index, 'title', e.target.value)}
+                            placeholder="Örn: Hareket Günü"
+                            className={inputClass}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`description-${index}`} className="block text-xs font-medium text-gray-700">Açıklama</label>
+                          <textarea
+                            id={`description-${index}`}
+                            value={day.description}
+                            onChange={(e) => handleProgramChange(index, 'description', e.target.value)}
+                            rows={3}
+                            placeholder="Gün programı açıklaması"
+                            className={inputClass}
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleAddProgramDay}
+                    className="flex items-center text-blue-600 hover:text-blue-800"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Yeni Gün Ekle
+                  </button>
+                </div>
+              </div>
+              
+              {/* Dahil Olan Hizmetler */}
+              <div className="mb-6">
+                <label className={labelClass}>Dahil Olan Hizmetler</label>
+                <div className="space-y-2">
+                  {formData.includedServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={service}
+                        onChange={(e) => handleIncludedServiceChange(index, e.target.value)}
+                        placeholder="Dahil olan hizmet"
+                        className={`${inputClass} flex-grow`}
+                      />
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveIncludedService(index)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleAddIncludedService}
+                    className="flex items-center text-blue-600 hover:text-blue-800"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Dahil Hizmet Ekle
+                  </button>
+                </div>
+              </div>
+              
+              {/* Dahil Olmayan Hizmetler */}
+              <div className="mb-6">
+                <label className={labelClass}>Dahil Olmayan Hizmetler</label>
+                <div className="space-y-2">
+                  {formData.excludedServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={service}
+                        onChange={(e) => handleExcludedServiceChange(index, e.target.value)}
+                        placeholder="Dahil olmayan hizmet"
+                        className={`${inputClass} flex-grow`}
+                      />
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExcludedService(index)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleAddExcludedService}
+                    className="flex items-center text-blue-600 hover:text-blue-800"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Dahil Olmayan Hizmet Ekle
+                  </button>
+                </div>
               </div>
               
               {/* Durum */}
