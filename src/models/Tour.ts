@@ -23,6 +23,13 @@ export interface ITour extends Document {
   startDate?: Date;  // Tur başlangıç tarihi
   endDate?: Date;    // Tur bitiş tarihi
   isActive: boolean;
+  program?: Array<{
+    day: string;
+    title: string;
+    description: string;
+  }>;
+  includedServices?: string[];
+  excludedServices?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +65,13 @@ const TourSchema: Schema = new Schema(
     startDate: { type: Date },  // Tur başlangıç tarihi
     endDate: { type: Date },    // Tur bitiş tarihi
     isActive: { type: Boolean, default: true },
+    program: [{ 
+      day: { type: String },
+      title: { type: String },
+      description: { type: String }
+    }],
+    includedServices: [{ type: String }],
+    excludedServices: [{ type: String }],
   },
   { timestamps: true }
 );

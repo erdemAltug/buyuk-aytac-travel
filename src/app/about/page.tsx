@@ -1,14 +1,14 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | Büyük Aytaç Seyahat - Çerkezköy'ün Güvenilir Seyahat Acentesi",
-  description: "Büyük Aytaç Seyahat, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
-  keywords: "Büyük Aytaç Seyahat, Çerkezköy seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü",
+  title: "Hakkımızda | Büyük Aytaç Travel - Çerkezköy'ün Güvenilir Seyahat Acentesi",
+  description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+  keywords: "Büyük Aytaç Travel, Çerkezköy seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü",
   openGraph: {
-    title: "Hakkımızda | Büyük Aytaç Seyahat - Çerkezköy'ün Güvenilir Seyahat Acentesi",
-    description: "Büyük Aytaç Seyahat, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
-    url: 'https://www.buyukaytacseyahat.com/about',
-    siteName: 'Büyük Aytaç Seyahat',
+    title: "Hakkımızda | Büyük Aytaç Travel - Çerkezköy'ün Güvenilir Seyahat Acentesi",
+    description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+    url: 'https://www.buyukaytactravel.com/about',
+    siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
   },
@@ -24,7 +24,7 @@ export default function AboutPage() {
             
             <div className="prose max-w-none">
               <p className="text-lg text-gray-700 mb-6">
-                <strong>Büyük Aytaç Seyahat</strong>, Çerkezköy&apos;de hizmet veren, TÜRSAB belgesine sahip profesyonel bir seyahat acentesidir. Müşteri memnuniyetini ön planda tutarak, kaliteli ve güvenilir tur hizmetleri sunmaktayız.
+                <strong>Büyük Aytaç Travel</strong>, Çerkezköy&apos;de hizmet veren, TÜRSAB belgesine sahip profesyonel bir seyahat acentesidir. Müşteri memnuniyetini ön planda tutarak, kaliteli ve güvenilir tur hizmetleri sunuyoruz.
               </p>
               
               <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Vizyonumuz</h2>
@@ -46,9 +46,9 @@ export default function AboutPage() {
                 <li className="mb-2">Sosyal sorumluluk ve çevre bilinci</li>
               </ul>
               
-              <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">Neden Biz?</h2>
-              <p className="text-gray-700 mb-6">
-                <strong>Büyük Aytaç Seyahat</strong> olarak, sizlere sunduğumuz avantajlar:
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Neden Bizi Tercih Etmelisiniz?</h2>
+              <p className="text-lg text-gray-700 mb-4">
+                <strong>Büyük Aytaç Travel</strong> olarak, sizlere sunduğumuz avantajlar:
               </p>
               <ul className="list-disc pl-5 text-gray-700 mb-6">
                 <li className="mb-2">TÜRSAB güvencesi ile profesyonel hizmet</li>
