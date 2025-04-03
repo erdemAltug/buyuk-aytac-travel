@@ -1,4 +1,15 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { IDestination } from './Destination';
+
+export enum TourType {
+  DOMESTIC = 'domestic',
+  INTERNATIONAL = 'international'
+}
+
+export enum AccommodationType {
+  WITH_ACCOMMODATION = 'with_accommodation',
+  DAILY = 'daily'
+}
 
 export interface ITour extends Document {
   name: string;
@@ -7,7 +18,9 @@ export interface ITour extends Document {
   slug: string;
   duration: string;
   price: number;
-  destinationId: mongoose.Types.ObjectId;
+  destinationId: mongoose.Types.ObjectId | IDestination;
+  tourType: TourType;
+  accommodationType: AccommodationType;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -31,6 +44,16 @@ const TourSchema: Schema = new Schema(
       type: Schema.Types.ObjectId, 
       ref: 'Destination', 
       required: true 
+    },
+    tourType: { 
+      type: String, 
+      enum: Object.values(TourType),
+      default: TourType.DOMESTIC
+    },
+    accommodationType: { 
+      type: String, 
+      enum: Object.values(AccommodationType),
+      default: AccommodationType.WITH_ACCOMMODATION
     },
     isActive: { type: Boolean, default: true },
   },

@@ -8,6 +8,8 @@ export const getTours = async (params?: {
   isActive?: boolean;
   destinationId?: string;
   destinationSlug?: string;
+  tourType?: string;
+  accommodationType?: string;
 }): Promise<ITour[]> => {
   try {
     let url = API_URL;
@@ -25,6 +27,14 @@ export const getTours = async (params?: {
       
       if (params.destinationSlug) {
         queryParams.append('destinationSlug', params.destinationSlug);
+      }
+      
+      if (params.tourType) {
+        queryParams.append('tourType', params.tourType);
+      }
+      
+      if (params.accommodationType) {
+        queryParams.append('accommodationType', params.accommodationType);
       }
       
       const queryString = queryParams.toString();

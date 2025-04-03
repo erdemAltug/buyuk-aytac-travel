@@ -1,24 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
+import { getDestinations } from '@/services/destinationService';
+import { createTour } from '@/services/tourService';
+import { uploadFile } from '@/services/uploadService';
+import { IDestination } from '@/models/Destination';
+import { ITour, TourType, AccommodationType } from '@/models/Tour';
 
-// Örnek destinasyonlar (gerçek uygulamada API'den gelecek)
-const demoDestinations = [
-  { id: 'istanbul', name: 'İstanbul' },
-  { id: 'cappadocia', name: 'Kapadokya' },
-  { id: 'antalya', name: 'Antalya' },
-  { id: 'pamukkale', name: 'Pamukkale' },
-  { id: 'izmir', name: 'İzmir' },
-  { id: 'bodrum', name: 'Bodrum' },
-];
+// Form input sınıflarını güncelle
+const inputClass = "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-2";
+const labelClass = "block text-sm font-medium leading-6 text-gray-900 mb-1";
+const buttonClass = "flex justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed";
 
 export default function AddNewTour() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [destinations, setDestinations] = useState<IDestination[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -28,43 +31,55 @@ export default function AddNewTour() {
     image: null as File | null,
     imagePreview: '',
     status: 'active',
+    tourType: TourType.DOMESTIC,
+    accommodationType: AccommodationType.WITH_ACCOMMODATION
   });
   
-  const router = useRouter();
-  
-  // Check if admin is logged in
   useEffect(() => {
-    const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem('adminLoggedIn');
-      if (!isLoggedIn) {
-        router.push('/admin/login');
-      } else {
+    const fetchDestinations = async () => {
+      try {
+        const data = await getDestinations();
+        setDestinations(data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Destinasyonları getirme hatası:', err);
+        setError('Destinasyonlar yüklenirken bir hata oluştu');
         setIsLoading(false);
       }
     };
     
-    checkAuth();
-  }, [router]);
+    fetchDestinations();
+  }, []);
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
   
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setFormData(prev => ({ 
-        ...prev, 
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData(prev => ({
+        ...prev,
         image: file,
-        imagePreview: URL.createObjectURL(file)
+        imagePreview: reader.result as string
       }));
-    }
+    };
+    reader.readAsDataURL(file);
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setError('');
     
     // Form validation
     if (!formData.name || !formData.description || !formData.destinationId || !formData.duration || !formData.price) {
@@ -73,14 +88,46 @@ export default function AddNewTour() {
       return;
     }
     
-    // Demo: Gerçek uygulamada burada API çağrısı yapılacak
-    setTimeout(() => {
-      console.log('Tur eklendi:', formData);
+    if (!formData.image) {
+      alert('Lütfen bir resim yükleyin');
       setSubmitting(false);
+      return;
+    }
+    
+    try {
+      // 1. Önce resmi yükle
+      const uploadResponse = await uploadFile(formData.image, 'tours');
       
-      // Turlar sayfasına yönlendir
+      if (!uploadResponse.success || !uploadResponse.url) {
+        throw new Error(uploadResponse.message || 'Resim yükleme hatası');
+      }
+      
+      // 2. Tur verilerini hazırla
+      const tourData = {
+        name: formData.name,
+        description: formData.description,
+        destinationId: formData.destinationId,
+        duration: formData.duration,
+        price: parseFloat(formData.price.replace(/[^\d.]/g, '')), // Fiyatı temizle ve sayıya çevir
+        image: uploadResponse.url,
+        isActive: formData.status === 'active',
+        tourType: formData.tourType,
+        accommodationType: formData.accommodationType
+      };
+      
+      // 3. Turu kaydet
+      // API string olarak destinationId kabul ediyor, ancak tip kontrolünü geçmek için
+      // Partial<ITour> & { destinationId: string } şeklinde belirtiyoruz
+      await createTour(tourData as Partial<ITour> & { destinationId: string });
+      
+      // 4. Başarı durumunda turlar sayfasına yönlendir
       router.push('/admin/tours');
-    }, 1000);
+      
+    } catch (err) {
+      console.error('Tur ekleme hatası:', err);
+      setError('Tur eklenirken bir hata oluştu: ' + (err instanceof Error ? err.message : 'Bilinmeyen hata'));
+      setSubmitting(false);
+    }
   };
   
   if (isLoading) {
@@ -98,200 +145,180 @@ export default function AddNewTour() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <AdminHeader />
         
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-800">Yeni Tur Ekle</h1>
-              <p className="text-gray-600">Sisteme yeni bir tur paketi ekleyin</p>
-            </div>
-            <Link 
-              href="/admin/tours"
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-              </svg>
-              Turlar Listesine Dön
-            </Link>
-          </div>
-          
-          <div className="bg-white shadow-md rounded-lg overflow-hidden p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+          <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+            <h1 className="text-2xl font-semibold text-gray-800 mb-6">Yeni Tur Ekle</h1>
+            
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md">
+                {error}
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                      Tur Adı <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                      Açıklama <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="description"
-                      name="description"
-                      rows={4}
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    ></textarea>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="destinationId" className="block text-sm font-medium text-gray-700">
-                      Destinasyon <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="destinationId"
-                      name="destinationId"
-                      value={formData.destinationId}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="">-- Destinasyon Seçin --</option>
-                      {demoDestinations.map(dest => (
-                        <option key={dest.id} value={dest.id}>{dest.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-                      Süre <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="duration"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                      placeholder="örn: 3 Gün"
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                      Fiyat <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="price"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      placeholder="örn: ₺3,500"
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                      Durum
-                    </label>
-                    <select
-                      id="status"
-                      name="status"
-                      value={formData.status}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="active">Aktif</option>
-                      <option value="inactive">Pasif</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Tur Resmi
-                    </label>
-                    <div className="mt-1 flex items-center">
-                      <div 
-                        className="h-32 w-32 border-2 border-gray-300 border-dashed rounded-md flex justify-center items-center relative"
-                      >
-                        {formData.imagePreview ? (
-                          <div className="h-full w-full relative">
-                            <img 
-                              src={formData.imagePreview} 
-                              alt="Preview" 
-                              className="h-full w-full object-cover rounded-md"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setFormData(prev => ({ ...prev, image: null, imagePreview: '' }))}
-                              className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-sm"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                              </svg>
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="text-center">
-                            <svg 
-                              className="mx-auto h-12 w-12 text-gray-400" 
-                              stroke="currentColor" 
-                              fill="none" 
-                              viewBox="0 0 48 48" 
-                              aria-hidden="true"
-                            >
-                              <path 
-                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" 
-                                strokeWidth={2} 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      <div className="ml-4">
-                        <div className="relative bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm cursor-pointer">
-                          <span>Resim Yükle</span>
-                          <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                          />
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF formatları desteklenir</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Tur Adı */}
+              <div className="mb-4">
+                <label htmlFor="name" className={labelClass}>Tur Adı</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                />
               </div>
               
-              <div className="mt-8 border-t pt-6 flex justify-end">
-                <Link
-                  href="/admin/tours"
-                  className="mr-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              {/* Destinasyon */}
+              <div className="mb-4">
+                <label htmlFor="destinationId" className={labelClass}>Destinasyon</label>
+                <select
+                  id="destinationId"
+                  name="destinationId"
+                  value={formData.destinationId}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                >
+                  <option value="">Seçiniz</option>
+                  {destinations.map((destination) => (
+                    <option key={destination._id?.toString()} value={destination._id?.toString()}>
+                      {destination.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              {/* Tur Süresi */}
+              <div className="mb-4">
+                <label htmlFor="duration" className={labelClass}>Tur Süresi</label>
+                <input
+                  type="text"
+                  id="duration"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleChange}
+                  placeholder="Örn: 3 Gün 2 Gece"
+                  className={inputClass}
+                  required
+                />
+              </div>
+              
+              {/* Tur Tipi */}
+              <div className="mb-4">
+                <label htmlFor="tourType" className={labelClass}>Tur Tipi</label>
+                <select
+                  id="tourType"
+                  name="tourType"
+                  value={formData.tourType}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                >
+                  <option value={TourType.DOMESTIC}>Yurt İçi</option>
+                  <option value={TourType.INTERNATIONAL}>Yurt Dışı</option>
+                </select>
+              </div>
+              
+              {/* Konaklama Tipi */}
+              <div className="mb-4">
+                <label htmlFor="accommodationType" className={labelClass}>Konaklama Tipi</label>
+                <select
+                  id="accommodationType"
+                  name="accommodationType"
+                  value={formData.accommodationType}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                >
+                  <option value={AccommodationType.WITH_ACCOMMODATION}>Konaklamalı</option>
+                  <option value={AccommodationType.DAILY}>Günübirlik</option>
+                </select>
+              </div>
+              
+              {/* Fiyat */}
+              <div className="mb-4">
+                <label htmlFor="price" className={labelClass}>Fiyat (₺)</label>
+                <input
+                  type="text"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="1500"
+                  className={inputClass}
+                  required
+                />
+              </div>
+              
+              {/* Açıklama */}
+              <div className="mb-4">
+                <label htmlFor="description" className={labelClass}>Açıklama</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={5}
+                  className={inputClass}
+                  required
+                ></textarea>
+              </div>
+              
+              {/* Durum */}
+              <div className="mb-4">
+                <label htmlFor="status" className={labelClass}>Durum</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className={inputClass}
+                >
+                  <option value="active">Aktif</option>
+                  <option value="inactive">Pasif</option>
+                </select>
+              </div>
+              
+              {/* Resim Yükleme */}
+              <div className="mb-6">
+                <label htmlFor="image" className={labelClass}>Tur Görseli</label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleImageChange}
+                  className="block w-full text-gray-500 file:mr-4 file:py-2 file:px-4
+                  file:rounded-md file:border-0 file:text-sm file:font-semibold
+                  file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  accept="image/*"
+                />
+                
+                {formData.imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={formData.imagePreview}
+                      alt="Preview"
+                      className="h-40 rounded-md object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+              
+              {/* Aksiyon Butonları */}
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="rounded-md px-3 py-1.5 text-sm font-semibold text-gray-900 border border-gray-300 hover:bg-gray-50"
                 >
                   İptal
-                </Link>
+                </button>
                 <button
                   type="submit"
+                  className={buttonClass}
                   disabled={submitting}
-                  className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none ${
-                    submitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
                 >
                   {submitting ? 'Kaydediliyor...' : 'Kaydet'}
                 </button>

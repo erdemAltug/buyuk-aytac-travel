@@ -32,7 +32,7 @@ function DestinationCard({ destination }: { destination: IDestination }) {
         <h3 className="text-xl font-semibold mb-2">{destination.name}</h3>
         <p className="text-gray-600 mb-4">{destination.description}</p>
         <Link 
-          href={`/destinations/${destination.slug}`}
+          href={`/tours/domestic?destination=${destination.slug}`}
           className="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center"
         >
           Keşfet
@@ -60,7 +60,7 @@ export default function FeaturedDestinations() {
         setLoading(false);
       } catch (err) {
         console.error('Destinasyonları getirme hatası:', err);
-        setError('Destinasyonlar yüklenirken bir hata oluştu.');
+        setError('Bölgeler yüklenirken bir hata oluştu.');
         setLoading(false);
       }
     };
@@ -74,7 +74,7 @@ export default function FeaturedDestinations() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Destinasyonlar</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Bölgelerimiz</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Yükleniyor...
             </p>
@@ -115,9 +115,9 @@ export default function FeaturedDestinations() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Destinasyonlar</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Bölgelerimiz</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Şu anda gösterilecek destinasyon bulunmuyor.
+              Şu anda gösterilecek bölge bulunmuyor.
             </p>
           </div>
         </div>
@@ -129,9 +129,9 @@ export default function FeaturedDestinations() {
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Destinasyonlar</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Bölgelerimiz</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Türkiye&apos;nin en nefes kesici destinasyonlarından oluşan özenle seçilmiş koleksiyonumuzu keşfedin
+            Türkiye&apos;nin en nefes kesici bölgelerinden oluşan özenle seçilmiş koleksiyonumuzu keşfedin
           </p>
         </div>
         
@@ -143,10 +143,10 @@ export default function FeaturedDestinations() {
         
         <div className="mt-12 text-center">
           <Link 
-            href="/destinations" 
+            href="/tours/domestic" 
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
           >
-            Tüm Destinasyonları Görüntüle
+            Tüm Yurtiçi Turlarımız
           </Link>
         </div>
       </div>

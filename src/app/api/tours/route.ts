@@ -10,11 +10,13 @@ export async function GET(req: NextRequest) {
     const isActive = searchParams.get('isActive');
     const destinationId = searchParams.get('destinationId');
     const destinationSlug = searchParams.get('destinationSlug');
+    const tourType = searchParams.get('tourType');
+    const accommodationType = searchParams.get('accommodationType');
     
     await dbConnect();
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: { isActive?: boolean; destinationId?: any } = {};
+    const query: { isActive?: boolean; destinationId?: any; tourType?: string; accommodationType?: string } = {};
     
     // İsteğe bağlı filtreler
     if (isActive !== null) {
@@ -23,6 +25,16 @@ export async function GET(req: NextRequest) {
     
     if (destinationId) {
       query.destinationId = destinationId;
+    }
+    
+    // Tur tipi filtresi (yurtiçi/yurtdışı)
+    if (tourType) {
+      query.tourType = tourType;
+    }
+    
+    // Konaklama tipi filtresi (konaklamalı/günübirlik)
+    if (accommodationType) {
+      query.accommodationType = accommodationType;
     }
     
     // Eğer destinasyon slug'ı ile filtreleme yapılacaksa

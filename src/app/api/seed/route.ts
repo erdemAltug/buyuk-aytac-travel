@@ -2,51 +2,51 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Destination from '@/models/Destination';
 import Tour from '@/models/Tour';
+import { TourType, AccommodationType } from '@/models/Tour';
 
 // Bu API route'u sadece geliştirme aşamasında örnek veriler eklemek için kullanılacak
 export async function GET() {
   try {
     await dbConnect();
     
-    // Önce mevcut verileri temizle
+    // İlk olarak mevcut tüm verileri temizleyelim
     await Destination.deleteMany({});
     await Tour.deleteMany({});
     
-    // Örnek destinasyonlar ekle
+    // Örnek destinasyonlar ekleyelim
     const destinations = await Destination.insertMany([
       { 
-        name: 'İstanbul', 
+        name: 'İstanbul',
         slug: 'istanbul',
-        description: 'Doğu ve Batının buluştuğu büyülü şehir. Ayasofya, Sultanahmet Camii ve canlı Kapalıçarşıyı keşfedin.',
+        description: 'Asya ve Avrupa kıtaları arasında bir köprü olan İstanbul, tarih boyunca Roma, Bizans ve Osmanlı İmparatorluklarına başkentlik yapmış, eşsiz kültürel ve tarihi mirası ile dünyanın en önemli şehirlerinden biridir.',
         image: '/destinations/istanbul.jpg',
         isActive: true,
       },
       { 
-        name: 'Kapadokya', 
-        slug: 'kapadokya',
-        description: 'Dünyada eşi benzeri olmayan peri bacalarını, vadileri ve ünlü sıcak hava balonu deneyimlerini keşfedin.',
-        image: '/destinations/kapadokya.jpg',
+        name: 'Kapadokya',
+        slug: 'cappadocia',
+        description: 'Eşsiz peri bacaları, yeraltı şehirleri ve sıcak hava balonlarıyla dünyaca ünlü bir destinasyon olan Kapadokya, binlerce yıllık tarihi ve doğal güzellikleriyle büyüleyici bir deneyim sunar.',
+        image: '/destinations/cappadocia.jpg',
         isActive: true,
       },
       { 
-        name: 'Antalya', 
+        name: 'Antalya',
         slug: 'antalya',
-        description: 'Muhteşem plajlarda dinlenin, antik kalıntıları keşfedin ve tarihin deniz tatiliyle mükemmel uyumunu yaşayın.',
+        description: 'Türkiye\'nin turizm başkenti olarak bilinen Antalya, muhteşem plajları, tarihi kalıntıları ve lüks tatil köyleriyle hem yerli hem de yabancı turistlerin gözdesi bir destinasyondur.',
         image: '/destinations/antalya.jpg',
         isActive: true,
       },
       { 
-        name: 'Pamukkale', 
+        name: 'Pamukkale',
         slug: 'pamukkale',
-        description: 'Göz alıcı beyaz travertenleri ve antik Hierapolis kalıntılarıyla "Pamuk Kalesini" ziyaret edin.',
+        description: 'UNESCO Dünya Mirası Listesi\'nde yer alan Pamukkale, bembeyaz travertenleri ve şifalı termal sularıyla doğal bir harikadır. Antik Hierapolis şehri kalıntılarıyla tarihi önemi de büyüktür.',
         image: '/destinations/pamukkale.jpg',
         isActive: true,
-      }
+      },
     ]);
 
-    // Örnek turlar ekle
     const istanbul = destinations.find(d => d.slug === 'istanbul');
-    const kapadokya = destinations.find(d => d.slug === 'kapadokya');
+    const kapadokya = destinations.find(d => d.slug === 'cappadocia');
     const antalya = destinations.find(d => d.slug === 'antalya');
     const pamukkale = destinations.find(d => d.slug === 'pamukkale');
 
@@ -54,69 +54,84 @@ export async function GET() {
       { 
         name: 'İstanbul Klasik Turu',
         slug: 'istanbul-klasik-turu',
-        description: 'İstanbul\'un en önemli tarihi yerlerini keşfedin. Ayasofya, Topkapı Sarayı ve Kapalıçarşı dahil.',
-        image: '/tours/istanbul-klasik.jpg',
-        duration: 2,
-        price: 2500,
+        description: 'Ayasofya, Topkapı Sarayı, Sultanahmet Camii ve Kapalıçarşı\'yı içeren klasik İstanbul turu.',
+        image: '/tours/istanbul-classic.jpg',
+        duration: '1 Gün',
+        price: 1200,
         destinationId: istanbul?._id,
+        tourType: TourType.DOMESTIC,
+        accommodationType: AccommodationType.DAILY,
         isActive: true,
       },
       {
         name: 'Kapadokya Balon Turu', 
         slug: 'kapadokya-balon-turu',
-        description: 'Nefes kesici manzaralar için sıcak hava balonu dahil tam Kapadokya deneyimi.',
-        image: '/tours/kapadokya-balon.jpg',
-        duration: 3,
-        price: 4200,
+        description: '11-13 Nisan 2025 tarihlerinde gerçekleşecek olan bu özel turumuzda, Kapadokya\'nın eşsiz doğal güzelliklerini, tarihi zenginliklerini ve kültürel mirasını keşfedeceksiniz. Göreme Açık Hava Müzesi, Derinkuyu Yeraltı Şehri, Hayal Vadisi, Üç Güzeller ve daha fazlasını içeren bu turda, balon seyrinden ATV turuna, Türk gecesinden şarap tadımına kadar birçok farklı aktivite seçeneğini deneyimleme şansı bulacaksınız. Profesyonel rehberlik eşliğinde, Kapadokya\'nın büyülü atmosferinde unutulmaz anlar yaşayacaksınız.',
+        image: 'https://buyukaytactravel.com/wp-content/uploads/2025/03/WhatsApp-Image-2025-02-28-at-11.24.34.jpeg',
+        duration: '3 Gün 2 Gece',
+        price: 5000,
         destinationId: kapadokya?._id,
+        tourType: TourType.DOMESTIC,
+        accommodationType: AccommodationType.WITH_ACCOMMODATION,
         isActive: true,
       },
       {
-        name: 'Ege Sahilleri Turu', 
-        slug: 'ege-sahilleri-turu',
-        description: 'Türkiye\'nin muhteşem Ege kıyısı boyunca antik kentler ve masmavi koylarda unutulmaz bir tatil.',
-        image: '/tours/ege-sahilleri.jpg',
-        duration: 5,
-        price: 5800,
+        name: 'Antalya Kemer Turu', 
+        slug: 'antalya-kemer-turu',
+        description: 'Antalya\'nın cennet köşesi Kemer\'de deniz, güneş ve doğa ile buluşan unutulmaz bir tatil.',
+        image: '/tours/antalya-kemer.jpg',
+        duration: '5 Gün 4 Gece',
+        price: 4500,
         destinationId: antalya?._id,
-        isActive: true,
-      },
-      {
-        name: 'Güneydoğu Lezzetleri', 
-        slug: 'guneydogu-lezzetleri',
-        description: 'Gaziantep, Şanlıurfa ve Mardin\'de Türkiye\'nin en zengin mutfak kültürünü ve tarihi dokusunu keşfedin.',
-        image: '/tours/guneydogu-lezzetleri.jpg',
-        duration: 4,
-        price: 3900,
-        destinationId: istanbul?._id,
+        tourType: TourType.DOMESTIC,
+        accommodationType: AccommodationType.WITH_ACCOMMODATION,
         isActive: true,
       },
       {
         name: 'Pamukkale & Hierapolis Turu', 
         slug: 'pamukkale-hierapolis-turu',
-        description: 'Beyaz cennet Pamukkale travertenlerini keşfedin ve antik Hierapolis kentinin kalıntılarını ziyaret edin.',
-        image: '/tours/pamukkale-hierapolis.jpg',
-        duration: 2,
-        price: 1800,
+        description: 'Bembeyaz travertenleri ve antik Hierapolis şehri ile UNESCO Dünya Mirası Listesi\'nde yer alan Pamukkale\'yi keşfedin.',
+        image: '/tours/pamukkale.jpg',
+        duration: '2 Gün 1 Gece',
+        price: 2800,
         destinationId: pamukkale?._id,
+        tourType: TourType.DOMESTIC,
+        accommodationType: AccommodationType.WITH_ACCOMMODATION,
         isActive: true,
-      }
+      },
+      {
+        name: 'Yunanistan Turu', 
+        slug: 'yunanistan-turu',
+        description: 'Atina, Santorini ve Mikonos\'u kapsayan nefes kesici bir Yunanistan turu. Akdeniz\'in en güzel adalarını ve Antik Yunan tarihini keşfedin.',
+        image: '/tours/greece.jpg',
+        duration: '7 Gün 6 Gece',
+        price: 15000,
+        destinationId: istanbul?._id, // Çıkış noktası İstanbul
+        tourType: TourType.INTERNATIONAL,
+        accommodationType: AccommodationType.WITH_ACCOMMODATION,
+        isActive: true,
+      },
+      {
+        name: 'İstanbul Boğaz Turu', 
+        slug: 'istanbul-bogaz-turu',
+        description: 'İstanbul Boğazı\'nı tekneyle gezerek şehrin en güzel manzaralarını denizden keşfedin. Rumeli Hisarı, Ortaköy Camii ve Dolmabahçe Sarayı gibi önemli eserleri görme şansı yakalayın.',
+        image: '/tours/istanbul-bosphorus.jpg',
+        duration: 'Yarım Gün',
+        price: 800,
+        destinationId: istanbul?._id,
+        tourType: TourType.DOMESTIC,
+        accommodationType: AccommodationType.DAILY,
+        isActive: true,
+      },
     ]);
-    
+
     return NextResponse.json({ 
-      success: true, 
       message: 'Örnek veriler başarıyla eklendi',
-      data: {
-        destinations: destinations.length,
-        tours: tours.length
-      }
-    });
+      destinationsCount: destinations.length,
+      toursCount: tours.length
+    }, { status: 200 });
   } catch (error) {
     console.error('Seed Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      message: 'Örnek veri ekleme işlemi sırasında bir hata oluştu',
-      error: error instanceof Error ? error.message : String(error)
-    }, { status: 500 });
+    return NextResponse.json({ error: 'Örnek veriler eklenirken bir hata oluştu' }, { status: 500 });
   }
 } 
