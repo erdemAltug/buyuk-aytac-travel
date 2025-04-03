@@ -68,8 +68,14 @@ export const metadata: Metadata = {
     google: 'google-site-verification-code', // Google Search Console doğrulama kodu ekleyin
   },
   icons: {
-    icon: '/images/LOGO.png',
-    apple: '/images/LOGO.png',
+    icon: [
+      { url: '/images/LOGO.png', sizes: '32x32' },
+      { url: '/images/LOGO.png', sizes: '16x16' }
+    ],
+    apple: [
+      { url: '/images/LOGO.png', sizes: '180x180' }
+    ],
+    shortcut: '/images/LOGO.png',
   },
 };
 
