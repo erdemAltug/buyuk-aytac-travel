@@ -18,6 +18,16 @@ const nextConfig = {
     // Daha sonra API Route Handler'larını next.js dokümanına uygun olarak güncellemek gerekecek
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'buyukaytactravel.com',
+        port: '',
+        pathname: '/wp-content/uploads/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig; 
