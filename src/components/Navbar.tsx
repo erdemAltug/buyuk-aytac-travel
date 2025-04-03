@@ -68,16 +68,34 @@ export default function Navbar() {
               Ana Sayfa
             </Link>
             <Link
-              href="/tours"
+              href="/tours?tourType=domestic"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Turlar
+              Yurtiçi Turları
             </Link>
             <Link
-              href="/about"
+              href="/tours?tourType=international"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Hakkımızda
+              Yurtdışı Turları
+            </Link>
+            <Link
+              href="/tours?accommodationType=with_accommodation"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Konaklamalı Turlar
+            </Link>
+            <Link
+              href="/tours?accommodationType=daily"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Günübirlik Turlar
+            </Link>
+            <Link
+              href="/annual-program"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Yıllık Program
             </Link>
             <Link
               href="/contact"
@@ -130,8 +148,11 @@ export default function Navbar() {
       <div className={`${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} sm:hidden transition-all duration-300 overflow-hidden bg-white shadow-lg`} id="mobile-menu">
         <div className="px-2 py-3 space-y-1">
           <MobileNavLink href="/" label="Ana Sayfa" />
-          <MobileNavLink href="/tours" label="Turlar" />
-          <MobileNavLink href="/about" label="Hakkımızda" />
+          <MobileNavLink href="/tours?tourType=domestic" label="Yurtiçi Turları" />
+          <MobileNavLink href="/tours?tourType=international" label="Yurtdışı Turları" />
+          <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" />
+          <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" />
+          <MobileNavLink href="/annual-program" label="Yıllık Program" />
           <MobileNavLink href="/contact" label="İletişim" />
         </div>
       </div>
