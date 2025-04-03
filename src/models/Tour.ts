@@ -21,6 +21,8 @@ export interface ITour extends Document {
   destinationId: mongoose.Types.ObjectId | IDestination;
   tourType: TourType;
   accommodationType: AccommodationType;
+  startDate?: Date;  // Tur başlangıç tarihi
+  endDate?: Date;    // Tur bitiş tarihi
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -55,6 +57,8 @@ const TourSchema: Schema = new Schema(
       enum: Object.values(AccommodationType),
       default: AccommodationType.WITH_ACCOMMODATION
     },
+    startDate: { type: Date },  // Tur başlangıç tarihi
+    endDate: { type: Date },    // Tur bitiş tarihi
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
@@ -82,4 +86,15 @@ TourSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.models.Tour || mongoose.model<ITour>('Tour', TourSchema); 
+// Model zaten varsa onu kullan, yoksa oluştur
+let Tour: mongoose.Model<ITour>;
+
+// Mongoose modeli tanımlanmışsa
+if (mongoose.models && mongoose.models.Tour) {
+  Tour = mongoose.models.Tour as mongoose.Model<ITour>;
+} else {
+  // Model henüz tanımlanmamışsa oluştur
+  Tour = mongoose.model<ITour>('Tour', TourSchema);
+}
+
+export default Tour; 

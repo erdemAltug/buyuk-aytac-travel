@@ -32,7 +32,9 @@ export default function AddNewTour() {
     imagePreview: '',
     status: 'active',
     tourType: TourType.DOMESTIC,
-    accommodationType: AccommodationType.WITH_ACCOMMODATION
+    accommodationType: AccommodationType.WITH_ACCOMMODATION,
+    startDate: '',
+    endDate: ''
   });
   
   useEffect(() => {
@@ -112,7 +114,9 @@ export default function AddNewTour() {
         image: uploadResponse.url,
         isActive: formData.status === 'active',
         tourType: formData.tourType,
-        accommodationType: formData.accommodationType
+        accommodationType: formData.accommodationType,
+        startDate: formData.startDate ? new Date(formData.startDate) : undefined,
+        endDate: formData.endDate ? new Date(formData.endDate) : undefined
       };
       
       // 3. Turu kaydet
@@ -250,6 +254,34 @@ export default function AddNewTour() {
                   className={inputClass}
                   required
                 />
+              </div>
+              
+              {/* Başlangıç Tarihi */}
+              <div className="mb-4">
+                <label htmlFor="startDate" className={labelClass}>Başlangıç Tarihi</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                <p className="mt-1 text-xs text-gray-500">Tur belirli bir tarihte başlıyorsa doldurun</p>
+              </div>
+              
+              {/* Bitiş Tarihi */}
+              <div className="mb-4">
+                <label htmlFor="endDate" className={labelClass}>Bitiş Tarihi</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                <p className="mt-1 text-xs text-gray-500">Tur belirli bir tarihte bitiyorsa doldurun. Bu tarih geçtiğinde tur otomatik olarak pasif duruma geçer.</p>
               </div>
               
               {/* Açıklama */}
