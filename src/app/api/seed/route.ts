@@ -8,124 +8,54 @@ import { TourType, AccommodationType } from '@/models/Tour';
 export async function GET() {
   try {
     await dbConnect();
-    
+
     // İlk olarak mevcut tüm verileri temizleyelim
     await Destination.deleteMany({});
     await Tour.deleteMany({});
-    
+
     // Örnek destinasyonlar ekleyelim
     const destinations = await Destination.insertMany([
-      { 
-        name: 'İstanbul',
-        slug: 'istanbul',
-        description: 'Asya ve Avrupa kıtaları arasında bir köprü olan İstanbul, tarih boyunca Roma, Bizans ve Osmanlı İmparatorluklarına başkentlik yapmış, eşsiz kültürel ve tarihi mirası ile dünyanın en önemli şehirlerinden biridir.',
-        image: '/destinations/istanbul.jpg',
-        isActive: true,
-      },
-      { 
-        name: 'Kapadokya',
-        slug: 'cappadocia',
-        description: 'Eşsiz peri bacaları, yeraltı şehirleri ve sıcak hava balonlarıyla dünyaca ünlü bir destinasyon olan Kapadokya, binlerce yıllık tarihi ve doğal güzellikleriyle büyüleyici bir deneyim sunar.',
-        image: '/destinations/cappadocia.jpg',
-        isActive: true,
-      },
-      { 
-        name: 'Antalya',
-        slug: 'antalya',
-        description: 'Türkiye\'nin turizm başkenti olarak bilinen Antalya, muhteşem plajları, tarihi kalıntıları ve lüks tatil köyleriyle hem yerli hem de yabancı turistlerin gözdesi bir destinasyondur.',
-        image: '/destinations/antalya.jpg',
-        isActive: true,
-      },
-      { 
-        name: 'Pamukkale',
-        slug: 'pamukkale',
-        description: 'UNESCO Dünya Mirası Listesi\'nde yer alan Pamukkale, bembeyaz travertenleri ve şifalı termal sularıyla doğal bir harikadır. Antik Hierapolis şehri kalıntılarıyla tarihi önemi de büyüktür.',
-        image: '/destinations/pamukkale.jpg',
+      {
+        name: 'Adana',
+        slug: 'adana',
+        description: 'Türkiye\'nin güneyinde bulunan Adana, zengin mutfağı, tarihi yapıları ve kültürel etkinlikleriyle öne çıkan bir şehirdir. Özellikle Portakal Çiçeği Festivali gibi önemli etkinliklere ev sahipliği yapmaktadır.',
+        image: '/destinations/adana.jpg',
         isActive: true,
       },
     ]);
 
-    const istanbul = destinations.find(d => d.slug === 'istanbul');
-    const kapadokya = destinations.find(d => d.slug === 'cappadocia');
-    const antalya = destinations.find(d => d.slug === 'antalya');
-    const pamukkale = destinations.find(d => d.slug === 'pamukkale');
+    const adana = destinations.find(d => d.slug === 'adana');
 
     const tours = await Tour.insertMany([
-      { 
-        name: 'İstanbul Klasik Turu',
-        slug: 'istanbul-klasik-turu',
-        description: 'Ayasofya, Topkapı Sarayı, Sultanahmet Camii ve Kapalıçarşı\'yı içeren klasik İstanbul turu.',
-        image: '/tours/istanbul-classic.jpg',
-        duration: '1 Gün',
-        price: 1200,
-        destinationId: istanbul?._id,
-        tourType: TourType.DOMESTIC,
-        accommodationType: AccommodationType.DAILY,
-        isActive: true,
-      },
       {
-        name: 'Kapadokya Balon Turu', 
-        slug: 'kapadokya-balon-turu',
-        description: '11-13 Nisan 2025 tarihlerinde gerçekleşecek olan bu özel turumuzda, Kapadokya\'nın eşsiz doğal güzelliklerini, tarihi zenginliklerini ve kültürel mirasını keşfedeceksiniz. Göreme Açık Hava Müzesi, Derinkuyu Yeraltı Şehri, Hayal Vadisi, Üç Güzeller ve daha fazlasını içeren bu turda, balon seyrinden ATV turuna, Türk gecesinden şarap tadımına kadar birçok farklı aktivite seçeneğini deneyimleme şansı bulacaksınız. Profesyonel rehberlik eşliğinde, Kapadokya\'nın büyülü atmosferinde unutulmaz anlar yaşayacaksınız.',
-        image: 'https://buyukaytactravel.com/wp-content/uploads/2025/03/WhatsApp-Image-2025-02-28-at-11.24.34.jpeg',
+        name: 'Adana Portakal Çiçeği Festivali Turu',
+        slug: 'adana-portakal-cicegi-festivali-turu',
+        description: `ADANA PORTAKAL ÇİÇEĞİ FESTİVALİ TURU 04-06 NİSAN 2025
+
+1.GÜN : 04 Nisan 2025 – Cuma
+Akşam saatlerinde firmamızın belirlediği noktalardan sizleri alarak Adana'ya hareket ediyoruz. 
+
+2.GÜN: 05 Nisan 2025 - Cumartesi 
+Sabahın erken saatlerinde Adana'ya varıyoruz ve kahvaltımızı yapıyoruz. (ekstra) Kahvaltımızın ardından isteyen misafirlerimizle birlikte Seyhan Nehri'nde gondol gezintisi yapıyoruz. (ekstra) Gondol gezintimizin ardından şehir turumuza ilk durağımız olan Atatük Evi ve Taş Köprü gezilerimizin sonrasında Türkiye'nin İlk Karnavalı olan Adana Portakal Çiçeği Festival Alanı'na ulaşıyoruz. Karnaval alanında öğle yemeğinizin ardından Kortej Yürüyüşünü izlemek üzere sizleri burada serbest bırakıyoruz. Rehberimizin belirttiği yerde ve saatte toplanarak otobüsümüze binerek otelimize yerleşmek üzere Mersin'e yola çıkıyoruz. Kebaplarıyla ünlü bölgemizin yöresel yemeklerini tadarak akşam yemeğimizi alıyoruz ve yerleşmek üzere otele geçiyoruz. Konaklama Mersin'de.
+
+3.GÜN : 06 Nisan 2025 - Pazar 
+Sabah otelimizde alacağımız kahvaltımızın ardından 08.30'da Kız Kalesi'ne hareket ediyoruz. Kızkalesi, Cennet – Cehennem Mağarası, Narlıkuyu gezilerimizin ardından Tarsus'a hareket ediyoruz. Burada alacağımız öğle yemeğimizin (ekstra) sonrasında Nusret Mayın Gemisini görüyoruz. Sonrasında Eshab-ı Kehf'e gidiyoruz. Mağaranın hemen yanında mescidi gördükten sonra serbest zaman veriyoruz. Eshab – ı Kehf gezimizin ardından Kleopatra Kapısı, St. Paul Kuyusu ve Kilisesi göreceğimiz yerler arasında. Tarsus Şelalesinde vereceğimiz çay molamızın sonrasında Çerkezköy'e dönmek üzere yola çıkıyoruz. Bir sonraki Büyük Aytaç Travel organizasyonunda görüşmek üzere vedalaşıyoruz.
+
+Adres: Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1, 59500 Çerkezköy/Tekirdağ
+Telefon: 0530 060 95 59 & 0539 345 95 59`,
+        image: '/images/adana-cicek-festivali.jpeg',
         duration: '3 Gün 2 Gece',
         price: 5000,
-        destinationId: kapadokya?._id,
+        destinationId: adana?._id,
         tourType: TourType.DOMESTIC,
         accommodationType: AccommodationType.WITH_ACCOMMODATION,
+        startDate: new Date('2025-04-04'),
+        endDate: new Date('2025-04-06'),
         isActive: true,
-      },
-      {
-        name: 'Antalya Kemer Turu', 
-        slug: 'antalya-kemer-turu',
-        description: 'Antalya\'nın cennet köşesi Kemer\'de deniz, güneş ve doğa ile buluşan unutulmaz bir tatil.',
-        image: '/tours/antalya-kemer.jpg',
-        duration: '5 Gün 4 Gece',
-        price: 4500,
-        destinationId: antalya?._id,
-        tourType: TourType.DOMESTIC,
-        accommodationType: AccommodationType.WITH_ACCOMMODATION,
-        isActive: true,
-      },
-      {
-        name: 'Pamukkale & Hierapolis Turu', 
-        slug: 'pamukkale-hierapolis-turu',
-        description: 'Bembeyaz travertenleri ve antik Hierapolis şehri ile UNESCO Dünya Mirası Listesi\'nde yer alan Pamukkale\'yi keşfedin.',
-        image: '/tours/pamukkale.jpg',
-        duration: '2 Gün 1 Gece',
-        price: 2800,
-        destinationId: pamukkale?._id,
-        tourType: TourType.DOMESTIC,
-        accommodationType: AccommodationType.WITH_ACCOMMODATION,
-        isActive: true,
-      },
-      {
-        name: 'Yunanistan Turu', 
-        slug: 'yunanistan-turu',
-        description: 'Atina, Santorini ve Mikonos\'u kapsayan nefes kesici bir Yunanistan turu. Akdeniz\'in en güzel adalarını ve Antik Yunan tarihini keşfedin.',
-        image: '/tours/greece.jpg',
-        duration: '7 Gün 6 Gece',
-        price: 15000,
-        destinationId: istanbul?._id, // Çıkış noktası İstanbul
-        tourType: TourType.INTERNATIONAL,
-        accommodationType: AccommodationType.WITH_ACCOMMODATION,
-        isActive: true,
-      },
-      {
-        name: 'İstanbul Boğaz Turu', 
-        slug: 'istanbul-bogaz-turu',
-        description: 'İstanbul Boğazı\'nı tekneyle gezerek şehrin en güzel manzaralarını denizden keşfedin. Rumeli Hisarı, Ortaköy Camii ve Dolmabahçe Sarayı gibi önemli eserleri görme şansı yakalayın.',
-        image: '/tours/istanbul-bosphorus.jpg',
-        duration: 'Yarım Gün',
-        price: 800,
-        destinationId: istanbul?._id,
-        tourType: TourType.DOMESTIC,
-        accommodationType: AccommodationType.DAILY,
-        isActive: true,
-      },
+      }
     ]);
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Örnek veriler başarıyla eklendi',
       destinationsCount: destinations.length,
       toursCount: tours.length
