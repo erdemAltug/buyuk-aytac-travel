@@ -9,26 +9,26 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     
     if (!tour) {
       return {
-        title: 'Tur Bulunamadı | Büyük Aytaç Seyahat',
+        title: 'Tur Bulunamadı | Büyük Aytaç Travel',
         description: 'Aradığınız tur bulunamadı veya kaldırılmış olabilir.',
       };
     }
     
     // Tur başlığına göre SEO meta verilerini oluştur
-    const title = `${tour.name} | ${tour.destination} | Büyük Aytaç Seyahat Turları`;
+    const title = `${tour.name} | ${tour.destination} | Büyük Aytaç Travel Turları`;
     
     // Açıklama tur açıklamasından oluşturulur (kısa tutmak için)
     const description = tour.description.length > 160 
       ? `${tour.description.substring(0, 157)}...` 
       : tour.description;
       
-    // Belirli anahtar kelimeler oluştur
-    const keywords = `${tour.name}, ${tour.destination}, Çerkezköy tur, ${tour.duration}, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik tur'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, Büyük Aytaç Seyahat`;
+    // Tur tipine ve özelliklerine göre anahtar kelimeleri ayarla
+    const keywordString = `${tour.name}, ${tour.destination}, ${tour.duration}, ${tour.price} TL, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik gezi'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, Büyük Aytaç Travel`;
     
     return {
       title,
       description,
-      keywords,
+      keywords: keywordString,
       openGraph: {
         title,
         description,
@@ -55,8 +55,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   } catch (error) {
     console.error('Metadata generation error:', error);
     return {
-      title: 'Tur Detayı | Büyük Aytaç Seyahat',
-      description: 'Büyük Aytaç Seyahat ile unutulmaz tur deneyimleri yaşayın',
+      title: 'Tur Detayı | Büyük Aytaç Travel',
+      description: 'Büyük Aytaç Travel ile unutulmaz tur deneyimleri yaşayın',
     };
   }
 } 

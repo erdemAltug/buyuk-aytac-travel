@@ -19,7 +19,7 @@ export default function AdminHeader() {
     <header className="bg-white shadow-md">
       <div className="flex justify-between items-center px-6 py-3">
         <div>
-          <h2 className="text-xl font-semibold text-gray-800">Büyük Aytaç Seyahat</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Büyük Aytaç Travel</h2>
         </div>
         
         <div className="flex items-center space-x-4">

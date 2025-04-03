@@ -101,10 +101,10 @@ export default function Footer() {
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'TravelAgency',
-              name: 'Büyük Aytaç Seyahat',
-              image: 'https://www.buyukaytacseyahat.com/images/LOGO.png',
-              '@id': 'https://www.buyukaytacseyahat.com',
-              url: 'https://www.buyukaytacseyahat.com',
+              name: 'Büyük Aytaç Travel',
+              image: 'https://www.buyukaytactravel.com/images/LOGO.png',
+              '@id': 'https://www.buyukaytactravel.com',
+              url: 'https://www.buyukaytactravel.com',
               telephone: '+905300609559',
               priceRange: '₺₺',
               address: {
@@ -117,33 +117,24 @@ export default function Footer() {
               },
               geo: {
                 '@type': 'GeoCoordinates',
-                latitude: 41.2861,  // Çerkezköy koordinatları
-                longitude: 28.0058
+                latitude: 41.2863,
+                longitude: 27.9983
               },
-              openingHoursSpecification: [
-                {
-                  '@type': 'OpeningHoursSpecification',
-                  dayOfWeek: [
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday'
-                  ],
-                  opens: '09:00',
-                  closes: '18:00'
-                },
-                {
-                  '@type': 'OpeningHoursSpecification',
-                  dayOfWeek: 'Saturday',
-                  opens: '09:00',
-                  closes: '13:00'
-                }
-              ],
               sameAs: [
                 'https://www.facebook.com/buyukaytacseyahat',
                 'https://www.instagram.com/buyukaytacseyahat'
-              ]
+              ],
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://www.buyukaytactravel.com/images/LOGO.png',
+                width: '112',
+                height: '112'
+              },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+905300609559',
+                contactType: 'customer service'
+              }
             })
           }}
         />
@@ -153,7 +144,7 @@ export default function Footer() {
               <div className="relative h-24 w-40 mr-3">
                 <Image
                   src="/images/LOGO.png"
-                  alt="Büyük Aytaç Seyahat Logo"
+                  alt="Büyük Aytaç Travel Logo"
                   fill
                   className="object-contain object-center brightness-110"
                 />
@@ -250,7 +241,7 @@ export default function Footer() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                   </svg>
                 </span>
-                <span className="text-white">info@buyukaytac.com</span>
+                <span className="text-white">buyukaytac59@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -259,7 +250,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <p className="text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} Büyük Aytaç Seyahat. Tüm hakları saklıdır.
+              &copy; {new Date().getFullYear()} Büyük Aytaç Travel. Tüm hakları saklıdır.
             </p>
             <a 
               href="https://www.tursab.org.tr/" 

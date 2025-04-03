@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -42,7 +42,7 @@ function TourCard({ tour }: { tour: ITour }) {
           <p className="text-gray-600 mb-3 line-clamp-2">{tour.description}</p>
           <div className="flex justify-between items-center mb-3">
             <span className="text-blue-600 font-bold text-lg">{tour.price.toLocaleString('tr-TR')} ₺</span>
-            <Link 
+            <Link
               href={`/tours/${tour.slug}`}
               className="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center"
             >
@@ -63,23 +63,24 @@ function TourCard({ tour }: { tour: ITour }) {
 
       {/* Rezervasyon Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto overflow-hidden">
-            <div className="flex justify-between items-center border-b px-6 py-4">
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto overflow-hidden max-h-[90vh] relative">
+            <div className="sticky top-0 z-10 flex justify-between items-center border-b px-6 py-4 bg-white">
               <h3 className="text-lg font-semibold text-gray-900">
                 Rezervasyon: {tour.name}
               </h3>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-gray-400 hover:text-gray-500 p-2.5 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Kapat"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            
-            <div className="px-6 py-4">
+
+            <div className="px-6 py-4 overflow-y-auto max-h-[60vh] md:max-h-[calc(90vh-120px)]">
               <div className="mb-4">
                 <p className="text-gray-700 mb-2">
                   <span className="font-semibold">Tur:</span> {tour.name}
@@ -91,7 +92,7 @@ function TourCard({ tour }: { tour: ITour }) {
                   <span className="font-semibold">Fiyat:</span> {tour.price.toLocaleString('tr-TR')} ₺
                 </p>
               </div>
-              
+
               <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
                 <h4 className="text-blue-800 font-semibold text-lg mb-2">Rezervasyon Bilgilendirmesi</h4>
                 <p className="text-blue-700 mb-2">
@@ -158,15 +159,15 @@ function TourCard({ tour }: { tour: ITour }) {
                 </div>
               </div>
             </div>
-            
-            <div className="bg-gray-50 px-6 py-4 flex justify-between">
+
+            <div className="sticky bottom-0 bg-gray-50 px-6 py-4 flex flex-col sm:flex-row justify-between gap-3 border-t">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                className="order-2 sm:order-1 w-full sm:w-auto px-4 py-2.5 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors font-medium"
               >
                 Kapat
               </button>
-              <a 
+              <a
                 href="tel:+905300609559"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
               >
@@ -189,36 +190,36 @@ function TourList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filterTitle, setFilterTitle] = useState('Tüm Turlarımız');
-  
+
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        
+
         // URL'den parametreleri al
         const tourType = searchParams.get('tourType');
         const accommodationType = searchParams.get('accommodationType');
-        
+
         // Filtre parametreleri varsa API çağrısına ekle
         const params: {
           isActive?: boolean;
           tourType?: string;
           accommodationType?: string;
         } = { isActive: true };
-        
+
         if (tourType) {
           params.tourType = tourType;
         }
-        
+
         if (accommodationType) {
           params.accommodationType = accommodationType;
         }
-        
+
         const data = await getTours(params);
         setFilteredTours(data);
-        
+
         // Başlığı ayarla
         if (tourType === 'domestic') {
           setFilterTitle('Yurtiçi Turlarımız');
@@ -231,7 +232,7 @@ function TourList() {
         } else {
           setFilterTitle('Tüm Turlarımız');
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Turları getirme hatası:', err);
@@ -251,7 +252,7 @@ function TourList() {
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Yükleniyor...
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
@@ -298,7 +299,7 @@ function TourList() {
           Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredTours.map((tour) => (
           <TourCard key={tour._id?.toString()} tour={tour} />

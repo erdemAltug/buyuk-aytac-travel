@@ -16,32 +16,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-  description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
-  keywords: "Çerkezköy tur, Çerkezköy seyahat, Çerkezköy tur şirketi, Tekirdağ tur, yurtiçi tur, yurtdışı tur, günübirlik turlar, konaklamalı turlar, Kapadokya turu, Karadeniz turu, Alaçatı turu, TÜRSAB seyahat acentesi, Çerkezköy gezi",
-  authors: [{ name: "Büyük Aytaç Seyahat" }],
-  creator: "Büyük Aytaç Seyahat",
-  publisher: "Büyük Aytaç Seyahat",
+  title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+  description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+  keywords: "tur, seyahat, çerkezköy tur, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, gezi, tatil, turizm",
+  authors: [{ name: "Büyük Aytaç Travel" }],
+  creator: "Büyük Aytaç Travel",
+  publisher: "Büyük Aytaç Travel",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://www.buyukaytacseyahat.com'),
+  metadataBase: new URL('https://www.buyukaytactravel.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
-    url: 'https://www.buyukaytacseyahat.com',
-    siteName: 'Büyük Aytaç Seyahat',
+    title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    url: "https://www.buyukaytactravel.com",
+    siteName: 'Büyük Aytaç Travel',
     images: [
       {
         url: '/images/LOGO.png',
         width: 1200,
         height: 630,
-        alt: 'Büyük Aytaç Seyahat Logo',
+        alt: 'Büyük Aytaç Travel Logo',
       },
     ],
     locale: 'tr_TR',
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Büyük Aytaç Seyahat | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Seyahat ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
     images: ['/images/LOGO.png'],
   },
   robots: {
@@ -66,6 +66,16 @@ export const metadata: Metadata = {
   category: 'travel',
   verification: {
     google: 'google-site-verification-code', // Google Search Console doğrulama kodu ekleyin
+  },
+  icons: {
+    icon: [
+      { url: '/images/LOGO.png', sizes: '32x32' },
+      { url: '/images/LOGO.png', sizes: '16x16' }
+    ],
+    apple: [
+      { url: '/images/LOGO.png', sizes: '180x180' }
+    ],
+    shortcut: '/images/LOGO.png',
   },
 };
 

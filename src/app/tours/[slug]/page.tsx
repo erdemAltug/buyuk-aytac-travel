@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTourBySlug } from '@/services/tourService';
+import { submitContactForm } from '@/services/contactService';
 import { ITour } from '@/models/Tour';
 
 export default function TourDetail({ params }: { params: { slug: string } }) {
@@ -12,6 +13,15 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
   const [error, setError] = useState('');
   const [imageError, setImageError] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -29,6 +39,48 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
 
     fetchTour();
   }, [params.slug]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setFormError('');
+    
+    try {
+      // Tur bilgisini mesaja ekle
+      const tourMessage = `Tur Bilgisi: ${tour?.name}\n\n${formData.message}`;
+      const formDataWithTour = {
+        ...formData,
+        message: tourMessage
+      };
+      
+      const response = await submitContactForm(formDataWithTour);
+      
+      if (!response.success) {
+        throw new Error(response.message || 'Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+      }
+      
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        setFormError(err.message);
+      } else {
+        setFormError('Bilinmeyen bir hata oluştu.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Yükleme durumu
   if (loading) {
@@ -86,47 +138,6 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
       </main>
     );
   }
-
-  // Örnek program (gerçekte API'den gelecek)
-  const sampleProgram = [
-    {
-      day: "11 Nisan 2025, Cuma - 1. Gün",
-      title: "Hareket Günü",
-      description: "Siz değerli misafirlerimizi firmamızın belirlediği noktalardan alarak yola çıkıyoruz."
-    },
-    {
-      day: "12 Nisan 2025, Cumartesi - 2. Gün",
-      title: "Kapadokya Keşif Günü",
-      description: "Sabah erken saatlerde alacağımız kahvaltının ardından (ekstra) Hava koşullarına göre balonlar kalktığı takdirde sabah erken saatlerde Kapadokya'nın mistik atmosferiyle tanışmak üzere Aşk Vadisi'nde gerçekleşecek muhteşem bir balon seyrine katılıyoruz. (ekstra)\n\nKapadokya'nın mistik atmosferine adım atmak üzere Göreme Açık Hava Müzesi'ne gidiyoruz. Burada binlerce yıllık tarihi ve benzersiz kaya kiliselerini keşfederek bölgenin büyüleyici geçmişine tanıklık edeceksiniz. Daha sonra adrenalini yüksek bir macera için dileyen misafirlerimizle ATV'lere binip, Kapadokya'nın eşsiz doğasında unutulmaz bir gezintiye çıkabilir veya Kapadokya'nın ismini aldığı güzel atlarıyla huzurlu bir vadi gezisi yapabilirsiniz. (ekstra)\n\nSonrasında Kızılırmak üzerine kurulmuş sallanan köprüden yürüyüş yaparak Avanos'ta çömlek atölyelerinde ustaların elinden çıkan geleneksel çömlekleri inceleyerek bölgenin zanaatkarlık geleneğini yakından görüyoruz. Bölgenin eşsiz Onyx taşlarını inceleyip alışveriş yapma fırsatı bulacağımız Onyx atölyesi olacak.\n\nSonrasında büyüleyici kaya oluşumlarının yer aldığı Hayal Vadisi'nde keyifli bir yürüyüş yapıyoruz ve eşsiz doğanın büyüsüne kapılıyoruz. Hayal vadisinden sonra Ürgüp'e doğru yol alırken, panoramik olarak bölgenin sembolü Üç Güzelleri görüyor ve bölgenin ünlü şarap mahzenlerini ziyaret etme fırsatı yakalıyoruz. Burada Kapadokya'ya özgü üzümlerden yapılan şaraplar hakkında bilgi alma, şarap alışverişi yapma şansı yakalıyoruz.\n\nArdından, Kapadokya'nın doğasıyla bütünleşmiş Güvercinlik Vadisinde eşsiz fotoğraflar çekme fırsatı yakalıyoruz.\n\nGünün sonunda, Ortahisar kalesinin görkemli manzarasını süsleyen eşsiz eski Kapadokya evleri eşliğinde kahve molası vererek, otelimize doğru harekete geçiyoruz. Akşam yemeği ve konaklama otelimizde. (Dileyen misafirlerimiz ekstra olarak düzenlenecek Türk Gecesine katılabilir.)"
-    },
-    {
-      day: "13 Nisan 2025, Pazar - 3. Gün",
-      title: "Yeraltı Şehirleri ve İnanç Merkezleri",
-      description: "Otelde alınan kahvaltının ardından Uçhisar'da bulunan eski yerleşim alanını ziyaret ederek, Derinkuyu Yeraltı Şehri'ni keşfetmek için derinlere iniyoruz, tarihin gizemli koridorlarında zaman yolculuğu yapıyoruz. Burada vereceğimiz vaktin ardından volkanik bir oluşum olan Narlıgöl'ün etkileyici manzarası eşliğinde mola veriyoruz. Ardından Ihlara Vadisi'nde bulunan Cam Teras'tan muhteşem bir manzara eşliğinde dinlenme molası veriyoruz.\n\nSonrasında 13.yy'da tek bir kayadan oyularak yapılmış olan döneminin en büyük eğitim merkezi olan Selime Katedrali'ni ziyaret ediyoruz, bu benzersiz kaya kilisesinin içindeki tarihi freskleri ve mimari detayları keşfetme fırsatı buluyoruz. Programımızın bitişiyle birlikte geri dönüş yolumuza devam ediyor, bir sonraki Büyük Aytaç Travel organizasyonunda görüşmek dileğiyle vedalaşıyoruz."
-    }
-  ];
-
-  // Dahil olan hizmetler (gerçekte API'den gelecek)
-  const includedServices = [
-    "Profesyonel rehberlik hizmeti",
-    "2 gece otel konaklaması (3* veya butik otel)",
-    "Programda belirtilen tüm geziler ve transferler",
-    "Otelde 2 sabah kahvaltısı ve 1 akşam yemeği",
-    "Seyahat sigortası",
-    "Müze ve ören yeri giriş ücretleri"
-  ];
-
-  // Dahil olmayan hizmetler (gerçekte API'den gelecek)
-  const excludedServices = [
-    "Programda 'ekstra' olarak belirtilen tüm aktiviteler",
-    "Kapadokya balon turu (150-180€/kişi)",
-    "ATV turu (35-40€/kişi)",
-    "At turu (25-30€/kişi)",
-    "Türk Gecesi (40-50€/kişi)",
-    "Kişisel harcamalar",
-    "Öğle yemekleri",
-    "Programda belirtilmeyen öğünler"
-  ];
 
   return (
     <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
@@ -229,12 +240,16 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tur Programı</h2>
                 <div className="space-y-6">
-                  {sampleProgram.map((day, index) => (
-                    <div key={index} className="border-l-4 border-blue-400 pl-4">
-                      <h3 className="text-lg font-medium text-gray-900">{day.day}: {day.title}</h3>
-                      <p className="mt-1 text-gray-600">{day.description}</p>
-                    </div>
-                  ))}
+                  {tour.program && tour.program.length > 0 ? (
+                    tour.program.map((day, index) => (
+                      <div key={index} className="border-l-4 border-blue-400 pl-4">
+                        <h3 className="text-lg font-medium text-gray-900">{day.day}: {day.title}</h3>
+                        <p className="mt-1 text-gray-600 whitespace-pre-line">{day.description}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-600">Program bilgisi henüz eklenmemiştir.</p>
+                  )}
                 </div>
                 <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
                   <p className="text-sm text-yellow-800">
@@ -248,18 +263,26 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
             {activeTab === 'services' && (
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olan Hizmetler</h2>
-                <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-8">
-                  {includedServices.map((service, index) => (
-                    <li key={index}>{service}</li>
-                  ))}
-                </ul>
+                {tour.includedServices && tour.includedServices.length > 0 ? (
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-8">
+                    {tour.includedServices.map((service, index) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 mb-8">Dahil hizmetler bilgisi henüz eklenmemiştir.</p>
+                )}
                 
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olmayan Hizmetler</h2>
-                <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                  {excludedServices.map((service, index) => (
-                    <li key={index}>{service}</li>
-                  ))}
-                </ul>
+                {tour.excludedServices && tour.excludedServices.length > 0 ? (
+                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                    {tour.excludedServices.map((service, index) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600">Dahil olmayan hizmetler bilgisi henüz eklenmemiştir.</p>
+                )}
               </div>
             )}
           </div>
@@ -277,7 +300,7 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
                   <span className="font-semibold">Telefon:</span> 0530 060 95 59 / 0539 345 95 59
                 </p>
                 <p className="mb-1 text-gray-600">
-                  <span className="font-semibold">Email:</span> buyukaytac59@gmail.com
+                  <span className="font-semibold">Email:</span> info@buyukaytactravel.com
                 </p>
                 <p className="mb-4 text-gray-600">
                   <span className="font-semibold">Adres:</span> Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1, 59500 Çerkezköy/Tekirdağ
@@ -291,62 +314,92 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
               
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">İletişim Formu</h3>
-                <form className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Ad Soyad
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Ad Soyad"
-                    />
+                
+                {submitted ? (
+                  <div className="bg-green-50 p-4 rounded-md border border-green-200 text-green-700 mb-6">
+                    <p className="font-medium">Mesajınız başarıyla gönderildi!</p>
+                    <p className="mt-1">En kısa sürede sizinle iletişime geçeceğiz.</p>
                   </div>
-                  
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Email"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                      Telefon
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Telefon"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      Mesaj
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Mesajınız..."
-                    ></textarea>
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Bilgi İsteyin
-                  </button>
-                </form>
+                ) : (
+                  <form className="space-y-4" onSubmit={handleSubmit}>
+                    {formError && (
+                      <div className="bg-red-50 p-4 rounded-md border border-red-200 text-red-700 mb-4">
+                        <p>{formError}</p>
+                      </div>
+                    )}
+                    
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                        Ad Soyad
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        placeholder="Ad Soyad"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        placeholder="Email"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                        Telefon
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        placeholder="Telefon"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                        Mesaj
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={4}
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        placeholder="Mesajınız..."
+                      ></textarea>
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
+                    >
+                      {submitting ? 'Gönderiliyor...' : 'Bilgi İsteyin'}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
