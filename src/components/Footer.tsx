@@ -204,9 +204,26 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} Büyük Aytaç Seyahat. Tüm hakları saklıdır.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <p className="text-gray-400 text-sm">
+              &copy; {new Date().getFullYear()} Büyük Aytaç Seyahat. Tüm hakları saklıdır.
+            </p>
+            <a 
+              href="https://www.tursab.org.tr/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block"
+              title="TÜRSAB - Türkiye Seyahat Acentaları Birliği"
+            >
+              <Image 
+                src="/images/tursab.png" 
+                alt="TÜRSAB Logo" 
+                width={80} 
+                height={40}
+                className="object-contain" 
+              />
+            </a>
+          </div>
           <div className="mt-6 md:mt-0">
             <ul className="flex flex-wrap justify-center space-x-6 text-sm">
               <li>
