@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -42,7 +42,7 @@ function TourCard({ tour }: { tour: ITour }) {
           <p className="text-gray-600 mb-3 line-clamp-2">{tour.description}</p>
           <div className="flex justify-between items-center mb-3">
             <span className="text-blue-600 font-bold text-lg">{tour.price.toLocaleString('tr-TR')} ₺</span>
-            <Link 
+            <Link
               href={`/tours/${tour.slug}`}
               className="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center"
             >
@@ -79,7 +79,7 @@ function TourCard({ tour }: { tour: ITour }) {
                 </svg>
               </button>
             </div>
-            
+
             <div className="px-6 py-4 overflow-y-auto max-h-[60vh] md:max-h-[calc(90vh-120px)]">
               <div className="mb-4">
                 <p className="text-gray-700 mb-2">
@@ -92,7 +92,7 @@ function TourCard({ tour }: { tour: ITour }) {
                   <span className="font-semibold">Fiyat:</span> {tour.price.toLocaleString('tr-TR')} ₺
                 </p>
               </div>
-              
+
               <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
                 <h4 className="text-blue-800 font-semibold text-lg mb-2">Rezervasyon Bilgilendirmesi</h4>
                 <p className="text-blue-700 mb-2">
@@ -159,7 +159,7 @@ function TourCard({ tour }: { tour: ITour }) {
                 </div>
               </div>
             </div>
-            
+
             <div className="sticky bottom-0 bg-gray-50 px-6 py-4 flex flex-col sm:flex-row justify-between gap-3 border-t">
               <button
                 onClick={closeModal}
@@ -167,11 +167,11 @@ function TourCard({ tour }: { tour: ITour }) {
               >
                 Kapat
               </button>
-              <a 
+              <a
                 href="tel:+905300609559"
-                className="order-1 sm:order-2 w-full sm:w-auto px-4 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center font-medium"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
                 Hemen Ara
@@ -190,36 +190,36 @@ function TourList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filterTitle, setFilterTitle] = useState('Tüm Turlarımız');
-  
+
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        
+
         // URL'den parametreleri al
         const tourType = searchParams.get('tourType');
         const accommodationType = searchParams.get('accommodationType');
-        
+
         // Filtre parametreleri varsa API çağrısına ekle
         const params: {
           isActive?: boolean;
           tourType?: string;
           accommodationType?: string;
         } = { isActive: true };
-        
+
         if (tourType) {
           params.tourType = tourType;
         }
-        
+
         if (accommodationType) {
           params.accommodationType = accommodationType;
         }
-        
+
         const data = await getTours(params);
         setFilteredTours(data);
-        
+
         // Başlığı ayarla
         if (tourType === 'domestic') {
           setFilterTitle('Yurtiçi Turlarımız');
@@ -232,7 +232,7 @@ function TourList() {
         } else {
           setFilterTitle('Tüm Turlarımız');
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error('Turları getirme hatası:', err);
@@ -252,7 +252,7 @@ function TourList() {
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Yükleniyor...
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
@@ -299,7 +299,7 @@ function TourList() {
           Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredTours.map((tour) => (
           <TourCard key={tour._id?.toString()} tour={tour} />
