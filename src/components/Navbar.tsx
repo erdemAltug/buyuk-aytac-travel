@@ -64,7 +64,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:ml-6 md:flex md:space-x-8">
+          <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
             <Link
               href="/"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
@@ -116,12 +116,12 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
+          <div className="flex items-center lg:hidden">
             <button
               type="button"
               className={`inline-flex items-center justify-center p-2 rounded-md ${
-                (!isHomepage || scrolled) ? 'text-blue-600' : 'text-white'
-              } hover:bg-blue-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors`}
+                (!isHomepage || scrolled) ? 'text-blue-600 bg-white/80' : 'text-white bg-blue-600/50'
+              } hover:bg-blue-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors`}
               aria-controls="mobile-menu"
               aria-expanded="false"
               onClick={toggleMenu}
@@ -155,7 +155,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu, show/hide based on menu state */}
-      <div className={`${isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'} sm:hidden bg-white shadow-lg transition-all duration-300 overflow-y-auto`} id="mobile-menu">
+      <div className={`${isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'} lg:hidden bg-white shadow-lg transition-all duration-300 overflow-y-auto`} id="mobile-menu">
         <div className="px-2 py-3 space-y-1">
           <MobileNavLink href="/" label="Ana Sayfa" onClick={closeMenu} />
           <MobileNavLink href="/tours?tourType=domestic" label="Yurtiçi Turları" onClick={closeMenu} />
