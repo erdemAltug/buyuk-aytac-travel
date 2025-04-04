@@ -308,12 +308,15 @@ export default function Footer() {
             </a>
           </div>
           <div className="mt-6 md:mt-0">
-            <ul className="flex flex-wrap justify-center space-x-6 text-sm">
+            <ul className="flex flex-wrap justify-center gap-4 text-sm">
               <li>
                 <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-300">Gizlilik Politikası</Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-300">Kullanım Şartları</Link>
+                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b border-blue-400 pb-1">Kullanım Şartları</Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b border-blue-400 pb-1">Sık Sorulan Sorular</Link>
               </li>
               <li>
                 <Link href="/admin/login" className="text-gray-400 hover:text-white transition-colors duration-300">Yönetici Girişi</Link>

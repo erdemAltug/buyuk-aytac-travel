@@ -92,6 +92,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.7,
       },
+      {
+        url: 'https://www.buyukaytactravel.com/terms',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/faq',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
     ];
     
     // Tüm sitemap entry'lerini birleştir
@@ -129,6 +141,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/terms',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/faq',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
       }
     ];
   }
