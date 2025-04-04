@@ -26,6 +26,11 @@ export interface ITour extends Document {
   isLastMinute?: boolean; // Son dakika fırsatı
   discountRate?: number;  // İndirim oranı
   viewCount?: number;     // Görüntülenme sayısı
+  additionalServices?: Array<{
+    name: string;
+    price: number;
+    description?: string;
+  }>;
   program?: Array<{
     day: string;
     title: string;
@@ -71,6 +76,11 @@ const TourSchema: Schema = new Schema(
     isLastMinute: { type: Boolean, default: false }, // Son dakika fırsatı
     discountRate: { type: Number }, // İndirim oranı
     viewCount: { type: Number },     // Görüntülenme sayısı
+    additionalServices: [{ 
+      name: { type: String, required: true },
+      price: { type: Number, required: true },
+      description: { type: String }
+    }],
     program: [{ 
       day: { type: String },
       title: { type: String },

@@ -35,6 +35,7 @@ export default function AddNewTour() {
     program: [{ day: '', title: '', description: '' }],
     includedServices: [''],
     excludedServices: [''],
+    additionalServices: [{ name: '', price: '', description: '' }],
   });
   
   useEffect(() => {
@@ -109,6 +110,13 @@ export default function AddNewTour() {
         program: formData.program.filter(item => item.day && item.title && item.description),
         includedServices: formData.includedServices.filter(item => item.trim() !== ''),
         excludedServices: formData.excludedServices.filter(item => item.trim() !== ''),
+        additionalServices: formData.additionalServices
+          .filter(service => service.name && service.price)
+          .map(service => ({
+            name: service.name,
+            price: parseFloat(service.price.replace(/[^\d.]/g, '')),
+            description: service.description || ''
+          }))
       };
       
       // 3. Turu kaydet
@@ -202,6 +210,33 @@ export default function AddNewTour() {
     setFormData(prev => ({
       ...prev,
       excludedServices: updatedServices
+    }));
+  };
+
+  // Ek hizmet ekleme fonksiyonu
+  const handleAddAdditionalService = () => {
+    setFormData(prev => ({
+      ...prev,
+      additionalServices: [...prev.additionalServices, { name: '', price: '', description: '' }]
+    }));
+  };
+
+  // Ek hizmet çıkarma fonksiyonu
+  const handleRemoveAdditionalService = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      additionalServices: prev.additionalServices.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Ek hizmet güncelleme fonksiyonu
+  const handleAdditionalServiceChange = (index: number, field: string, value: string) => {
+    const updatedServices = [...formData.additionalServices];
+    updatedServices[index] = { ...updatedServices[index], [field]: value };
+    
+    setFormData(prev => ({
+      ...prev,
+      additionalServices: updatedServices
     }));
   };
   
@@ -507,6 +542,77 @@ export default function AddNewTour() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                     Dahil Olmayan Hizmet Ekle
+                  </button>
+                </div>
+              </div>
+              
+              {/* Ek Hizmetler */}
+              <div className="mb-6">
+                <label className={labelClass}>Ek Hizmetler</label>
+                <p className="text-sm text-gray-500 mb-2">Ek hizmetler müşterilerin tur rezervasyonu sırasında ek ücretle satın alabileceği hizmetlerdir. (Örn: Seyahat sigortası, VIP transfer, özel rehber)</p>
+                <div className="space-y-4">
+                  {formData.additionalServices.map((service, index) => (
+                    <div key={index} className="border p-4 rounded-md">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-medium text-gray-900">Ek Hizmet {index + 1}</h4>
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAdditionalService(index)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label htmlFor={`service-name-${index}`} className="block text-xs font-medium text-gray-700">Hizmet Adı</label>
+                          <input
+                            type="text"
+                            id={`service-name-${index}`}
+                            value={service.name}
+                            onChange={(e) => handleAdditionalServiceChange(index, 'name', e.target.value)}
+                            placeholder="Örn: Seyahat Sigortası"
+                            className={inputClass}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`service-price-${index}`} className="block text-xs font-medium text-gray-700">Fiyat (₺)</label>
+                          <input
+                            type="text"
+                            id={`service-price-${index}`}
+                            value={service.price}
+                            onChange={(e) => handleAdditionalServiceChange(index, 'price', e.target.value)}
+                            placeholder="Örn: 250"
+                            className={inputClass}
+                          />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label htmlFor={`service-description-${index}`} className="block text-xs font-medium text-gray-700">Açıklama</label>
+                          <textarea
+                            id={`service-description-${index}`}
+                            value={service.description}
+                            onChange={(e) => handleAdditionalServiceChange(index, 'description', e.target.value)}
+                            placeholder="Hizmetin detaylı açıklaması"
+                            rows={2}
+                            className={inputClass}
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleAddAdditionalService}
+                    className="flex items-center text-blue-600 hover:text-blue-800"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Yeni Ek Hizmet Ekle
                   </button>
                 </div>
               </div>
