@@ -8,18 +8,11 @@ interface PriceCalculatorProps {
   tour: ITour;
 }
 
-// Ek hizmetler için tip
-interface ExtraService {
-  id: string;
-  name: string;
-  price: number;
-}
-
 export default function PriceCalculator({ tour }: PriceCalculatorProps) {
   // Hesaplama için state tanımları
   const [adultCount, setAdultCount] = useState<number>(2);
   const [childCount, setChildCount] = useState<number>(0);
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
+  const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [pricePerPerson, setPricePerPerson] = useState<number>(tour.price);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -31,13 +24,16 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
     notes: ''
   });
 
-  // Örnek ek hizmetler (bunları veritabanında da saklayabilirsiniz)
-  const extraServices: ExtraService[] = [
-    { id: 'extra_meal', name: 'Ekstra Öğün', price: 350 },
-    { id: 'travel_insurance', name: 'Seyahat Sigortası', price: 250 },
-    { id: 'vip_transfer', name: 'VIP Transfer', price: 600 },
-    { id: 'tour_guide', name: 'Özel Rehber', price: 750 },
-  ];
+  // Ek hizmet seçiminin değişmesi
+  const handleAdditionalServiceChange = (serviceId: string) => {
+    setSelectedAdditionalServices(prev => {
+      if (prev.includes(serviceId)) {
+        return prev.filter(id => id !== serviceId);
+      } else {
+        return [...prev, serviceId];
+      }
+    });
+  };
 
   // Fiyat hesaplama fonksiyonu
   useEffect(() => {
@@ -45,50 +41,38 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
       // Baz fiyat (kişi başı)
       const basePrice = tour.price;
       
-      // Toplam kişi sayısı
-      const totalPeople = adultCount + childCount;
-      
       // Çocuklar için %30 indirim
       const adultTotalPrice = basePrice * adultCount;
       const childTotalPrice = basePrice * childCount * 0.7;
       
-      // Eklenen hizmetlerin toplam fiyatı
-      const extrasTotalPrice = selectedExtras.reduce((total, extraId) => {
-        const extraService = extraServices.find(service => service.id === extraId);
-        return total + (extraService ? extraService.price : 0);
-      }, 0);
+      // Ek hizmetlerin toplam fiyatı
+      const additionalServicesTotal = tour.additionalServices 
+        ? selectedAdditionalServices.reduce((total, serviceId) => {
+            const service = tour.additionalServices?.find(s => s.name === serviceId);
+            return total + (service ? service.price : 0);
+          }, 0)
+        : 0;
       
       // 4+ kişi için grup indirimi
       let groupDiscount = 0;
-      if (totalPeople >= 4) {
+      if ((adultCount + childCount) >= 4) {
         groupDiscount = 0.05; // %5 indirim
       }
       
       // Toplam tutar hesaplanması
       const subtotal = adultTotalPrice + childTotalPrice;
       const discountAmount = subtotal * groupDiscount;
-      const finalTotal = subtotal - discountAmount + extrasTotalPrice;
+      const finalTotal = subtotal - discountAmount + additionalServicesTotal;
       
-      // Kişi başı fiyat hesaplanması
-      const newPricePerPerson = totalPeople > 0 ? finalTotal / totalPeople : tour.price;
+      // Kişi başı fiyat hesaplanması (ek hizmetler hariç)
+      const newPricePerPerson = (adultCount + childCount) > 0 ? (subtotal - discountAmount) / (adultCount + childCount) : tour.price;
       
       setTotalPrice(finalTotal);
       setPricePerPerson(newPricePerPerson);
     };
     
     calculatePrice();
-  }, [adultCount, childCount, selectedExtras, tour.price]);
-
-  // Ek hizmet seçim değişikliği
-  const handleExtraServiceChange = (extraId: string) => {
-    setSelectedExtras(prev => {
-      if (prev.includes(extraId)) {
-        return prev.filter(id => id !== extraId);
-      } else {
-        return [...prev, extraId];
-      }
-    });
-  };
+  }, [adultCount, childCount, selectedAdditionalServices, tour.price, tour.additionalServices]);
 
   // Yetişkin sayısı değişikliği
   const handleAdultCountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -124,7 +108,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
       tourName: tour.name,
       adults: adultCount,
       children: childCount,
-      extras: selectedExtras,
+      additionalServices: selectedAdditionalServices,
       totalPrice: totalPrice,
       ...reservationForm
     };
@@ -176,58 +160,62 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
           </div>
         </div>
         
-        {/* Ek Hizmetler */}
-        <div>
-          <p className="block text-sm font-medium text-gray-700 mb-2">
-            Ek Hizmetler
-          </p>
-          <div className="space-y-2">
-            {extraServices.map(service => (
-              <div key={service.id} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={service.id}
-                  checked={selectedExtras.includes(service.id)}
-                  onChange={() => handleExtraServiceChange(service.id)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label htmlFor={service.id} className="ml-2 text-sm text-gray-700 flex justify-between w-full">
-                  <span>{service.name}</span>
-                  <span className="font-medium">₺{service.price.toLocaleString('tr-TR')}</span>
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-        
         {/* Fiyat Özeti */}
         <div className="mt-4 bg-gray-50 p-4 rounded-md border border-gray-200">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-600">Kişi Başı Fiyat:</span>
-            <span className="font-medium">₺{Math.round(pricePerPerson).toLocaleString('tr-TR')}</span>
+            <span className="font-medium text-blue-600">₺{Math.round(pricePerPerson).toLocaleString('tr-TR')}</span>
           </div>
           
           {adultCount > 0 && (
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">{adultCount} Yetişkin:</span>
-              <span className="font-medium">₺{(adultCount * tour.price).toLocaleString('tr-TR')}</span>
+              <span className="font-medium text-blue-600">₺{(adultCount * tour.price).toLocaleString('tr-TR')}</span>
             </div>
           )}
           
           {childCount > 0 && (
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">{childCount} Çocuk (0-12 yaş):</span>
-              <span className="font-medium">₺{Math.round(childCount * tour.price * 0.7).toLocaleString('tr-TR')}</span>
+              <span className="font-medium text-blue-600">₺{Math.round(childCount * tour.price * 0.7).toLocaleString('tr-TR')}</span>
             </div>
           )}
           
-          {selectedExtras.length > 0 && (
+          {/* Ek Hizmetler */}
+          {tour.additionalServices && tour.additionalServices.length > 0 && (
+            <div className="mt-4 mb-4">
+              <p className="text-sm font-medium text-gray-700 mb-2">Ek Hizmetler:</p>
+              <div className="space-y-2">
+                {tour.additionalServices.map((service, index) => (
+                  <div key={index} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`service-${index}`}
+                      checked={selectedAdditionalServices.includes(service.name)}
+                      onChange={() => handleAdditionalServiceChange(service.name)}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor={`service-${index}`} className="ml-2 text-sm text-gray-700 flex justify-between w-full">
+                      <span>{service.name}</span>
+                      <span className="font-medium text-blue-600">₺{service.price.toLocaleString('tr-TR')}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {selectedAdditionalServices.length > 0 && (
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">Ek Hizmetler:</span>
-              <span className="font-medium">₺{selectedExtras.reduce((total, extraId) => {
-                const extraService = extraServices.find(service => service.id === extraId);
-                return total + (extraService ? extraService.price : 0);
-              }, 0).toLocaleString('tr-TR')}</span>
+              <span className="font-medium text-blue-600">
+                ₺{tour.additionalServices
+                  ? selectedAdditionalServices.reduce((total, serviceId) => {
+                      const service = tour.additionalServices?.find(s => s.name === serviceId);
+                      return total + (service ? service.price : 0);
+                    }, 0).toLocaleString('tr-TR')
+                  : 0}
+              </span>
             </div>
           )}
           
@@ -248,7 +236,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
           </p>
         </div>
         
-        {/* Rezervasyon Butonu */}
+        {/* Rezervasyon Yap Butonu */}
         <button
           onClick={toggleModal}
           className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
@@ -256,29 +244,32 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
           Rezervasyon Yap
         </button>
       </div>
-
+      
       {/* Rezervasyon Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-lg w-full max-h-[90vh] overflow-auto">
-            <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Rezervasyon Formu</h3>
-              <button
-                onClick={toggleModal}
-                className="text-gray-400 hover:text-gray-500"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            <div className="p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Rezervasyon Formu</h3>
+                <button 
+                  onClick={toggleModal}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
               <div className="mb-4">
-                <h4 className="font-medium text-gray-900 mb-2">Tur Bilgileri</h4>
-                <p className="text-gray-700">{tour.name}</p>
-                <p className="text-gray-700">
-                  {adultCount} Yetişkin, {childCount} Çocuk - Toplam: <span className="font-semibold">₺{Math.round(totalPrice).toLocaleString('tr-TR')}</span>
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold">{tour.name}</span> turuna {adultCount} yetişkin
+                  {childCount > 0 ? ` ve ${childCount} çocuk ` : ' '}
+                  için rezervasyon yapıyorsunuz.
+                </p>
+                <p className="text-sm font-semibold text-blue-600">
+                  Toplam Tutar: ₺{Math.round(totalPrice).toLocaleString('tr-TR')}
                 </p>
               </div>
               
@@ -300,7 +291,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
                 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    E-posta *
+                    Email *
                   </label>
                   <input
                     type="email"
@@ -344,16 +335,15 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
                 
                 <div>
                   <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
-                    Notlar
+                    Ekstra Notlar
                   </label>
                   <textarea
                     id="notes"
                     name="notes"
+                    rows={3}
                     value={reservationForm.notes}
                     onChange={handleReservationFormChange}
-                    rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                    placeholder="Eklemek istediğiniz bilgiler..."
                   ></textarea>
                 </div>
                 
@@ -364,13 +354,11 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
                   >
                     Rezervasyon Talebini Gönder
                   </button>
+                  <p className="text-xs text-gray-500 mt-2">
+                    * Rezervasyon talebiniz alındıktan sonra, onay için sizinle iletişime geçeceğiz.
+                  </p>
                 </div>
               </form>
-              
-              <p className="text-xs text-gray-500 mt-4">
-                * Rezervasyon talebi gönderdikten sonra ekibimiz sizinle iletişime geçecektir. 
-                Bu aşamada kesin rezervasyon yapılmamaktadır.
-              </p>
             </div>
           </div>
         </div>
