@@ -102,6 +102,29 @@ export default function Footer() {
               url: 'https://www.buyukaytactravel.com',
               telephone: '+905300609559',
               priceRange: '₺₺',
+              description: 'Çerkezköy, Tekirdağ ve Çorlu\'dan kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri.',
+              areaServed: [
+                {
+                  '@type': 'City',
+                  name: 'Çerkezköy',
+                  containedInPlace: {
+                    '@type': 'AdministrativeArea',
+                    name: 'Tekirdağ'
+                  }
+                },
+                {
+                  '@type': 'City',
+                  name: 'Tekirdağ'
+                },
+                {
+                  '@type': 'City',
+                  name: 'Çorlu',
+                  containedInPlace: {
+                    '@type': 'AdministrativeArea',
+                    name: 'Tekirdağ'
+                  }
+                }
+              ],
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'Gazi Mustafa Kemalpaşa, Tokuşlar Sk. Güneşler İş Merkezi No:7 Kat:1 Daire:1',
@@ -115,10 +138,45 @@ export default function Footer() {
                 latitude: 41.2863,
                 longitude: 27.9983
               },
+              openingHoursSpecification: [
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                  opens: '09:00',
+                  closes: '18:00'
+                },
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Saturday'],
+                  opens: '09:00',
+                  closes: '13:00'
+                }
+              ],
               sameAs: [
                 'https://www.facebook.com/people/B%C3%9CY%C3%9CK-AYTA%C3%87-Travel/61568576463311/',
                 'https://www.instagram.com/buyukaytactravel/'
               ],
+              hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'Büyük Aytaç Travel Turları',
+                itemListElement: [
+                  {
+                    '@type': 'Offer',
+                    name: 'Yurtiçi Konaklamalı Turlar',
+                    url: 'https://www.buyukaytactravel.com/tours?type=domestic&accommodation=with_accommodation'
+                  },
+                  {
+                    '@type': 'Offer',
+                    name: 'Yurtiçi Günübirlik Turlar',
+                    url: 'https://www.buyukaytactravel.com/tours?type=domestic&accommodation=daily'
+                  },
+                  {
+                    '@type': 'Offer',
+                    name: 'Yurtdışı Turlar',
+                    url: 'https://www.buyukaytactravel.com/tours?type=international'
+                  }
+                ]
+              },
               logo: {
                 '@type': 'ImageObject',
                 url: 'https://www.buyukaytactravel.com/images/LOGO.png',
@@ -128,7 +186,9 @@ export default function Footer() {
               contactPoint: {
                 '@type': 'ContactPoint',
                 telephone: '+905300609559',
-                contactType: 'customer service'
+                contactType: 'customer service',
+                areaServed: ['Çerkezköy', 'Tekirdağ', 'Çorlu'],
+                availableLanguage: ['Turkish', 'English']
               }
             })
           }}

@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-  description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
-  keywords: "tur, seyahat, çerkezköy tur, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, gezi, tatil, turizm",
+  title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
+  description: "Çerkezköy, Tekirdağ ve Çorlu'dan kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+  keywords: "tur, seyahat, Çerkezköy tur, Tekirdağ tur, Çorlu tur, Tekirdağ seyahat acentesi, Çerkezköy seyahat acentesi, Çorlu seyahat acentesi, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, gezi, tatil, turizm",
   authors: [{ name: "Büyük Aytaç Travel" }],
   creator: "Büyük Aytaç Travel",
   publisher: "Büyük Aytaç Travel",
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
     url: "https://www.buyukaytactravel.com",
     siteName: 'Büyük Aytaç Travel',
     images: [
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Büyük Aytaç Travel | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar",
-    description: "Çerkezköy'den kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
+    title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan kalkan yurtiçi ve yurtdışı turlar, günübirlik ve konaklamalı tur paketleri. Büyük Aytaç Travel ile güvenli ve uygun fiyatlı tur deneyimi yaşayın.",
     images: ['/images/LOGO.png'],
   },
   robots: {
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   category: 'travel',
   verification: {
-    google: 'google-site-verification-code', // Google Search Console doğrulama kodu ekleyin
+    google: 'xxxxxxxxxxxxxxxxxxxx', // Google Search Console doğrulama kodunuzu buraya ekleyin
   },
   icons: {
     icon: [

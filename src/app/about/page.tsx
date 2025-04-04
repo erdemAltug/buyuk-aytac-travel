@@ -1,16 +1,24 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | Büyük Aytaç Travel - Çerkezköy'ün Güvenilir Seyahat Acentesi",
-  description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
-  keywords: "Büyük Aytaç Travel, Çerkezköy seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü",
+  title: "Hakkımızda | Büyük Aytaç Travel - Tekirdağ'ın Güvenilir Seyahat Acentesi",
+  description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Çerkezköy, Tekirdağ ve Çorlu'dan hareketle yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+  keywords: "Büyük Aytaç Travel, Çerkezköy seyahat acentesi, Tekirdağ seyahat acentesi, Çorlu seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü, Trakya bölgesi turları",
   openGraph: {
-    title: "Hakkımızda | Büyük Aytaç Travel - Çerkezköy'ün Güvenilir Seyahat Acentesi",
-    description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+    title: "Hakkımızda | Büyük Aytaç Travel - Tekirdağ'ın Güvenilir Seyahat Acentesi",
+    description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Çerkezköy, Tekirdağ ve Çorlu'dan hareketle yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
     url: 'https://www.buyukaytactravel.com/about',
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
+    images: [
+      {
+        url: '/images/LOGO.png',
+        width: 1200,
+        height: 630,
+        alt: 'Büyük Aytaç Travel Hakkında',
+      },
+    ],
   },
 };
 
