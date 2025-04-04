@@ -259,6 +259,16 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
               >
                 Dahil Hizmetler
               </button>
+              <button
+                onClick={() => setActiveTab('terms')}
+                className={`px-6 py-4 text-sm font-medium ${
+                  activeTab === 'terms'
+                    ? 'border-b-2 border-blue-500 text-blue-600'
+                    : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Sözleşme Şartları
+              </button>
             </nav>
           </div>
           
@@ -326,6 +336,36 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
                 ) : (
                   <p className="text-gray-600">Dahil olmayan hizmetler bilgisi henüz eklenmemiştir.</p>
                 )}
+              </div>
+            )}
+            
+            {/* Sözleşme Şartları */}
+            {activeTab === 'terms' && (
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Sözleşme Şartları</h2>
+                <div className="bg-blue-100 border-l-4 border-blue-600 p-4 my-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-bold text-blue-800 mb-3">BÜYÜK AYTAÇ TRAVEL TUR SATIŞ BİLGİLENDİRME VE İPTAL İADE KOŞULLARI</h3>
+                  <ol className="list-decimal pl-5 text-gray-700 space-y-2">
+                    <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin minimum %50&apos;sidir. Günübirlik turlarda turun hareket tarihinden 7 gün önce, konaklamalı turlarda 15 gün önce kalan tur bedelinin tamamlanması gerekir.</li>
+                    <li>İptaller GÜNÜBİRLİK TURLARDA son 7 gün öncesine kadar yapılmaktadır.</li>
+                    <li>İptaller KONAKLAMALI TURLARDA son 15 gün öncesine kadar yapılmaktadır.</li>
+                    <li>Hava muhalefeti nedeni ile olabilecek değişikliklerden, acentemiz sorumlu değildir ve Acente programda değişiklik hakkına sahiptir.</li>
+                    <li>Rezervasyon esnasında kesinlikle koltuk numarası sözü ve garantisi verilemez. Araçlarda bulunan 3 ve 4 numaralı koltuk rehber ve yardımcısına aittir.</li>
+                    <li>Rehberimiz gezilecek bölgenin yoğunluğu, hava muhalefeti nedeniyle tur programında değişiklik yapabilir. Bu durumda tur programında yazılan ama gezilemeyen yerlerden BÜYÜK AYTAÇ TRAVEL sorumlu değildir. Rehberimizin tur sırasında verdiği saatlere misafirlerimizin uymaması sonucunda, tur programında yazdığı halde gezilemeyen yerlerden BÜYÜK AYTAÇ TRAVEL sorumlu değildir.</li>
+                    <li>Tur öncesi ve tur esnasında hava muhalefeti nedeniyle ve mücbir sebepler ile yapılamayan turlarda BÜYÜK AYTAÇ TRAVEL&apos;in sorumluluğu yoktur.</li>
+                    <li>Tur esnasında program yoğunluğundan dolayı bankamatik, döviz bürosu vs. bulmak her zaman mümkün olmadığından dolayı hazırlıklı gelinmelidir.</li>
+                    <li>Mola yerlerimiz; yoğunluk, tadilat vb. gibi mücbir sebeplerden ötürü mevki ve hizmet standartları açısından benzer yerlerle değiştirilebilir.</li>
+                    <li>Kullanılmayan ulaşım, konaklama, çevre gezileri vb. haklar iade edilmez başka bir tur programında kullanılmak üzere ödeme hakkı saklı tutulur.</li>
+                    <li>Kişilerin tura katılımlarındaki sağlık sorunları, hamilelik durumu, sürekli kullanımda bulundukları ilaçlar ile ilgili raporları yanlarında bulundurmaları gerekmektedir. Bu gibi sebeplerle ayrıcalık talep etmeleri halinde rapor bildirmeleri gerekmektedir.</li>
+                    <li>BÜYÜK AYTAÇ TRAVEL konaklamalı turlarda otel değişikliği hakkını saklı tutar.</li>
+                  </ol>
+                  <p className="text-gray-700 mt-4 font-bold">
+                    SATIN ALMIŞ OLDUĞUNUZ TUR SONRASI YUKARIDAKİ KOŞULLARI KABUL ETMİŞ SAYILIRSINIZ. BİLGİLERİNİZE SUNARIZ.
+                  </p>
+                </div>
+                <p className="text-sm text-gray-500 mt-4">
+                  Daha fazla bilgi için <Link href="/terms" className="text-blue-600 hover:underline font-medium">Kullanım Şartları</Link> sayfamızı ziyaret edebilirsiniz.
+                </p>
               </div>
             )}
           </div>
