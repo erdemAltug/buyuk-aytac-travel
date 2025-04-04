@@ -309,17 +309,17 @@ export default function Footer() {
           </div>
           <div className="mt-6 md:mt-0">
             <ul className="flex flex-wrap justify-center gap-4 text-sm">
-              <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-300">Gizlilik Politikası</Link>
+              <li className="mb-2 mx-1">
+                <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Gizlilik Politikası</Link>
               </li>
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b border-blue-400 pb-1">Kullanım Şartları</Link>
+              <li className="mb-2 mx-1">
+                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b-2 border-blue-400 pb-1 px-2 py-1">Kullanım Şartları</Link>
               </li>
-              <li>
-                <Link href="/faq" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b border-blue-400 pb-1">Sık Sorulan Sorular</Link>
+              <li className="mb-2 mx-1">
+                <Link href="/faq" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b-2 border-blue-400 pb-1 px-2 py-1">Sık Sorulan Sorular</Link>
               </li>
-              <li>
-                <Link href="/admin/login" className="text-gray-400 hover:text-white transition-colors duration-300">Yönetici Girişi</Link>
+              <li className="mb-2 mx-1">
+                <Link href="/admin/login" className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Yönetici Girişi</Link>
               </li>
             </ul>
           </div>
