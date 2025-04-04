@@ -5,38 +5,47 @@ import Tour from '@/models/Tour';
 // Tüm turları getir
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const isActive = searchParams.get('isActive');
-    const destination = searchParams.get('destination');
-    const tourType = searchParams.get('tourType');
-    const accommodationType = searchParams.get('accommodationType');
-    
     await dbConnect();
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: { isActive?: boolean; destination?: string; tourType?: string; accommodationType?: string } = {};
+    // URL parametrelerini al
+    const url = new URL(req.url);
+    const params = url.searchParams;
     
-    // İsteğe bağlı filtreler
+    // Filtre parametrelerini oluştur
+    const filter: Record<string, boolean | string> = {};
+    
+    // isActive parametresi
+    const isActive = params.get('isActive');
     if (isActive !== null) {
-      query.isActive = isActive === 'true';
+      filter.isActive = isActive === 'true';
     }
     
+    // destination parametresi
+    const destination = params.get('destination');
     if (destination) {
-      query.destination = destination;
+      filter.destination = destination;
     }
     
-    // Tur tipi filtresi (yurtiçi/yurtdışı)
+    // tourType parametresi
+    const tourType = params.get('tourType');
     if (tourType) {
-      query.tourType = tourType;
+      filter.tourType = tourType;
     }
     
-    // Konaklama tipi filtresi (konaklamalı/günübirlik)
+    // accommodationType parametresi
+    const accommodationType = params.get('accommodationType');
     if (accommodationType) {
-      query.accommodationType = accommodationType;
+      filter.accommodationType = accommodationType;
     }
     
-    // Turları getir
-    const tours = await Tour.find(query).sort({ createdAt: -1 });
+    // isLastMinute parametresi
+    const isLastMinute = params.get('isLastMinute');
+    if (isLastMinute !== null) {
+      filter.isLastMinute = isLastMinute === 'true';
+    }
+    
+    // Turları al
+    const tours = await Tour.find(filter).sort({ createdAt: -1 }).lean();
     
     return NextResponse.json(tours, { status: 200 });
   } catch (error) {

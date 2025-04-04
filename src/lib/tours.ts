@@ -11,6 +11,7 @@ export async function getToursByDB(params?: {
   destination?: string;
   tourType?: string;
   accommodationType?: string;
+  isLastMinute?: boolean;
 }): Promise<ITour[]> {
   try {
     await dbConnect();
@@ -33,6 +34,10 @@ export async function getToursByDB(params?: {
       
       if (params.accommodationType) {
         filter.accommodationType = params.accommodationType;
+      }
+      
+      if (params.isLastMinute !== undefined) {
+        filter.isLastMinute = params.isLastMinute;
       }
     }
     

@@ -23,6 +23,8 @@ export interface ITour extends Document {
   startDate?: Date;  // Tur başlangıç tarihi
   endDate?: Date;    // Tur bitiş tarihi
   isActive: boolean;
+  isLastMinute?: boolean; // Son dakika fırsatı
+  discountRate?: number;  // İndirim oranı
   program?: Array<{
     day: string;
     title: string;
@@ -65,6 +67,8 @@ const TourSchema: Schema = new Schema(
     startDate: { type: Date },  // Tur başlangıç tarihi
     endDate: { type: Date },    // Tur bitiş tarihi
     isActive: { type: Boolean, default: true },
+    isLastMinute: { type: Boolean, default: false }, // Son dakika fırsatı
+    discountRate: { type: Number }, // İndirim oranı
     program: [{ 
       day: { type: String },
       title: { type: String },

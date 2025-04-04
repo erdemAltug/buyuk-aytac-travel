@@ -9,6 +9,7 @@ export const getTours = async (params?: {
   destination?: string;
   tourType?: string;
   accommodationType?: string;
+  isLastMinute?: boolean;
 }): Promise<ITour[]> => {
   try {
     let url = API_URL;
@@ -30,6 +31,10 @@ export const getTours = async (params?: {
       
       if (params.accommodationType) {
         queryParams.append('accommodationType', params.accommodationType);
+      }
+      
+      if (params.isLastMinute !== undefined) {
+        queryParams.append('isLastMinute', params.isLastMinute.toString());
       }
       
       const queryString = queryParams.toString();

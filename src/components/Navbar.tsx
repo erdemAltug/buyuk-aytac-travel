@@ -84,22 +84,22 @@ export default function Navbar() {
               Yurtdışı Turları
             </Link>
             <Link
-              href="/tours?accommodationType=with_accommodation"
+              href="/tours/last-minute"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Konaklamalı Turlar
+              Son Dakika Fırsatları
             </Link>
             <Link
-              href="/tours?accommodationType=daily"
+              href="/tour-calendar"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Günübirlik Turlar
+              Tur Takvimi
             </Link>
             <Link
-              href="/annual-program"
+              href="/group-tour"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
-              Yıllık Program
+              Özel Grup Turu
             </Link>
             <Link
               href="/blog"
@@ -162,6 +162,9 @@ export default function Navbar() {
           <MobileNavLink href="/tours?tourType=international" label="Yurtdışı Turları" onClick={closeMenu} />
           <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" onClick={closeMenu} />
           <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" onClick={closeMenu} />
+          <MobileNavLink href="/tours/last-minute" label="Son Dakika Fırsatları" onClick={closeMenu} />
+          <MobileNavLink href="/tour-calendar" label="Tur Takvimi" onClick={closeMenu} />
+          <MobileNavLink href="/group-tour" label="Özel Grup Turu" onClick={closeMenu} />
           <MobileNavLink href="/annual-program" label="Yıllık Program" onClick={closeMenu} />
           <MobileNavLink href="/blog" label="Blog" onClick={closeMenu} />
           <MobileNavLink href="/contact" label="İletişim" onClick={closeMenu} />
