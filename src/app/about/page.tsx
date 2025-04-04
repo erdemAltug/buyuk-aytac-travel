@@ -70,7 +70,7 @@ export default function AboutPage() {
                 <strong>Telefon:</strong> 0530 060 95 59 / 0539 345 95 59
               </p>
               <p className="text-gray-700">
-                <strong>E-posta:</strong> info@buyukaytac.com
+                <strong>E-posta:</strong> info@buyukaytactravel.com
               </p>
             </div>
           </div>
