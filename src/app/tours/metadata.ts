@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Turlar | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
-  description: "Büyük Aytaç Travel'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
-  keywords: "Çerkezköy turları, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, konaklamalı turlar, Kapadokya turu, İstanbul turu, Büyük Aytaç Travel",
+  title: "Turlar | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
+  description: "Büyük Aytaç Travel'in Çerkezköy, Tekirdağ ve Çorlu'dan kalkan yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Trakya bölgesinin en uygun fiyatlı ve güvenli turlarını keşfedin.",
+  keywords: "Çerkezköy turları, Tekirdağ turları, Çorlu turları, yurtiçi turlar, yurtdışı turlar, günübirlik turlar, Tekirdağ'dan turlar, Çerkezköy'den turlar, Çorlu'dan turlar, konaklamalı turlar, Kapadokya turu, İstanbul turu, Trakya bölgesi turları, Büyük Aytaç Travel",
   openGraph: {
-    title: "Turlar | Çerkezköy'den Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
-    description: "Büyük Aytaç Travel'in yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Çerkezköy'den başlayan uygun fiyatlı ve güvenli turlarımızı keşfedin.",
+    title: "Turlar | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel",
+    description: "Büyük Aytaç Travel'in Çerkezköy, Tekirdağ ve Çorlu'dan kalkan yurtiçi, yurtdışı, günübirlik ve konaklamalı tur seçenekleri. Trakya bölgesinin en uygun fiyatlı ve güvenli turlarını keşfedin.",
     url: 'https://www.buyukaytactravel.com/tours',
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
