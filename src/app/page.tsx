@@ -4,6 +4,7 @@ import ToursByType from '@/components/ToursByType';
 import { TourType, AccommodationType } from '@/models/Tour';
 import Image from 'next/image';
 import ContactCTA from '@/components/ContactCTA';
+import BlogPreview from '@/components/BlogPreview';
 
 export default function Home() {
   return (
@@ -112,6 +113,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Blog Önizleme Bölümü */}
+      <BlogPreview />
       
       <ContactCTA />
     </main>

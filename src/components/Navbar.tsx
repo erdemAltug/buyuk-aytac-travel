@@ -102,6 +102,12 @@ export default function Navbar() {
               Yıllık Program
             </Link>
             <Link
+              href="/blog"
+              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
+            >
+              Blog
+            </Link>
+            <Link
               href="/contact"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
             >
@@ -157,6 +163,7 @@ export default function Navbar() {
           <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" onClick={closeMenu} />
           <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" onClick={closeMenu} />
           <MobileNavLink href="/annual-program" label="Yıllık Program" onClick={closeMenu} />
+          <MobileNavLink href="/blog" label="Blog" onClick={closeMenu} />
           <MobileNavLink href="/contact" label="İletişim" onClick={closeMenu} />
         </div>
       </div>

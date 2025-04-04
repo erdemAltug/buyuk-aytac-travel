@@ -138,7 +138,7 @@ function TourCard({ tour }: { tour: ITour }) {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-900">E-posta</p>
-                    <p className="text-sm text-gray-600">buyukaytac59@gmail.com</p>
+                    <p className="text-sm text-gray-600">info@buyukaytactravel.com</p>
                   </div>
                 </div>
 

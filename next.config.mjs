@@ -25,8 +25,13 @@ const nextConfig = {
         hostname: 'buyukaytactravel.com',
         pathname: '/wp-content/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
-    domains: ['buyukaytactravel.com'],
+    domains: ['buyukaytactravel.com', 'images.unsplash.com'],
   },
 };
 
