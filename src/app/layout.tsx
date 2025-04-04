@@ -69,12 +69,17 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/images/LOGO.png' },
+      { url: '/images/LOGO.png', sizes: '16x16', type: 'image/png' },
+      { url: '/images/LOGO.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/LOGO.png', sizes: '192x192', type: 'image/png' },
+      { url: '/images/LOGO.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/images/LOGO.png', sizes: '180x180' }
+      { url: '/images/LOGO.png' },
+      { url: '/images/LOGO.png', sizes: '180x180', type: 'image/png' }
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/images/LOGO.png',
   },
 };
 
@@ -85,6 +90,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/images/LOGO.png" />
+        <link rel="apple-touch-icon" href="/images/LOGO.png" />
+        <link rel="shortcut icon" href="/images/LOGO.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -98,7 +109,7 @@ export default function RootLayout({
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
               </svg>
-              Admin Girişi
+              Giriş Yap
             </Link>
           </div>
           {children}
