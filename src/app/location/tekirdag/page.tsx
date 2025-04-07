@@ -55,7 +55,7 @@ export default function TekirgagToursPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen pt-24 pb-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8"> 
         <div className="max-w-7xl mx-auto">
           {/* Location-specific header section */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-8 mb-12 text-white shadow-lg">
