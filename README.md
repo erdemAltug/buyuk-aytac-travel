@@ -53,12 +53,7 @@ Site, belirlenen bitiş tarihi geçmiş turları otomatik olarak pasif hale geti
 2. `/api/cron/expired-tours` API endpoint'i çağrıldığında, bitiş tarihi geçmiş ve hala aktif olan tüm turlar tespit edilir ve otomatik olarak pasif duruma getirilir.
 3. Bu API'nin düzenli olarak çalıştırılması için Vercel deployment'ı sonrasında bir harici cron job servisi kullanılmalıdır.
 
-### Cron Job Kurulumu
 
-1. Web sitenizi Vercel'e deploy edin.
-2. [cron-job.org](https://cron-job.org) gibi bir serviste hesap oluşturun.
-3. Yeni bir cron job ekleyin ve URL'i `https://your-domain.com/api/cron/expired-tours` olarak ayarlayın.
-4. Çalışma zamanını "her gün gece yarısı" (00:00) olarak ayarlayın.
 
 ### Yerel Test
 
@@ -85,12 +80,6 @@ NEXTAUTH_URL=http://localhost:3000
 ```bash
 npm run dev
 ```
-
-## Admin Paneline Erişim
-
-- URL: `/admin/login`
-- Kullanıcı adı: `admin`
-- Şifre: `admin123`
 
 ## Teknolojiler
 
