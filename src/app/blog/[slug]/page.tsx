@@ -1,69 +1,117 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogBySlug } from '@/services/blogService';
 import { IBlog } from '@/models/Blog';
+import { Metadata } from 'next';
 
-export default function BlogDetail({ params }: { params: { slug: string } }) {
-  const [blog, setBlog] = useState<IBlog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [imageError, setImageError] = useState(false);
+// Tarihi formatla
+const formatDate = (dateString: string | Date) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('tr-TR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+};
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true);
-        const data = await getBlogBySlug(params.slug);
-        setBlog(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Blog detayı getirme hatası:', err);
-        setError('Blog yazısı yüklenirken bir hata oluştu.');
-        setLoading(false);
-      }
+// Blog sayfaları için metadata oluşturma
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  try {
+    // API yerine doğrudan veritabanından çeken yaklaşımı kullan
+    await import('@/lib/dbConnect').then((module) => module.default());
+    const Blog = (await import('@/models/Blog')).default;
+    
+    const blog = await Blog.findOne({ slug: params.slug }).lean();
+    
+    if (!blog) {
+      return {
+        title: 'Blog Yazısı Bulunamadı | Büyük Aytaç Travel',
+        description: 'Aradığınız blog yazısı bulunamadı veya kaldırılmış olabilir.',
+      };
+    }
+    
+    return {
+      title: `${blog.title} | Büyük Aytaç Travel Blog`,
+      description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
+      openGraph: {
+        title: blog.title,
+        description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
+        type: 'article',
+        publishedTime: blog.publishDate?.toString(),
+        modifiedTime: blog.updatedAt?.toString(),
+        url: `https://www.buyukaytactravel.com/blog/${blog.slug}`,
+        images: [
+          {
+            url: blog.image,
+            width: 1200,
+            height: 630,
+            alt: blog.title,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: blog.title,
+        description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
+        images: [blog.image],
+      },
     };
+  } catch (error) {
+    console.error('Metadata generation error:', error);
+    return {
+      title: 'Blog | Büyük Aytaç Travel',
+      description: 'Büyük Aytaç Travel gezi blogları, seyahat yazıları ve tur önerileri',
+    };
+  }
+}
 
-    fetchBlog();
-  }, [params.slug]);
+// Blog sayfaları için static params oluşturma
+export async function generateStaticParams() {
+  try {
+    // API yerine doğrudan veritabanından çeken fonksiyonu kullan
+    // Mongoose model'inden doğrudan çağırabiliriz
+    await import('@/lib/dbConnect').then((module) => module.default());
+    const Blog = (await import('@/models/Blog')).default;
+    
+    // Tüm yayınlanmış blog yazılarını al
+    const blogs = await Blog.find({ isPublished: true }).lean();
+    
+    // Her blog için slug parametresi oluştur
+    return blogs.map((blog: IBlog) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.error('Static params generation error:', error);
+    return [];
+  }
+}
 
-  // Tarihi formatla
-  const formatDate = (dateString: string | Date) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('tr-TR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(date);
-  };
+// Sayfanın yeniden doğrulanma süresi (saniye cinsinden)
+export const revalidate = 3600; // Her saat başı yeniden doğrula
 
-  // Yükleme durumu
-  if (loading) {
-    return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="h-8 bg-gray-200 rounded animate-pulse mb-4 w-1/2 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse w-1/4 mx-auto"></div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="h-96 bg-gray-200 animate-pulse"></div>
-            <div className="p-6">
-              <div className="h-8 bg-gray-200 rounded animate-pulse mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
+// Server-side rendering için async fonksiyon olarak tanımla
+export default async function BlogDetail({ params }: { params: { slug: string } }) {
+  let blog: IBlog | null = null;
+  let error = '';
+  
+  try {
+    // API yerine doğrudan veritabanından çeken yaklaşımı kullan
+    await import('@/lib/dbConnect').then((module) => module.default());
+    const Blog = (await import('@/models/Blog')).default;
+    
+    blog = await Blog.findOne({ slug: params.slug }).lean();
+    
+    // blog içindeki _id'yi string'e çevir
+    if (blog) {
+      blog._id = (blog._id as unknown as { toString(): string }).toString();
+      
+      // Date nesnelerini formatlı şekilde çevir
+      if (blog.createdAt) blog.createdAt = new Date(blog.createdAt);
+      if (blog.updatedAt) blog.updatedAt = new Date(blog.updatedAt);
+      if (blog.publishDate) blog.publishDate = new Date(blog.publishDate);
+    }
+  } catch (err) {
+    console.error('Blog detayı getirme hatası:', err);
+    error = 'Blog yazısı yüklenirken bir hata oluştu.';
   }
 
   // Hata durumu
@@ -133,21 +181,14 @@ export default function BlogDetail({ params }: { params: { slug: string } }) {
         {/* Blog Görseli */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-            {!imageError ? (
-              <Image
-                src={blog.image}
-                alt={blog.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                onError={() => setImageError(true)}
-                priority
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-500">Görsel yüklenemedi</span>
-              </div>
-            )}
+            <Image
+              src={blog.image}
+              alt={blog.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+            />
           </div>
         </div>
         
@@ -168,27 +209,29 @@ export default function BlogDetail({ params }: { params: { slug: string } }) {
             </svg>
           </a>
           
-          {/* WhatsApp */}
+          {/* Twitter */}
           <a 
-            href={`https://wa.me/?text=${encodeURIComponent(`${blog.title} - Büyük Aytaç Travel\nhttps://www.buyukaytactravel.com/blog/${blog.slug}`)}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${blog.title} | Büyük Aytaç Travel`)}&url=${encodeURIComponent(`https://www.buyukaytactravel.com/blog/${blog.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-600 hover:text-green-800"
-            aria-label="WhatsApp'ta paylaş"
+            className="text-blue-400 hover:text-blue-600"
+            aria-label="Twitter'da paylaş"
           >
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
             </svg>
           </a>
           
-          {/* Email */}
+          {/* WhatsApp */}
           <a 
-            href={`mailto:?subject=${encodeURIComponent(`${blog.title} - Büyük Aytaç Travel`)}&body=${encodeURIComponent(`${blog.title} yazısını okumak için tıklayın: https://www.buyukaytactravel.com/blog/${blog.slug}`)}`}
-            className="text-red-600 hover:text-red-800"
-            aria-label="Email ile paylaş"
+            href={`https://wa.me/?text=${encodeURIComponent(`${blog.title} | Büyük Aytaç Travel: https://www.buyukaytactravel.com/blog/${blog.slug}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-500 hover:text-green-700"
+            aria-label="WhatsApp'ta paylaş"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" d="M21.105 4.696c1.616 1.642 2.438 3.79 2.442 5.933.005 7.15-7.764 12.272-13.436 9.306-.359-.189-.718-.378-1.076-.568-1.586.625-5.191 1.941-5.986 1.574-.736-.338.141-4.225.582-5.932-.382-.38-.764-.761-1.146-1.142-4.915-5.212-.485-14.218 7.74-14.264 2.139-.012 4.556.704 6.072 2.256 1.485 1.471 2.501 3.267 2.868 5.029.367 1.762.094 3.575-.782 5.125 1.922-1.976 2.92-4.795 2.717-7.608-.203-2.813-1.597-5.409-3.818-7.1-2.22-1.691-5.067-2.367-7.82-1.846S.932 9.053.286 11.746c-.646 2.694-.04 5.546 1.659 7.82 1.698 2.275 4.295 3.668 7.107 3.811-.586-1.412-.554-3.001.088-4.39.642-1.388 1.841-2.447 3.334-2.936 1.492-.49 3.124-.332 4.522.437 1.398.77 2.45 2.076 2.91 3.607-.105.087-.21.174-.315.261-.105.087-.21.174-.315.261-2.263 1.577-4.454 1.585-6.407.744-.964-.393-1.82-.925-2.657-1.462-.6.278-1.22.531-1.864.752.693.61 1.433 1.181 2.243 1.638 2.434 1.363 5.225 1.412 8.132-.131 2.475-1.31 4.317-3.329 5.315-5.829 1.075-2.695.833-5.664-.693-8.33z" clipRule="evenodd" />
             </svg>
           </a>
         </div>
@@ -198,21 +241,21 @@ export default function BlogDetail({ params }: { params: { slug: string } }) {
           <div className="prose max-w-none">
             <div 
               dangerouslySetInnerHTML={{ __html: blog.content }} 
-              className="text-gray-800 text-base leading-relaxed" 
+              className="text-gray-800"
             />
           </div>
         </div>
         
-        {/* Kategoriler */}
+        {/* Etiketler */}
         {blog.categories && blog.categories.length > 0 && (
           <div className="mb-8">
-            <p className="text-gray-700 mb-2">Kategoriler:</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-3">Kategoriler:</h3>
             <div className="flex flex-wrap gap-2">
-              {blog.categories.map((category, index) => (
+              {blog.categories.map((category: string, index: number) => (
                 <Link 
                   key={index}
-                  href={`/blog?category=${category}`}
-                  className="inline-block px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-xs hover:bg-gray-300 transition-colors"
+                  href={`/blog?category=${encodeURIComponent(category)}`}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
                 >
                   {category}
                 </Link>
@@ -221,14 +264,12 @@ export default function BlogDetail({ params }: { params: { slug: string } }) {
           </div>
         )}
         
-        {/* Diğer Blog Yazıları Linki */}
-        <div className="text-center">
-          <Link 
-            href="/blog" 
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
-          >
-            Diğer Blog Yazılarını Keşfet
-          </Link>
+        {/* Yazarla İlgili */}
+        <div className="bg-blue-50 rounded-lg p-6 mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Yazar Hakkında</h3>
+          <p className="text-gray-700">
+            Bu yazı, {blog.author} tarafından {formatDate(blog.publishDate)} tarihinde Büyük Aytaç Travel blog serisi için yazılmıştır.
+          </p>
         </div>
       </div>
     </main>
