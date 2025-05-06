@@ -9,11 +9,6 @@ import BlogPreview from '@/components/BlogPreview';
 export default function Home() {
   return (
     <>
-      <head>
-        <link rel="icon" href="/images/LOGO.png" />
-        <link rel="apple-touch-icon" href="/images/LOGO.png" />
-      </head>
-      
       <div className="bg-white min-h-screen">
         <main>
           <Hero />
