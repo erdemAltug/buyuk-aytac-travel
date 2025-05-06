@@ -88,6 +88,56 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Organization schema.org yapılandırılmış verisi
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Büyük Aytaç Travel",
+    "url": "https://www.buyukaytactravel.com",
+    "logo": "https://www.buyukaytactravel.com/images/LOGO.png",
+    "sameAs": [
+      "https://www.facebook.com/buyukaytactravel",
+      "https://www.instagram.com/buyukaytactravel",
+      "https://twitter.com/buyukaytactravel"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "İsmetpaşa Mahallesi, Cumhuriyet Caddesi",
+      "addressLocality": "Çerkezköy",
+      "addressRegion": "Tekirdağ",
+      "postalCode": "59500",
+      "addressCountry": "TR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "41.2861",
+      "longitude": "27.9811"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "10:00",
+        "closes": "16:00"
+      }
+    ],
+    "telephone": "+902828000000",
+    "email": "info@buyukaytactravel.com",
+    "priceRange": "$$"
+  };
+
   return (
     <html lang="tr">
       <head>
@@ -95,6 +145,10 @@ export default function RootLayout({
         <link rel="icon" href="/images/LOGO.png" />
         <link rel="apple-touch-icon" href="/images/LOGO.png" />
         <link rel="shortcut icon" href="/images/LOGO.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
