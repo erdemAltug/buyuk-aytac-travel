@@ -1,110 +1,56 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getTourBySlug } from '@/services/tourService';
-import { submitContactForm } from '@/services/contactService';
 import { ITour } from '@/models/Tour';
 import PriceCalculator from '@/components/PriceCalculator';
+import ContactForm from '@/components/ContactForm';
 
-export default function TourDetail({ params }: { params: { slug: string } }) {
-  const [tour, setTour] = useState<ITour | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [imageError, setImageError] = useState(false);
-  const [activeTab, setActiveTab] = useState('description');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [formError, setFormError] = useState('');
 
-  useEffect(() => {
-    const fetchTour = async () => {
-      try {
-        setLoading(true);
-        const data = await getTourBySlug(params.slug);
-        setTour(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Tur detayı getirme hatası:', err);
-        setError('Tur detayı yüklenirken bir hata oluştu.');
-        setLoading(false);
-      }
-    };
-
-    fetchTour();
-  }, [params.slug]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setFormError('');
+// Tur sayfaları için Server Component kullanımı
+export async function generateStaticParams() {
+  try {
+    // API yerine doğrudan veritabanından çeken fonksiyonu kullan
+    // lib içindeki fonksiyonları import edip kullanabiliriz
+    const { getToursByDB } = await import('@/lib/tours');
+    const tours = await getToursByDB();
     
-    try {
-      // Tur bilgisini mesaja ekle
-      const tourMessage = `Tur Bilgisi: ${tour?.name}\n\n${formData.message}`;
-      const formDataWithTour = {
-        ...formData,
-        message: tourMessage
-      };
-      
-      const response = await submitContactForm(formDataWithTour);
-      
-      if (!response.success) {
-        throw new Error(response.message || 'Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
-      }
-      
-      setSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-    } catch (err) {
-      if (err instanceof Error) {
-        setFormError(err.message);
-      } else {
-        setFormError('Bilinmeyen bir hata oluştu.');
-      }
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    // Her tur için slug parametresi oluştur
+    return tours.map((tour: ITour) => ({
+      slug: tour.slug,
+    }));
+  } catch (error) {
+    console.error('Static params generation error:', error);
+    return [];
+  }
+}
 
-  // Yükleme durumu
-  if (loading) {
-    return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="h-8 bg-gray-200 rounded animate-pulse mb-4 w-1/4 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 mx-auto"></div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="h-96 bg-gray-200 animate-pulse"></div>
-            <div className="p-6">
-              <div className="h-8 bg-gray-200 rounded animate-pulse mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded animate-pulse mb-4"></div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
+// Sayfanın yeniden doğrulanma süresi (saniye cinsinden)
+export const revalidate = 3600; // Her saat başı yeniden doğrula
+
+// Server-side rendering için async fonksiyon olarak tanımla
+export default async function TourDetail({ params }: { params: { slug: string } }) {
+  let tour: ITour | null = null;
+  let error = '';
+  
+  try {
+    // API yerine doğrudan veritabanından çeken yaklaşımı kullan
+    await import('@/lib/dbConnect').then((module) => module.default());
+    const Tour = (await import('@/models/Tour')).default;
+    
+    tour = await Tour.findOne({ slug: params.slug }).lean();
+    
+    // tour içindeki _id'yi string'e çevir
+    if (tour) {
+      tour._id = (tour._id as unknown as { toString(): string }).toString();
+      
+      // Date nesnelerini formatlı şekilde çevir
+      if (tour.createdAt) tour.createdAt = new Date(tour.createdAt);
+      if (tour.updatedAt) tour.updatedAt = new Date(tour.updatedAt);
+      if (tour.startDate) tour.startDate = new Date(tour.startDate);
+      if (tour.endDate) tour.endDate = new Date(tour.endDate);
+    }
+  } catch (err) {
+    console.error('Tur detayı getirme hatası:', err);
+    error = 'Tur detayı yüklenirken bir hata oluştu.';
   }
 
   // Hata durumu
@@ -165,25 +111,18 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
         {/* Tur Görseli */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
           <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-            {!imageError ? (
-              <Image
-                src={tour.image}
-                alt={tour.name}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                onError={() => setImageError(true)}
-                priority
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-500">Görsel yüklenemedi</span>
-              </div>
-            )}
+            <Image
+              src={tour.image}
+              alt={tour.name}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+              priority
+            />
           </div>
         </div>
         
-        {/* Sosyal Medya Paylaşım Butonları */}
+        {/* Sosyal Medya Paylaşım Butonları - Client Component'e taşınmalı */}
         <div className="flex justify-end items-center space-x-3 mb-8">
           <span className="text-gray-600 text-sm">Paylaş:</span>
           
@@ -200,276 +139,245 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
             </svg>
           </a>
           
-          {/* WhatsApp */}
+          {/* Twitter */}
           <a 
-            href={`https://wa.me/?text=${encodeURIComponent(`${tour.name} - Büyük Aytaç Travel\nhttps://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${tour.name} - ${tour.destination} | Büyük Aytaç Travel`)}&url=${encodeURIComponent(`https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-600 hover:text-green-800"
+            className="text-blue-400 hover:text-blue-600"
+            aria-label="Twitter'da paylaş"
+          >
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+            </svg>
+          </a>
+          
+          {/* WhatsApp */}
+          <a 
+            href={`https://wa.me/?text=${encodeURIComponent(`${tour.name} - ${tour.destination} | Büyük Aytaç Travel: https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-500 hover:text-green-700"
             aria-label="WhatsApp'ta paylaş"
           >
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-          </a>
-          
-          {/* Email */}
-          <a 
-            href={`mailto:?subject=${encodeURIComponent(`${tour.name} - Büyük Aytaç Travel`)}&body=${encodeURIComponent(`${tour.name} turunu incelemek için tıklayın: https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
-            className="text-red-600 hover:text-red-800"
-            aria-label="Email ile paylaş"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" d="M21.105 4.696c1.616 1.642 2.438 3.79 2.442 5.933.005 7.15-7.764 12.272-13.436 9.306-.359-.189-.718-.378-1.076-.568-1.586.625-5.191 1.941-5.986 1.574-.736-.338.141-4.225.582-5.932-.382-.38-.764-.761-1.146-1.142-4.915-5.212-.485-14.218 7.74-14.264 2.139-.012 4.556.704 6.072 2.256 1.485 1.471 2.501 3.267 2.868 5.029.367 1.762.094 3.575-.782 5.125 1.922-1.976 2.92-4.795 2.717-7.608-.203-2.813-1.597-5.409-3.818-7.1-2.22-1.691-5.067-2.367-7.82-1.846S.932 9.053.286 11.746c-.646 2.694-.04 5.546 1.659 7.82 1.698 2.275 4.295 3.668 7.107 3.811-.586-1.412-.554-3.001.088-4.39.642-1.388 1.841-2.447 3.334-2.936 1.492-.49 3.124-.332 4.522.437 1.398.77 2.45 2.076 2.91 3.607-.105.087-.21.174-.315.261-.105.087-.21.174-.315.261-2.263 1.577-4.454 1.585-6.407.744-.964-.393-1.82-.925-2.657-1.462-.6.278-1.22.531-1.864.752.693.61 1.433 1.181 2.243 1.638 2.434 1.363 5.225 1.412 8.132-.131 2.475-1.31 4.317-3.329 5.315-5.829 1.075-2.695.833-5.664-.693-8.33z" clipRule="evenodd" />
             </svg>
           </a>
         </div>
-        
-        {/* Tur Detayları Sekmeler */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          <div className="border-b border-gray-200 overflow-x-auto">
-            <nav className="flex whitespace-nowrap">
-              <button
-                onClick={() => setActiveTab('description')}
-                className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium ${
-                  activeTab === 'description'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Tur Hakkında
-              </button>
-              <button
-                onClick={() => setActiveTab('program')}
-                className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium ${
-                  activeTab === 'program'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Program
-              </button>
-              <button
-                onClick={() => setActiveTab('services')}
-                className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium ${
-                  activeTab === 'services'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Dahil Hizmetler
-              </button>
-              <button
-                onClick={() => setActiveTab('terms')}
-                className={`px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium ${
-                  activeTab === 'terms'
-                    ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
-                    : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Sözleşme Şartları
-              </button>
-            </nav>
-          </div>
-          
-          <div className="p-6">
-            {/* Tur Açıklaması */}
-            {activeTab === 'description' && (
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tur Hakkında</h2>
-                <div className="prose max-w-none text-gray-600">
-                  <p className="whitespace-pre-line">{tour.description}</p>
-                </div>
-                <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Fiyat Bilgisi</h3>
-                  <p className="text-gray-700">Kişi başı fiyat: <span className="text-2xl font-bold text-blue-600">{tour.price.toLocaleString('tr-TR')} ₺</span></p>
-                  <p className="text-sm text-gray-500 mt-1">* Fiyatlar oda tipi ve sezona göre değişiklik gösterebilir.</p>
-                </div>
-              </div>
-            )}
-            
-            {/* Program */}
-            {activeTab === 'program' && (
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tur Programı</h2>
-                <div className="space-y-6">
-                  {tour.program && tour.program.length > 0 ? (
-                    tour.program.map((day, index) => (
-                      <div key={index} className="border-l-4 border-blue-400 pl-4">
-                        <h3 className="text-lg font-medium text-gray-900">{day.day}: {day.title}</h3>
-                        <p className="mt-1 text-gray-600 whitespace-pre-line">{day.description}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-600">Program bilgisi henüz eklenmemiştir.</p>
-                  )}
-                </div>
-                <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
-                  <p className="text-sm text-yellow-800">
-                    <span className="font-semibold">Not:</span> Program, hava durumu ve diğer şartlara bağlı olarak değişiklik gösterebilir.
-                  </p>
-                </div>
-              </div>
-            )}
-            
-            {/* Dahil Hizmetler */}
-            {activeTab === 'services' && (
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olan Hizmetler</h2>
-                {tour.includedServices && tour.includedServices.length > 0 ? (
-                  <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-8">
-                    {tour.includedServices.map((service, index) => (
-                      <li key={index}>{service}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600 mb-8">Dahil hizmetler bilgisi henüz eklenmemiştir.</p>
-                )}
-                
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Dahil Olmayan Hizmetler</h2>
-                {tour.excludedServices && tour.excludedServices.length > 0 ? (
-                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                    {tour.excludedServices.map((service, index) => (
-                      <li key={index}>{service}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600">Dahil olmayan hizmetler bilgisi henüz eklenmemiştir.</p>
-                )}
-              </div>
-            )}
-            
-            {/* Sözleşme Şartları */}
-            {activeTab === 'terms' && (
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Sözleşme Şartları</h2>
-                <div className="bg-blue-100 border-l-4 border-blue-600 p-4 my-4 rounded-lg shadow-md">
-                  <h3 className="text-lg font-bold text-blue-800 mb-3">BÜYÜK AYTAÇ TRAVEL TUR SATIŞ BİLGİLENDİRME VE İPTAL İADE KOŞULLARI</h3>
-                  <ol className="list-decimal pl-5 text-gray-700 space-y-2">
-                    <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin minimum %50&apos;sidir. Günübirlik turlarda turun hareket tarihinden 7 gün önce, konaklamalı turlarda 15 gün önce kalan tur bedelinin tamamlanması gerekir.</li>
-                    <li>İptaller GÜNÜBİRLİK TURLARDA son 7 gün öncesine kadar yapılmaktadır.</li>
-                    <li>İptaller KONAKLAMALI TURLARDA son 15 gün öncesine kadar yapılmaktadır.</li>
-                    <li>Hava muhalefeti nedeni ile olabilecek değişikliklerden, acentemiz sorumlu değildir ve Acente programda değişiklik hakkına sahiptir.</li>
-                    <li>Rezervasyon esnasında kesinlikle koltuk numarası sözü ve garantisi verilemez. Araçlarda bulunan 3 ve 4 numaralı koltuk rehber ve yardımcısına aittir.</li>
-                    <li>Rehberimiz gezilecek bölgenin yoğunluğu, hava muhalefeti nedeniyle tur programında değişiklik yapabilir. Bu durumda tur programında yazılan ama gezilemeyen yerlerden BÜYÜK AYTAÇ TRAVEL sorumlu değildir. Rehberimizin tur sırasında verdiği saatlere misafirlerimizin uymaması sonucunda, tur programında yazdığı halde gezilemeyen yerlerden BÜYÜK AYTAÇ TRAVEL sorumlu değildir.</li>
-                    <li>Tur öncesi ve tur esnasında hava muhalefeti nedeniyle ve mücbir sebepler ile yapılamayan turlarda BÜYÜK AYTAÇ TRAVEL&apos;in sorumluluğu yoktur.</li>
-                    <li>Tur esnasında program yoğunluğundan dolayı bankamatik, döviz bürosu vs. bulmak her zaman mümkün olmadığından dolayı hazırlıklı gelinmelidir.</li>
-                    <li>Mola yerlerimiz; yoğunluk, tadilat vb. gibi mücbir sebeplerden ötürü mevki ve hizmet standartları açısından benzer yerlerle değiştirilebilir.</li>
-                    <li>Kullanılmayan ulaşım, konaklama, çevre gezileri vb. haklar iade edilmez başka bir tur programında kullanılmak üzere ödeme hakkı saklı tutulur.</li>
-                    <li>Kişilerin tura katılımlarındaki sağlık sorunları, hamilelik durumu, sürekli kullanımda bulundukları ilaçlar ile ilgili raporları yanlarında bulundurmaları gerekmektedir. Bu gibi sebeplerle ayrıcalık talep etmeleri halinde rapor bildirmeleri gerekmektedir.</li>
-                    <li>BÜYÜK AYTAÇ TRAVEL konaklamalı turlarda otel değişikliği hakkını saklı tutar.</li>
-                  </ol>
-                  <p className="text-gray-700 mt-4 font-bold">
-                    SATIN ALMIŞ OLDUĞUNUZ TUR SONRASI YUKARIDAKİ KOŞULLARI KABUL ETMİŞ SAYILIRSINIZ. BİLGİLERİNİZE SUNARIZ.
-                  </p>
-                </div>
-                <p className="text-sm text-gray-500 mt-4">
-                  Daha fazla bilgi için <Link href="/terms" className="text-blue-600 hover:underline font-medium">Kullanım Şartları</Link> sayfamızı ziyaret edebilirsiniz.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        {/* Rezervasyon Formu */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Rezervasyon Bilgileri</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                {/* Fiyat Hesaplama Bileşeni */}
-                <PriceCalculator tour={tour} />
+
+        {/* Ana İçerik Alanı */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* Sol Kolon - Tur Detayları */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+              {/* Sekmeler */}
+              <div className="border-b border-gray-200">
+                <nav className="flex -mb-px">
+                  <a 
+                    href="#description"
+                    className="flex-1 py-4 px-1 text-center border-b-2 border-blue-500 font-medium text-blue-600 text-sm"
+                  >
+                    Tur Hakkında
+                  </a>
+                  <a 
+                    href="#program"
+                    className="flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
+                  >
+                    Program
+                  </a>
+                  <a 
+                    href="#services"
+                    className="flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
+                  >
+                    Hizmetler
+                  </a>
+                </nav>
               </div>
               
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">İletişim Formu</h3>
+              {/* Tur Açıklaması */}
+              <div className="p-6" id="description">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında</h2>
+                <div className="prose max-w-none text-gray-600">
+                  {tour.description.split('\n').map((paragraph, index) => (
+                    <p key={index} className="mb-4">{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Tur Programı */}
+              <div className="p-6 border-t border-gray-200" id="program">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Programı</h2>
                 
-                {submitted ? (
-                  <div className="bg-green-50 p-4 rounded-md border border-green-200 text-green-700 mb-6">
-                    <p className="font-medium">Mesajınız başarıyla gönderildi!</p>
-                    <p className="mt-1">En kısa sürede sizinle iletişime geçeceğiz.</p>
+                {tour.program && tour.program.length > 0 ? (
+                  <div className="space-y-6">
+                    {tour.program.map((day, index) => (
+                      <div key={index} className="border-l-4 border-blue-500 pl-4">
+                        <h3 className="text-lg font-bold text-gray-900 mb-1">{day.day}: {day.title}</h3>
+                        <p className="text-gray-600">{day.description}</p>
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <form className="space-y-4" onSubmit={handleSubmit}>
-                    {formError && (
-                      <div className="bg-red-50 p-4 rounded-md border border-red-200 text-red-700 mb-4">
-                        <p>{formError}</p>
-                      </div>
-                    )}
-                    
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                        Ad Soyad
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                        placeholder="Ad Soyad"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                        placeholder="Email"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                        Telefon
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                        placeholder="Telefon"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                        Mesaj
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                        placeholder="Mesajınız..."
-                      ></textarea>
-                    </div>
-                    
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
-                    >
-                      {submitting ? 'Gönderiliyor...' : 'Bilgi İsteyin'}
-                    </button>
-                  </form>
+                  <p className="text-gray-600">
+                    Bu tur için detaylı program bilgisi henüz eklenmemiştir. Daha fazla bilgi için lütfen bizimle iletişime geçin.
+                  </p>
                 )}
+              </div>
+              
+              {/* Hizmetler */}
+              <div className="p-6 border-t border-gray-200" id="services">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Dahil Olan ve Olmayan Hizmetler</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Dahil Olan Hizmetler */}
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                      <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      Tur Ücretine Dahil Olanlar
+                    </h3>
+                    
+                    {tour.includedServices && tour.includedServices.length > 0 ? (
+                      <ul className="space-y-2">
+                        {tour.includedServices.map((service, index) => (
+                          <li key={index} className="flex items-start">
+                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span className="text-gray-600">{service}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-gray-600">Dahil olan hizmetler henüz listelenmemiştir.</p>
+                    )}
+                  </div>
+                  
+                  {/* Dahil Olmayan Hizmetler */}
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                      <svg className="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                      Tur Ücretine Dahil Olmayanlar
+                    </h3>
+                    
+                    {tour.excludedServices && tour.excludedServices.length > 0 ? (
+                      <ul className="space-y-2">
+                        {tour.excludedServices.map((service, index) => (
+                          <li key={index} className="flex items-start">
+                            <svg className="w-5 h-5 text-red-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            <span className="text-gray-600">{service}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-gray-600">Dahil olmayan hizmetler henüz listelenmemiştir.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Sağ Kolon - Fiyat ve İletişim */}
+          <div className="lg:col-span-1">
+            {/* Fiyat Bilgisi */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Fiyat Bilgisi</h2>
+                
+                <div className="mb-4">
+                  <p className="text-4xl font-bold text-blue-600 mb-1">
+                    {tour.discountRate ? (
+                      <>
+                        <span className="line-through text-gray-400 text-2xl mr-2">
+                          {tour.price.toLocaleString()} TL
+                        </span>
+                        {Math.round(tour.price * (1 - tour.discountRate / 100)).toLocaleString()} TL
+                      </>
+                    ) : (
+                      `${tour.price.toLocaleString()} TL`
+                    )}
+                  </p>
+                  <p className="text-sm text-gray-500">kişi başı</p>
+                </div>
+                
+                {/* Fiyat hesaplayıcı - Client Component */}
+                <PriceCalculator tour={tour} />
+                
+                <div className="mt-6">
+                  <h3 className="font-medium text-gray-900 mb-2">Tur Bilgileri</h3>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center">
+                      <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      <span className="text-gray-600">
+                        Süre: {tour.duration}
+                      </span>
+                    </li>
+                    <li className="flex items-center">
+                      <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      </svg>
+                      <span className="text-gray-600">
+                        Gidilecek Yer: {tour.destination}
+                      </span>
+                    </li>
+                    {tour.startDate && (
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span className="text-gray-600">
+                          Başlangıç: {new Date(tour.startDate).toLocaleDateString('tr-TR')}
+                        </span>
+                      </li>
+                    )}
+                    {tour.endDate && (
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span className="text-gray-600">
+                          Bitiş: {new Date(tour.endDate).toLocaleDateString('tr-TR')}
+                        </span>
+                      </li>
+                    )}
+                    <li className="flex items-center">
+                      <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                      </svg>
+                      <span className="text-gray-600">
+                        Tur Tipi: {tour.tourType === 'domestic' ? 'Yurtiçi' : 'Yurtdışı'}
+                      </span>
+                    </li>
+                    <li className="flex items-center">
+                      <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                      </svg>
+                      <span className="text-gray-600">
+                        Konaklama: {tour.accommodationType === 'with_accommodation' ? 'Konaklamalı' : 'Günübirlik'}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            {/* İletişim Formu */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında Bilgi Alın</h2>
+                
+                {/* Burada client-side iletişim formu komponenti kullanılabilir */}
+                <ContactForm tourName={tour.name} />
               </div>
             </div>
           </div>
@@ -477,4 +385,67 @@ export default function TourDetail({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+// Tur sayfaları için metadata oluşturma
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  try {
+    // API yerine doğrudan veritabanından çeken yaklaşımı kullan
+    await import('@/lib/dbConnect').then((module) => module.default());
+    const Tour = (await import('@/models/Tour')).default;
+    
+    const tour = await Tour.findOne({ slug: params.slug }).lean();
+    
+    if (!tour) {
+      return {
+        title: 'Tur Bulunamadı | Büyük Aytaç Travel',
+        description: 'Aradığınız tur bulunamadı veya kaldırılmış olabilir.',
+      };
+    }
+    
+    // Tur başlığına göre SEO meta verilerini oluştur
+    const title = `${tour.name} | ${tour.destination} | Büyük Aytaç Travel Turları`;
+    
+    // Açıklama tur açıklamasından oluşturulur (kısa tutmak için)
+    const description = tour.description.length > 160 
+      ? `${tour.description.substring(0, 157)}...` 
+      : tour.description;
+      
+    // Tur tipine ve özelliklerine göre anahtar kelimeleri ayarla
+    const keywordString = `${tour.name}, ${tour.destination}, ${tour.duration}, ${tour.price} TL, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik gezi'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, Büyük Aytaç Travel`;
+    
+    return {
+      title,
+      description,
+      keywords: keywordString,
+      openGraph: {
+        title,
+        description,
+        type: 'article',
+        publishedTime: tour.createdAt?.toString(),
+        modifiedTime: tour.updatedAt?.toString(),
+        url: `https://www.buyukaytacseyahat.com/tours/${tour.slug}`,
+        images: [
+          {
+            url: tour.image,
+            width: 1200,
+            height: 630,
+            alt: tour.name,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [tour.image],
+      },
+    };
+  } catch (error) {
+    console.error('Metadata generation error:', error);
+    return {
+      title: 'Tur Detayı | Büyük Aytaç Travel',
+      description: 'Büyük Aytaç Travel ile unutulmaz tur deneyimleri yaşayın',
+    };
+  }
 } 
