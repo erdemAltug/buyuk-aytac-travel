@@ -30,8 +30,8 @@ function TourCard({ tour }: { tour: ITour }) {
       <div className="p-5">
         <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">{tour.name}</h3>
         <p className="text-sm text-gray-500 mb-1">
-          {tour.destinationId && typeof tour.destinationId === 'object' && 'name' in tour.destinationId ? 
-            (tour.destinationId.name as string) : ''}
+          {tour.destinationRef && typeof tour.destinationRef === 'object' && 'name' in tour.destinationRef ? 
+            (tour.destinationRef.name as string) : ''}
         </p>
         <p className="text-gray-600 mb-4 line-clamp-2">{tour.description}</p>
         <div className="flex justify-between items-center">

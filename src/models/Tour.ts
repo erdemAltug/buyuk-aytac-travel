@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export enum TourType {
   DOMESTIC = 'domestic',
@@ -18,6 +18,8 @@ export interface ITour extends Document {
   duration: string;
   price: number;
   destination: string;
+  destinationRef?: Types.ObjectId; // Destination modeline referans
+  departureCity?: string; // Kalkış şehri (örn: Çerkezköy)
   tourType: TourType;
   accommodationType: AccommodationType;
   startDate?: Date;  // Tur başlangıç tarihi
@@ -60,6 +62,14 @@ const TourSchema: Schema = new Schema(
       type: String, 
       required: true 
     },
+    destinationRef: {
+      type: Schema.Types.ObjectId,
+      ref: 'Destination'
+    },
+    departureCity: {
+      type: String,
+      default: 'Çerkezköy'
+    },
     tourType: { 
       type: String, 
       enum: Object.values(TourType),
@@ -75,7 +85,7 @@ const TourSchema: Schema = new Schema(
     isActive: { type: Boolean, default: true },
     isLastMinute: { type: Boolean, default: false }, // Son dakika fırsatı
     discountRate: { type: Number }, // İndirim oranı
-    viewCount: { type: Number },     // Görüntülenme sayısı
+    viewCount: { type: Number, default: 0 },     // Görüntülenme sayısı
     additionalServices: [{ 
       name: { type: String, required: true },
       price: { type: Number, required: true },
@@ -92,11 +102,17 @@ const TourSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-// Slug oluşturma fonksiyonu
+// Slug oluşturma fonksiyonu - Türkçe karakterleri de destekleyelim
 function createSlug(name: string): string {
   return name
     .toString()
     .toLowerCase()
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
     .replace(/\s+/g, '-')        // Boşlukları tire ile değiştir
     .replace(/[^\w\-]+/g, '')    // Alfanümerik olmayan karakterleri kaldır
     .replace(/\-\-+/g, '-')      // Birden fazla tireyi tek tireye dönüştür
