@@ -78,7 +78,7 @@ export async function PUT(
       
       const existingDestination = await Destination.findOne({ slug: newSlug });
       
-      if (existingDestination && !existingDestination._id.equals(destination._id)) {
+      if (existingDestination && (existingDestination as any)._id.toString() !== (destination as any)._id.toString()) {
         return NextResponse.json(
           { error: 'Bu isimle bir destinasyon zaten mevcut' },
           { status: 400 }

@@ -177,9 +177,9 @@ export default function AnnualProgramPage() {
                       <div>
                         <h2 className="text-2xl font-bold text-gray-900">{tour.name}</h2>
                         <p className="text-gray-500 mt-1">
-                          {tour.destinationId && typeof tour.destinationId === 'object' && 'name' in tour.destinationId
-                            ? tour.destinationId.name as string
-                            : ''}
+                          {tour.destinationRef && typeof tour.destinationRef === 'object' && 'name' in tour.destinationRef
+                            ? tour.destinationRef.name as string
+                            : tour.destination}
                         </p>
                       </div>
                       <div className="mt-4 md:mt-0 text-right">
