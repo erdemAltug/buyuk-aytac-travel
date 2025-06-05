@@ -1,4 +1,5 @@
-# Büyük Aytaç Travel - Tourism Website
+# Buyuk Aytac Travel - Tour Agency 
+
 
 Çerkezköy merkezli tur ve seyahat hizmetleri sunan Büyük Aytaç Travel'ın kurumsal websitesi. Next.js 15, TypeScript ve MongoDB kullanılarak geliştirilmiştir.
 
