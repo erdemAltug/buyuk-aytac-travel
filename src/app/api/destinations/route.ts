@@ -1,83 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
+import dbConnect from '@/lib/dbConnect';
 import Destination from '@/models/Destination';
 
 // Tüm destinasyonları getir
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const isActive = searchParams.get('isActive');
-    
     await dbConnect();
     
-    const query: { isActive?: boolean } = {};
+    const { searchParams } = new URL(request.url);
+    const isActive = searchParams.get('isActive');
+    const featured = searchParams.get('featured');
     
-    // İsteğe bağlı filtreler
+    let query: any = {};
+    
     if (isActive !== null) {
       query.isActive = isActive === 'true';
     }
     
-    const destinations = await Destination.find(query).sort({ createdAt: -1 });
+    if (featured !== null) {
+      query.featured = featured === 'true';
+    }
     
-    return NextResponse.json(destinations, { status: 200 });
+    const destinations = await Destination.find(query).sort({ featured: -1, name: 1 });
+    
+    return NextResponse.json(destinations);
   } catch (error) {
-    console.error('Destinations GET Error:', error);
+    console.error('Destinasyonları getirme hatası:', error);
     return NextResponse.json(
-      { error: 'Destinasyonları getirirken bir hata oluştu' },
+      { error: 'Destinasyonlar getirilemedi' },
       { status: 500 }
     );
   }
 }
 
 // Yeni destinasyon ekle
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     
-    const body = await req.json();
-    
-    // Gerekli alanları kontrol et
-    if (!body.name || !body.description || !body.image) {
-      return NextResponse.json(
-        { error: 'İsim, açıklama ve görsel zorunludur' },
-        { status: 400 }
-      );
-    }
-    
-    // Slug otomatik oluşturulacak
-    const slug = body.name
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-    
-    // Aynı slug ile başka bir destinasyon var mı kontrol et
-    const existingDestination = await Destination.findOne({ slug });
-    if (existingDestination) {
-      return NextResponse.json(
-        { error: 'Bu isimle bir destinasyon zaten mevcut' },
-        { status: 400 }
-      );
-    }
-    
-    // Yeni destinasyon oluştur
-    const destination = new Destination({
-      name: body.name,
-      description: body.description,
-      image: body.image,
-      slug,
-      isActive: body.isActive !== undefined ? body.isActive : true,
-    });
-    
+    const body = await request.json();
+    const destination = new Destination(body);
     await destination.save();
     
     return NextResponse.json(destination, { status: 201 });
   } catch (error) {
-    console.error('Destination POST Error:', error);
+    console.error('Destinasyon oluşturma hatası:', error);
     return NextResponse.json(
-      { error: 'Destinasyon eklerken bir hata oluştu' },
+      { error: 'Destinasyon oluşturulamadı' },
       { status: 500 }
     );
   }

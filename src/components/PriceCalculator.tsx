@@ -121,21 +121,22 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Fiyat Hesaplama</h3>
-      
-      <div className="space-y-4">
+    <div>
+      <div className="space-y-6">
+        {/* Başlık */}
+        <h3 className="text-xl font-bold text-gray-900">Fiyat Hesaplama</h3>
+        
         {/* Kişi Sayısı Seçimi */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-4">
           <div>
-            <label htmlFor="adultCount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="adultCount" className="block text-sm font-medium text-gray-700 mb-2">
               Yetişkin Sayısı
             </label>
             <select
               id="adultCount"
               value={adultCount}
               onChange={handleAdultCountChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm transition-all duration-200 hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgNkw4IDEwTDEyIDYiIHN0cm9rZT0iIzZCNzI4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+')] bg-[position:right_1rem_center] bg-no-repeat pr-10"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                 <option key={`adult-${num}`} value={num}>{num}</option>
@@ -144,14 +145,14 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
           </div>
           
           <div>
-            <label htmlFor="childCount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="childCount" className="block text-sm font-medium text-gray-700 mb-2">
               Çocuk Sayısı (0-12 yaş)
             </label>
             <select
               id="childCount"
               value={childCount}
               onChange={handleChildCountChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm transition-all duration-200 hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgNkw4IDEwTDEyIDYiIHN0cm9rZT0iIzZCNzI4MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+')] bg-[position:right_1rem_center] bg-no-repeat pr-10"
             >
               {[0, 1, 2, 3, 4, 5].map(num => (
                 <option key={`child-${num}`} value={num}>{num}</option>
@@ -161,77 +162,43 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
         </div>
         
         {/* Fiyat Özeti */}
-        <div className="mt-4 bg-gray-50 p-4 rounded-md border border-gray-200">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-600">Kişi Başı Fiyat:</span>
-            <span className="font-medium text-blue-600">₺{Math.round(pricePerPerson).toLocaleString('tr-TR')}</span>
-          </div>
-          
-          {adultCount > 0 && (
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">{adultCount} Yetişkin:</span>
-              <span className="font-medium text-blue-600">₺{(adultCount * tour.price).toLocaleString('tr-TR')}</span>
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Kişi Başı Fiyat:</span>
+              <span className="font-semibold text-lg text-blue-600">₺{tour.price.toLocaleString('tr-TR')}</span>
             </div>
-          )}
-          
-          {childCount > 0 && (
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">{childCount} Çocuk (0-12 yaş):</span>
-              <span className="font-medium text-blue-600">₺{Math.round(childCount * tour.price * 0.7).toLocaleString('tr-TR')}</span>
-            </div>
-          )}
-          
-          {/* Ek Hizmetler */}
-          {tour.additionalServices && tour.additionalServices.length > 0 && (
-            <div className="mt-4 mb-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">Ek Hizmetler:</p>
-              <div className="space-y-2">
-                {tour.additionalServices.map((service, index) => (
-                  <div key={index} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={`service-${index}`}
-                      checked={selectedAdditionalServices.includes(service.name)}
-                      onChange={() => handleAdditionalServiceChange(service.name)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor={`service-${index}`} className="ml-2 text-sm text-gray-700 flex justify-between w-full">
-                      <span>{service.name}</span>
-                      <span className="font-medium text-blue-600">₺{service.price.toLocaleString('tr-TR')}</span>
-                    </label>
-                  </div>
-                ))}
+            
+            {adultCount > 0 && (
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">{adultCount} Yetişkin:</span>
+                <span className="font-semibold text-blue-600">₺{(adultCount * tour.price).toLocaleString('tr-TR')}</span>
+              </div>
+            )}
+            
+            {childCount > 0 && (
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">{childCount} Çocuk:</span>
+                <span className="font-semibold text-blue-600">₺{Math.round(childCount * tour.price * 0.7).toLocaleString('tr-TR')}</span>
+              </div>
+            )}
+            
+            {(adultCount + childCount) >= 4 && (
+              <div className="flex justify-between items-center text-green-700">
+                <span className="text-sm">Grup İndirimi (5%):</span>
+                <span className="font-semibold">-₺{Math.round(((adultCount * tour.price) + (childCount * tour.price * 0.7)) * 0.05).toLocaleString('tr-TR')}</span>
+              </div>
+            )}
+            
+            <div className="border-t border-gray-300 pt-3 mt-3">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-gray-900">Toplam Tutar:</span>
+                <span className="text-2xl font-bold text-blue-600">₺{Math.round(totalPrice).toLocaleString('tr-TR')}</span>
               </div>
             </div>
-          )}
-          
-          {selectedAdditionalServices.length > 0 && (
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">Ek Hizmetler:</span>
-              <span className="font-medium text-blue-600">
-                ₺{tour.additionalServices
-                  ? selectedAdditionalServices.reduce((total, serviceId) => {
-                      const service = tour.additionalServices?.find(s => s.name === serviceId);
-                      return total + (service ? service.price : 0);
-                    }, 0).toLocaleString('tr-TR')
-                  : 0}
-              </span>
-            </div>
-          )}
-          
-          {(adultCount + childCount) >= 4 && (
-            <div className="flex justify-between items-center mb-2 text-green-700">
-              <span className="text-sm">Grup İndirimi (5%):</span>
-              <span className="font-medium">-₺{Math.round(((adultCount * tour.price) + (childCount * tour.price * 0.7)) * 0.05).toLocaleString('tr-TR')}</span>
-            </div>
-          )}
-          
-          <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between items-center">
-            <span className="font-medium text-gray-900">Toplam Tutar:</span>
-            <span className="text-xl font-bold text-blue-600">₺{Math.round(totalPrice).toLocaleString('tr-TR')}</span>
           </div>
           
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-500 mt-4">
             * Fiyat hesaplaması tahminidir. Kesin fiyat için lütfen bizimle iletişime geçiniz.
           </p>
         </div>
@@ -239,7 +206,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
         {/* Rezervasyon Yap Butonu */}
         <button
           onClick={toggleModal}
-          className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+          className="w-full bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
         >
           Rezervasyon Yap
         </button>
