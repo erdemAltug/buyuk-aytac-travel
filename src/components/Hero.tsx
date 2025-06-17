@@ -9,11 +9,12 @@ export default function Hero() {
       <div className="absolute inset-0">
         <Image
           src="/images/hero-banner.jpg"
-          alt="Hero Banner"
+          alt="Çerkezköy'den Yurtiçi ve Yurtdışı Turlar - Büyük Aytaç Travel ile Unutulmaz Seyahat Deneyimleri"
           fill
           className="object-cover object-center brightness-75"
           priority
-          quality={100}
+          quality={85}
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-indigo-900/40"></div>
       </div>
@@ -21,23 +22,25 @@ export default function Hero() {
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div>
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-            Yeni Yerler, Yeni Maceralar
+            Çerkezköy'den Yeni Yerler, Yeni Maceralar
           </h1>
           <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light text-white">
-            Profesyonel rehberler eşliğinde, güvenli ve konforlu bir şekilde yeni yerler keşfedin.
+            TÜRSAB üyesi Büyük Aytaç Travel ile profesyonel rehberler eşliğinde, güvenli ve konforlu seyahat deneyimi yaşayın.
           </p>
           
           <div className="flex flex-wrap gap-4">
             <Link 
               href="/tours"
               className="px-6 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+              aria-label="Büyük Aytaç Travel tüm tur programlarını görüntüle"
             >
               Tüm Turlarımız
             </Link>
             
             <Link 
-              href="/tours/domestic"
+              href="/tours?tourType=domestic"
               className="px-6 py-3 rounded-full bg-white text-blue-800 font-medium hover:bg-blue-50 transition-colors duration-300 shadow-lg hover:shadow-xl"
+              aria-label="Çerkezköy'den kalkan yurtiçi turları incele"
             >
               Yurtiçi Turlar
             </Link>

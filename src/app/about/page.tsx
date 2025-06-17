@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | Büyük Aytaç Travel - Tekirdağ'ın Güvenilir Seyahat Acentesi",
-  description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Çerkezköy, Tekirdağ ve Çorlu'dan hareketle yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
-  keywords: "Büyük Aytaç Travel, Çerkezköy seyahat acentesi, Tekirdağ seyahat acentesi, Çorlu seyahat acentesi, TÜRSAB üyesi, güvenilir tur şirketi, Çerkezköy tur şirketi, Tekirdağ tur operatörü, Trakya bölgesi turları",
+  title: "Çerkezköy'ün En Güvenilir Tur Şirketi | Büyük Aytaç Travel Hakkında",
+  description: "Çerkezköy'ün en güvenilir tur şirketi Büyük Aytaç Travel, 20 yılı aşkın tecrübesiyle Çerkezköy'den günübirlik turlar, yurtiçi ve yurtdışı tur seçenekleri sunuyor. TÜRSAB üyesi, güvenilir ve profesyonel hizmet.",
+  keywords: "çerkezköy tur şirketi, çerkezköy seyahat acentesi, çerkezköy güvenilir tur, çerkezköy tur operatörü, çerkezköy tur firması, çerkezköy tur acentesi, Büyük Aytaç Travel, TÜRSAB üyesi, çerkezköy tur deneyimi",
   openGraph: {
-    title: "Hakkımızda | Büyük Aytaç Travel - Tekirdağ'ın Güvenilir Seyahat Acentesi",
-    description: "Büyük Aytaç Travel, Çerkezköy merkezli TÜRSAB üyesi bir seyahat acentesidir. Çerkezköy, Tekirdağ ve Çorlu'dan hareketle yurtiçi ve yurtdışı turlarımızla güvenilir ve konforlu seyahat hizmeti sunuyoruz.",
+    title: "Çerkezköy'ün En Güvenilir Tur Şirketi | Büyük Aytaç Travel Hakkında",
+    description: "Çerkezköy'ün en güvenilir tur şirketi Büyük Aytaç Travel, 20 yılı aşkın tecrübesiyle Çerkezköy'den günübirlik turlar, yurtiçi ve yurtdışı tur seçenekleri sunuyor. TÜRSAB üyesi, güvenilir ve profesyonel hizmet.",
     url: 'https://www.buyukaytactravel.com/about',
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
         url: '/images/LOGO.png',
         width: 1200,
         height: 630,
-        alt: 'Büyük Aytaç Travel Hakkında',
+        alt: 'Çerkezköy Tur Şirketi - Büyük Aytaç Travel',
       },
     ],
   },
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="pt-28 pb-16 min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">500 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-6">Hakkımızda</h1>
