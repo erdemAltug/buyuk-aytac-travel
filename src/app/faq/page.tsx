@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Sık Sorulan Sorular | Büyük Aytaç Travel",
-  description: "Büyük Aytaç Travel tur rezervasyonları, ödemeler, iptaller ve hizmetlerimiz hakkında sık sorulan sorular ve yanıtları.",
-  keywords: "sık sorulan sorular, faq, tur rezervasyonu, tur iptali, tur koşulları, seyahat acentesi, Büyük Aytaç Travel",
+  title: "Sık Sorulan Sorular | Tur Rezervasyonu, İptal Koşulları | Büyük Aytaç Travel",
+  description: "Çerkezköy'den turlar hakkında sık sorulan sorular. Tur rezervasyonu, ödemeler, iptal koşulları, çocuk indirimleri ve daha fazlası.",
+  keywords: "sık sorulan sorular, faq, tur rezervasyonu, tur iptali, tur koşulları, çocuk indirimi, tek kişi tur, erken rezervasyon, çerkezköy tur sorular, büyük aytaç travel sss",
   openGraph: {
-    title: "Sık Sorulan Sorular | Büyük Aytaç Travel",
-    description: "Büyük Aytaç Travel tur rezervasyonları, ödemeler, iptaller ve hizmetlerimiz hakkında sık sorulan sorular ve yanıtları.",
+    title: "Sık Sorulan Sorular | Tur Rezervasyonu, İptal Koşulları | Büyük Aytaç Travel",
+    description: "Çerkezköy'den turlar hakkında sık sorulan sorular. Tur rezervasyonu, ödemeler, iptal koşulları, çocuk indirimleri ve daha fazlası.",
     url: 'https://www.buyukaytactravel.com/faq',
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
@@ -82,7 +83,7 @@ export default function FAQPage() {
     },
     {
       question: "Tek kişi olarak katılabilir miyim? Tek kişi farkı nedir?",
-      answer: "Evet, tek kişi olarak turlarımıza katılabilirsiniz. Konaklamalı turlarda odaları genellikle çift kişilik olarak düzenlediğimiz için tek kişi konaklama durumunda &apos;tek kişi farkı&apos; ödemeniz gerekir. Bu fark, tur fiyatının yaklaşık %25-30&apos;u kadardır ve tur detay sayfasında belirtilir."
+      answer: "Evet, tek kişi olarak turlarımıza katılabilirsiniz. Konaklamalı turlarda odaları genellikle çift kişilik olarak düzenlediğimiz için tek kişi konaklama durumunda 'tek kişi farkı' ödemeniz gerekir. Bu fark, tur fiyatının yaklaşık %25-30'u kadardır ve tur detay sayfasında belirtilir."
     },
     {
       question: "Engelli misafirler için uygun turlarınız var mı?",
@@ -94,46 +95,88 @@ export default function FAQPage() {
     },
   ];
 
+  // FAQPage Schema markup for rich snippets
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
-    <main className="pt-28 pb-16 min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="p-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Sık Sorulan Sorular</h1>
-            
-            <p className="text-gray-700 mb-8">
-              Büyük Aytaç Travel hizmetleri hakkında sık sorulan sorular ve cevapları aşağıda bulabilirsiniz. 
-              Burada cevabını bulamadığınız sorularınız için <a href="/contact" className="text-blue-600 hover:underline">iletişim sayfamızdan</a> bize ulaşabilirsiniz.
-            </p>
-            
-            <div className="space-y-6">
-              {faqs.map((faq, index) => (
-                <div key={index} className="border-b border-gray-200 pb-6 last:border-b-0">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                    {faq.question}
-                  </h3>
-                  <p className="text-gray-700">
-                    {faq.answer}
-                  </p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-12 bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-blue-800 mb-3">Başka Sorunuz Var mı?</h3>
-              <p className="text-gray-700 mb-4">
-                Burada yanıtını bulamadığınız sorularınız için bizimle iletişime geçmekten çekinmeyin. Size en kısa sürede yardımcı olmaktan memnuniyet duyarız.
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main className="pt-28 pb-16 min-h-screen bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="p-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Sık Sorulan Sorular</h1>
+              
+              <p className="text-gray-700 mb-8">
+                Büyük Aytaç Travel hizmetleri hakkında sık sorulan sorular ve cevapları aşağıda bulabilirsiniz. 
+                Burada cevabını bulamadığınız sorularınız için <Link href="/contact" className="text-blue-600 hover:underline">iletişim sayfamızdan</Link> bize ulaşabilirsiniz.
               </p>
-              <a 
-                href="/contact" 
-                className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Bize Ulaşın
-              </a>
+              
+              {/* FAQ Categories */}
+              <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+                <h2 className="text-lg font-semibold text-blue-800 mb-3">Kategoriler</h2>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Rezervasyon</span>
+                  <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Ödeme</span>
+                  <span className="px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded-full">İptal</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">Özel Durumlar</span>
+                  <span className="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">Tur Koşulları</span>
+                </div>
+              </div>
+              
+              <div className="space-y-6" itemScope itemType="https://schema.org/FAQPage">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="border-b border-gray-200 pb-6 last:border-b-0" itemScope itemType="https://schema.org/Question">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2" itemProp="name">
+                      {faq.question}
+                    </h3>
+                    <div itemScope itemType="https://schema.org/Answer" itemProp="acceptedAnswer">
+                      <p className="text-gray-700" itemProp="text">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-12 bg-blue-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-blue-800 mb-3">Başka Sorunuz Var mı?</h3>
+                <p className="text-gray-700 mb-4">
+                  Burada yanıtını bulamadığınız sorularınız için bizimle iletişime geçmekten çekinmeyin. Size en kısa sürede yardımcı olmaktan memnuniyet duyarız.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link 
+                    href="/contact" 
+                    className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  >
+                    Bize Ulaşın
+                  </Link>
+                  <Link 
+                    href="/tours" 
+                    className="inline-flex items-center justify-center px-5 py-2 border border-blue-600 text-base font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50"
+                  >
+                    Turları İncele
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 } 

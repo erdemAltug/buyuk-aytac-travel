@@ -10,11 +10,16 @@ function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  // SEO-optimized alt text
+  const optimizedAltText = `${tour.name} - ${tour.destination} ${tour.duration} - ${tour.accommodationType === 'daily' ? 'Günübirlik' : 'Konaklamalı'} Tur - Büyük Aytaç Travel`;
+
   return (
-    <div 
+    <article 
       className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      itemScope 
+      itemType="https://schema.org/TouristTrip"
     >
       <div className="relative h-64 w-full overflow-hidden">
         {/* Skeleton loader */}
@@ -25,11 +30,13 @@ function TourCard({ tour }: { tour: ITour }) {
           <>
             <Image
               src={tour.image}
-              alt={tour.name}
+              alt={optimizedAltText}
               fill
               className={`object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onError={() => setImageError(true)}
+              loading="lazy"
+              itemProp="image"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
           </>
@@ -41,22 +48,23 @@ function TourCard({ tour }: { tour: ITour }) {
         
         {/* Badge */}
         <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          {tour.duration}
+          <span itemProp="duration">{tour.duration}</span>
         </div>
         
         {/* Price */}
-        <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg">
-          {tour.price.toLocaleString('tr-TR')} ₺
+        <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+          <span itemProp="price">{tour.price.toLocaleString('tr-TR')}</span> 
+          <span itemProp="priceCurrency" content="TRY">₺</span>
         </div>
         
         {/* Tour Name */}
-        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg">
+        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg" itemProp="name">
           {tour.name}
         </h3>
       </div>
       
       <div className="p-5">
-        <p className="text-gray-600 mb-4 line-clamp-2 h-12">{tour.description}</p>
+        <p className="text-gray-600 mb-4 line-clamp-2 h-12" itemProp="description">{tour.description}</p>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -66,12 +74,14 @@ function TourCard({ tour }: { tour: ITour }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500">{tour.destination}</span>
+            <span className="text-sm text-gray-500" itemProp="touristType">{tour.destination}</span>
           </div>
           
           <Link 
             href={`/tours/${tour.slug}`}
             className="relative inline-flex items-center group-hover:text-blue-700 font-medium text-sm text-blue-600 transition-colors"
+            aria-label={`${tour.name} tur detaylarını görüntüle`}
+            itemProp="url"
           >
             <span className="mr-6">Detaylar</span>
             <span className="absolute right-0 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
@@ -82,7 +92,7 @@ function TourCard({ tour }: { tour: ITour }) {
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
