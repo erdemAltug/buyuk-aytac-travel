@@ -1,56 +1,23 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getTours } from '@/services/tourService';
+import { getToursByDB } from '@/lib/tours';
 import { ITour } from '@/models/Tour';
 
-export default function LocationPage() {
-  const [tours, setTours] = useState<ITour[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+export const metadata = {
+  title: 'Bölgesel Tur Hizmetleri | Büyük Aytaç Travel',
+  description: 'Tekirdağ, Çerkezköy, Çorlu ve çevre ilçelerden kalkan tur hizmetleri. Trakya bölgesinin her noktasından turlarımıza katılabilirsiniz.',
+  keywords: 'tekirdağ turları, çerkezköy turları, çorlu turları, bölgesel tur hizmetleri, trakya turları'
+};
 
-  useEffect(() => {
-    const fetchTours = async () => {
-      try {
-        setLoading(true);
-        const data = await getTours({ isActive: true });
-        setTours(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Turları getirme hatası:', err);
-        setError('Turlar yüklenirken bir hata oluştu.');
-        setLoading(false);
-      }
-    };
-
-    fetchTours();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="text-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-3 text-gray-600">Lokasyon bilgileri yükleniyor...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-20">
-        <div className="bg-red-50 p-4 rounded-md border border-red-200 inline-block mx-auto">
-          <p className="text-red-600">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-3 text-blue-600 hover:text-blue-800 font-medium"
-          >
-            Yeniden dene
-          </button>
-        </div>
-      </div>
-    );
+export default async function LocationPage() {
+  let tours: ITour[] = [];
+  
+  try {
+    tours = await getToursByDB({ isActive: true });
+  } catch (error) {
+    console.error('Turları getirme hatası:', error);
+    // Fallback to empty array
+    tours = [];
   }
 
   return (
@@ -81,9 +48,6 @@ export default function LocationPage() {
                       fill 
                       className="object-cover group-hover:brightness-110 transition-all duration-300"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      onError={(e) => {
-                        e.currentTarget.src = '/images/placeholder-location.jpg';
-                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     <div className="absolute bottom-4 left-4">
@@ -115,9 +79,6 @@ export default function LocationPage() {
                     fill 
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-location.jpg';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute bottom-4 left-4">
@@ -148,9 +109,6 @@ export default function LocationPage() {
                     fill 
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-location.jpg';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute bottom-4 left-4">
@@ -178,35 +136,95 @@ export default function LocationPage() {
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Bölgemizden En Çok Tercih Edilen Turlar</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {tours.slice(0, 6).map((tour) => (
-                <div key={tour._id?.toString()} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <div className="relative h-48">
-                    <Image 
-                      src={tour.image || '/images/placeholder-tour.jpg'} 
-                      alt={tour.name} 
-                      fill 
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    <div className="absolute bottom-0 left-0 bg-blue-600 text-white px-3 py-1 m-2 text-sm font-medium rounded">
-                      {tour.tourType === 'domestic' ? 'Yurtiçi' : 'Yurtdışı'} • {tour.duration} {parseInt(tour.duration) > 1 ? 'Gün' : 'Gün'}
+              {tours.length > 0 ? (
+                tours.slice(0, 6).map((tour) => (
+                  <div key={tour._id?.toString()} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div className="relative h-48">
+                      <Image 
+                        src={tour.image || '/images/placeholder-tour.jpg'} 
+                        alt={tour.name} 
+                        fill 
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <div className="absolute bottom-0 left-0 bg-blue-600 text-white px-3 py-1 m-2 text-sm font-medium rounded">
+                        {tour.tourType === 'domestic' ? 'Yurtiçi' : 'Yurtdışı'} • {tour.duration} {parseInt(tour.duration) > 1 ? 'Gün' : 'Gün'}
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">{tour.name}</h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{tour.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-600 font-bold">{tour.price.toLocaleString('tr-TR')} ₺</span>
+                        <Link 
+                          href={`/tours/${tour.slug}`}
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
+                        >
+                          Detaylar
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{tour.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{tour.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-blue-600 font-bold">{tour.price.toLocaleString('tr-TR')} ₺</span>
-                      <Link 
-                        href={`/tours/${tour.slug}`}
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
-                      >
-                        Detaylar
-                      </Link>
+                ))
+              ) : (
+                // Fallback content when no tours available
+                <>
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="relative h-48 bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                      <span className="text-blue-600 text-4xl">🏔️</span>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Kapadokya Turu</h3>
+                      <p className="text-gray-600 text-sm mb-4">Peri bacaları ve balon turları ile unutulmaz bir deneyim</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-600 font-bold">750 ₺</span>
+                        <Link 
+                          href="/tours"
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
+                        >
+                          Detaylar
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="relative h-48 bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                      <span className="text-green-600 text-4xl">🌊</span>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">Karadeniz Turu</h3>
+                      <p className="text-gray-600 text-sm mb-4">Doğa harikası Karadeniz bölgesinde yaylalar ve deniz</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-600 font-bold">680 ₺</span>
+                        <Link 
+                          href="/tours"
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
+                        >
+                          Detaylar
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="relative h-48 bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                      <span className="text-purple-600 text-4xl">🏛️</span>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">İstanbul Kültür Turu</h3>
+                      <p className="text-gray-600 text-sm mb-4">Tarihi yarımada ve müzeler ile kültür dolu bir gün</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-600 font-bold">450 ₺</span>
+                        <Link 
+                          href="/tours"
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
+                        >
+                          Detaylar
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="text-center mt-8">
               <Link 
@@ -274,7 +292,7 @@ export default function LocationPage() {
                 Rezervasyon Yap
               </Link>
               <Link 
-                href="tel:+905551234567"
+                href="tel:+905300609559"
                 className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-md transition-colors"
               >
                 Hemen Ara
