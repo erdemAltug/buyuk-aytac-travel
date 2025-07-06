@@ -48,9 +48,6 @@ export default async function LocationPage() {
                       fill 
                       className="object-cover group-hover:brightness-110 transition-all duration-300"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      onError={(e) => {
-                        e.currentTarget.src = '/images/placeholder-location.jpg';
-                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     <div className="absolute bottom-4 left-4">
@@ -82,9 +79,6 @@ export default async function LocationPage() {
                     fill 
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-location.jpg';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute bottom-4 left-4">
@@ -115,9 +109,6 @@ export default async function LocationPage() {
                     fill 
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-location.jpg';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute bottom-4 left-4">
