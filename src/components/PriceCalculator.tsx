@@ -206,7 +206,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
         {/* Rezervasyon Yap Butonu */}
         <button
           onClick={toggleModal}
-          className="w-full bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-4 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02]"
         >
           Rezervasyon Yap
         </button>
@@ -214,16 +214,16 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
       
       {/* Rezervasyon Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
+        <div className="fixed inset-0 bg-white/10 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-screen overflow-y-auto border border-gray-200">
             <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Rezervasyon Formu</h3>
+              <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900">Rezervasyon Formu</h3>
                 <button 
                   onClick={toggleModal}
-                  className="text-gray-400 hover:text-gray-500"
+                  className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 hover:scale-105"
                 >
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -314,14 +314,14 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
                   ></textarea>
                 </div>
                 
-                <div className="pt-2">
+                <div className="pt-4 border-t border-gray-100">
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02]"
                   >
                     Rezervasyon Talebini Gönder
                   </button>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 mt-3 text-center">
                     * Rezervasyon talebiniz alındıktan sonra, onay için sizinle iletişime geçeceğiz.
                   </p>
                 </div>

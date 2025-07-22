@@ -22,27 +22,27 @@ export default function Hero() {
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div>
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-            Çerkezköy'den Yeni Yerler, Yeni Maceralar
+            Çerkezköy Günübirlik ve Konaklamalı Turlar | Büyük Aytaç Travel
           </h1>
           <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light text-white">
-            TÜRSAB üyesi Büyük Aytaç Travel ile profesyonel rehberler eşliğinde, güvenli ve konforlu seyahat deneyimi yaşayın.
+            Çerkezköy kalkışlı yurtiçi ve yurtdışı turlar. TÜRSAB üyesi tur operatörü ile profesyonel rehberler eşliğinde güvenli seyahat deneyimi. Tekirdağ ve Çorlu'dan da katılım imkanı.
           </p>
           
           <div className="flex flex-wrap gap-4">
             <Link 
               href="/tours"
               className="px-6 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
-              aria-label="Büyük Aytaç Travel tüm tur programlarını görüntüle"
+              aria-label="Çerkezköy kalkışlı tüm tur programlarını incele"
             >
-              Tüm Turlarımız
+              Çerkezköy Turları
             </Link>
             
             <Link 
               href="/tours?tourType=domestic"
               className="px-6 py-3 rounded-full bg-white text-blue-800 font-medium hover:bg-blue-50 transition-colors duration-300 shadow-lg hover:shadow-xl"
-              aria-label="Çerkezköy'den kalkan yurtiçi turları incele"
+              aria-label="Çerkezköy'den kalkan günübirlik yurtiçi turlar"
             >
-              Yurtiçi Turlar
+              Günübirlik Turlar
             </Link>
           </div>
         </div>

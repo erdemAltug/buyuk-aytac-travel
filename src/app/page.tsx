@@ -5,6 +5,7 @@ import { TourType, AccommodationType } from '@/models/Tour';
 import Image from 'next/image';
 import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';
+import CustomerReviews from '@/components/CustomerReviews';
 import Link from 'next/link';
 
 export default function Home() {
@@ -225,6 +226,9 @@ export default function Home() {
           
           {/* Blog Önizleme Bölümü */}
           <BlogPreview />
+          
+          {/* Müşteri Yorumları - SEO Optimized */}
+          <CustomerReviews />
           
           <ContactCTA />
         </main>
