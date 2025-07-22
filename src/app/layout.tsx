@@ -17,11 +17,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
-  description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
-  keywords: "çerkezköy tur, tekirdağ tur, çorlu tur, günübirlik turlar, konaklamalı turlar, yurtiçi turlar, yurtdışı turlar, seyahat acentesi, tur operatörü, TÜRSAB üyesi, büyük aytaç travel, trakya turları",
+  description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi. Yurtiçi ve yurtdışı tur paketleri.",
+  keywords: [
+    // Lokal anahtar kelimeler
+    "çerkezköy tur", "tekirdağ tur", "çorlu tur", "çerkezköy seyahat acentesi", "tekirdağ tur operatörü",
+    // Genel tur anahtar kelimeleri
+    "günübirlik turlar", "konaklamalı turlar", "yurtiçi turlar", "yurtdışı turlar", "avrupa turu", "balkan turu",
+    // Destinasyon anahtar kelimeleri
+    "kapadokya turu", "pamukkale turu", "istanbul turu", "yunanistan turu", "gürcistan turu", "italya turu",
+    // Hizmet anahtar kelimeleri
+    "seyahat acentesi", "tur operatörü", "TÜRSAB üyesi", "otobüs turu", "grup turu", "son dakika tur",
+    // Özgün anahtar kelimeler
+    "büyük aytaç travel", "uygun fiyatlı tur", "güvenli tur", "trakya turları", "çerkezköy çıkışlı tur"
+  ].join(", "),
   authors: [{ name: "Büyük Aytaç Travel" }],
   creator: "Büyük Aytaç Travel",
   publisher: "Büyük Aytaç Travel",
+  category: "Travel",
+  classification: "Seyahat ve Turizm",
   formatDetection: {
     email: false,
     address: false,
@@ -30,25 +43,38 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.buyukaytactravel.com'),
   alternates: {
     canonical: '/',
+    languages: {
+      'tr-TR': '/',
+    },
   },
   openGraph: {
     title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
-    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi. Yurtiçi ve yurtdışı tur paketleri.",
     url: "https://www.buyukaytactravel.com",
     siteName: 'Büyük Aytaç Travel',
+    locale: 'tr_TR',
+    type: 'website',
     images: [
       {
         url: '/images/LOGO.png',
         width: 1200,
         height: 630,
         alt: 'Büyük Aytaç Travel - Çerkezköy Tur Operatörü Logo',
+        type: 'image/png',
+      },
+      {
+        url: '/images/hero-banner.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Büyük Aytaç Travel Tur Deneyimleri',
+        type: 'image/jpeg',
       },
     ],
-    locale: 'tr_TR',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@buyukaytactravel',
+    creator: '@buyukaytactravel',
     title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
     description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
     images: ['/images/LOGO.png'],
@@ -56,16 +82,28 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
-  category: 'travel',
   verification: {
-    google: 'xxxxxxxxxxxxxxxxxxxx', // Google Search Console doğrulama kodunuzu buraya ekleyin
+    google: 'your-google-search-console-verification-code-here', // Google Search Console doğrulama kodunuzu buraya ekleyin
+    yandex: 'your-yandex-verification-code-here', // Yandex Webmaster doğrulama kodu
+    yahoo: 'your-yahoo-verification-code-here', // Yahoo doğrulama kodu
+  },
+  applicationName: 'Büyük Aytaç Travel',
+  referrer: 'origin-when-cross-origin',
+  other: {
+    'msapplication-TileColor': '#2563eb',
+    'theme-color': '#2563eb',
+    'apple-mobile-web-app-capable': 'yes',
+    'mobile-web-app-capable': 'yes',
   },
   icons: {
     icon: [
@@ -145,6 +183,18 @@ export default function RootLayout({
         <link rel="icon" href="/images/LOGO.png" />
         <link rel="apple-touch-icon" href="/images/LOGO.png" />
         <link rel="shortcut icon" href="/images/LOGO.png" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+          `
+        }} />
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
