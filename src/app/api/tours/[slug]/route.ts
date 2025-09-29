@@ -13,7 +13,8 @@ export async function GET(req: NextRequest, { params }: RouteSegmentProps) {
   try {
     await dbConnect();
     
-    const tour = await Tour.findOne({ slug: params.slug });
+    const { slug } = await params;
+    const tour = await Tour.findOne({ slug });
     
     if (!tour) {
       return NextResponse.json({ error: 'Tur bulunamadı' }, { status: 404 });
@@ -35,9 +36,10 @@ export async function PUT(req: NextRequest, { params }: RouteSegmentProps) {
     await dbConnect();
     
     const body = await req.json();
+    const { slug } = await params;
     
     // Önce turu bul
-    const tour = await Tour.findOne({ slug: params.slug });
+    const tour = await Tour.findOne({ slug });
     
     if (!tour) {
       return NextResponse.json({ error: 'Tur bulunamadı' }, { status: 404 });
@@ -73,7 +75,8 @@ export async function DELETE(req: NextRequest, { params }: RouteSegmentProps) {
   try {
     await dbConnect();
     
-    const tour = await Tour.findOne({ slug: params.slug });
+    const { slug } = await params;
+    const tour = await Tour.findOne({ slug });
     
     if (!tour) {
       return NextResponse.json({ error: 'Tur bulunamadı' }, { status: 404 });
@@ -89,4 +92,4 @@ export async function DELETE(req: NextRequest, { params }: RouteSegmentProps) {
       { status: 500 }
     );
   }
-} 
+}
