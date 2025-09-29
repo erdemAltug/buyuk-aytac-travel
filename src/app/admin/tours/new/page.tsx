@@ -8,14 +8,14 @@ import { createTour } from '@/services/tourService';
 import { uploadFile } from '@/services/uploadService';
 import { TourType, AccommodationType } from '@/models/Tour';
 
-// Form input sınıflarını güncelle
+// Form input sınıfları
 const inputClass = "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-2";
 const labelClass = "block text-sm font-medium leading-6 text-gray-900 mb-1";
 const buttonClass = "flex justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed";
 
 export default function AddNewTour() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   
@@ -32,23 +32,30 @@ export default function AddNewTour() {
     accommodationType: AccommodationType.WITH_ACCOMMODATION,
     startDate: '',
     endDate: '',
+    departureCity: 'Çerkezköy',
+    isLastMinute: false,
+    discountRate: '',
     program: [{ day: '', title: '', description: '' }],
     includedServices: [''],
     excludedServices: [''],
     additionalServices: [{ name: '', price: '', description: '' }],
   });
   
-  useEffect(() => {
-    // Artık destinasyon verileri çekmeye gerek yok
-    setIsLoading(false);
-  }, []);
-  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type } = e.target;
+    
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData(prev => ({
+        ...prev,
+        [name]: checked
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
   
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,13 +82,13 @@ export default function AddNewTour() {
     
     // Form validation
     if (!formData.name || !formData.description || !formData.destination || !formData.duration || !formData.price) {
-      alert('Lütfen tüm zorunlu alanları doldurun');
+      setError('Lütfen tüm zorunlu alanları doldurun');
       setSubmitting(false);
       return;
     }
     
     if (!formData.image) {
-      alert('Lütfen bir resim yükleyin');
+      setError('Lütfen bir resim yükleyin');
       setSubmitting(false);
       return;
     }
@@ -100,14 +107,17 @@ export default function AddNewTour() {
         description: formData.description,
         destination: formData.destination,
         duration: formData.duration,
-        price: parseFloat(formData.price.replace(/[^\d.]/g, '')), // Fiyatı temizle ve sayıya çevir
+        price: parseFloat(formData.price.replace(/[^\d.]/g, '')),
         image: uploadResponse.url,
         isActive: formData.status === 'active',
         tourType: formData.tourType,
         accommodationType: formData.accommodationType,
+        departureCity: formData.departureCity,
+        isLastMinute: formData.isLastMinute,
+        discountRate: formData.discountRate ? parseFloat(formData.discountRate) : undefined,
         startDate: formData.startDate ? new Date(formData.startDate) : undefined,
         endDate: formData.endDate ? new Date(formData.endDate) : undefined,
-        program: formData.program.filter(item => item.day && item.title && item.description),
+        program: formData.program.filter(item => item.day || item.title || item.description),
         includedServices: formData.includedServices.filter(item => item.trim() !== ''),
         excludedServices: formData.excludedServices.filter(item => item.trim() !== ''),
         additionalServices: formData.additionalServices
@@ -132,7 +142,7 @@ export default function AddNewTour() {
     }
   };
   
-  // Program günü ekleme fonksiyonu
+  // Program günü ekleme fonksiyonları
   const handleAddProgramDay = () => {
     setFormData(prev => ({
       ...prev,
@@ -140,7 +150,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Program günü çıkarma fonksiyonu
   const handleRemoveProgramDay = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -148,7 +157,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Program güncelleme fonksiyonu
   const handleProgramChange = (index: number, field: string, value: string) => {
     const updatedProgram = [...formData.program];
     updatedProgram[index] = { ...updatedProgram[index], [field]: value };
@@ -159,7 +167,7 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olan hizmetleri ekleme fonksiyonu
+  // Dahil olan hizmetler fonksiyonları
   const handleAddIncludedService = () => {
     setFormData(prev => ({
       ...prev,
@@ -167,7 +175,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olan hizmet çıkarma fonksiyonu
   const handleRemoveIncludedService = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -175,7 +182,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olan hizmet güncelleme fonksiyonu
   const handleIncludedServiceChange = (index: number, value: string) => {
     const updatedServices = [...formData.includedServices];
     updatedServices[index] = value;
@@ -186,7 +192,7 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olmayan hizmetleri ekleme fonksiyonu
+  // Dahil olmayan hizmetler fonksiyonları
   const handleAddExcludedService = () => {
     setFormData(prev => ({
       ...prev,
@@ -194,7 +200,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olmayan hizmet çıkarma fonksiyonu
   const handleRemoveExcludedService = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -202,7 +207,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Dahil olmayan hizmet güncelleme fonksiyonu
   const handleExcludedServiceChange = (index: number, value: string) => {
     const updatedServices = [...formData.excludedServices];
     updatedServices[index] = value;
@@ -213,7 +217,7 @@ export default function AddNewTour() {
     }));
   };
 
-  // Ek hizmet ekleme fonksiyonu
+  // Ek hizmet fonksiyonları
   const handleAddAdditionalService = () => {
     setFormData(prev => ({
       ...prev,
@@ -221,7 +225,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Ek hizmet çıkarma fonksiyonu
   const handleRemoveAdditionalService = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -229,7 +232,6 @@ export default function AddNewTour() {
     }));
   };
 
-  // Ek hizmet güncelleme fonksiyonu
   const handleAdditionalServiceChange = (index: number, field: string, value: string) => {
     const updatedServices = [...formData.additionalServices];
     updatedServices[index] = { ...updatedServices[index], [field]: value };
@@ -239,14 +241,6 @@ export default function AddNewTour() {
       additionalServices: updatedServices
     }));
   };
-  
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
   
   return (
     <div className="flex h-screen bg-gray-100">
@@ -268,7 +262,9 @@ export default function AddNewTour() {
             <form onSubmit={handleSubmit}>
               {/* Tur Adı */}
               <div className="mb-4">
-                <label htmlFor="name" className={labelClass}>Tur Adı</label>
+                <label htmlFor="name" className={labelClass}>
+                  Tur Adı <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   id="name"
@@ -282,21 +278,41 @@ export default function AddNewTour() {
               
               {/* Destinasyon */}
               <div className="mb-4">
-                <label htmlFor="destination" className={labelClass}>Destinasyon</label>
+                <label htmlFor="destination" className={labelClass}>
+                  Destinasyon <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   id="destination"
                   name="destination"
                   value={formData.destination}
                   onChange={handleChange}
+                  placeholder="Örn: Kapadokya, İstanbul, Paris"
                   className={inputClass}
                   required
                 />
               </div>
               
+              {/* Kalkış Şehri */}
+              <div className="mb-4">
+                <label htmlFor="departureCity" className={labelClass}>
+                  Kalkış Şehri
+                </label>
+                <input
+                  type="text"
+                  id="departureCity"
+                  name="departureCity"
+                  value={formData.departureCity}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+              </div>
+              
               {/* Tur Süresi */}
               <div className="mb-4">
-                <label htmlFor="duration" className={labelClass}>Tur Süresi</label>
+                <label htmlFor="duration" className={labelClass}>
+                  Tur Süresi <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   id="duration"
@@ -311,14 +327,15 @@ export default function AddNewTour() {
               
               {/* Tur Tipi */}
               <div className="mb-4">
-                <label htmlFor="tourType" className={labelClass}>Tur Tipi</label>
+                <label htmlFor="tourType" className={labelClass}>
+                  Tur Tipi
+                </label>
                 <select
                   id="tourType"
                   name="tourType"
                   value={formData.tourType}
                   onChange={handleChange}
                   className={inputClass}
-                  required
                 >
                   <option value={TourType.DOMESTIC}>Yurt İçi</option>
                   <option value={TourType.INTERNATIONAL}>Yurt Dışı</option>
@@ -327,14 +344,15 @@ export default function AddNewTour() {
               
               {/* Konaklama Tipi */}
               <div className="mb-4">
-                <label htmlFor="accommodationType" className={labelClass}>Konaklama Tipi</label>
+                <label htmlFor="accommodationType" className={labelClass}>
+                  Konaklama Tipi
+                </label>
                 <select
                   id="accommodationType"
                   name="accommodationType"
                   value={formData.accommodationType}
                   onChange={handleChange}
                   className={inputClass}
-                  required
                 >
                   <option value={AccommodationType.WITH_ACCOMMODATION}>Konaklamalı</option>
                   <option value={AccommodationType.DAILY}>Günübirlik</option>
@@ -343,7 +361,9 @@ export default function AddNewTour() {
               
               {/* Fiyat */}
               <div className="mb-4">
-                <label htmlFor="price" className={labelClass}>Fiyat (₺)</label>
+                <label htmlFor="price" className={labelClass}>
+                  Fiyat (₺) <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   id="price"
@@ -356,9 +376,43 @@ export default function AddNewTour() {
                 />
               </div>
               
+              {/* İndirim Oranı */}
+              <div className="mb-4">
+                <label htmlFor="discountRate" className={labelClass}>
+                  İndirim Oranı (%)
+                </label>
+                <input
+                  type="number"
+                  id="discountRate"
+                  name="discountRate"
+                  value={formData.discountRate}
+                  onChange={handleChange}
+                  min="0"
+                  max="100"
+                  placeholder="20"
+                  className={inputClass}
+                />
+              </div>
+              
+              {/* Son Dakika */}
+              <div className="mb-4">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="isLastMinute"
+                    checked={formData.isLastMinute}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Son Dakika Fırsatı
+                </label>
+              </div>
+              
               {/* Başlangıç Tarihi */}
               <div className="mb-4">
-                <label htmlFor="startDate" className={labelClass}>Başlangıç Tarihi</label>
+                <label htmlFor="startDate" className={labelClass}>
+                  Başlangıç Tarihi
+                </label>
                 <input
                   type="date"
                   id="startDate"
@@ -367,12 +421,13 @@ export default function AddNewTour() {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                <p className="mt-1 text-xs text-gray-500">Tur belirli bir tarihte başlıyorsa doldurun</p>
               </div>
               
               {/* Bitiş Tarihi */}
               <div className="mb-4">
-                <label htmlFor="endDate" className={labelClass}>Bitiş Tarihi</label>
+                <label htmlFor="endDate" className={labelClass}>
+                  Bitiş Tarihi
+                </label>
                 <input
                   type="date"
                   id="endDate"
@@ -381,12 +436,14 @@ export default function AddNewTour() {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                <p className="mt-1 text-xs text-gray-500">Tur belirli bir tarihte bitiyorsa doldurun. Bu tarih geçtiğinde tur otomatik olarak pasif duruma geçer.</p>
+                <p className="mt-1 text-xs text-gray-500">Bu tarih geçtiğinde tur otomatik olarak pasif duruma geçer.</p>
               </div>
               
               {/* Açıklama */}
               <div className="mb-4">
-                <label htmlFor="description" className={labelClass}>Açıklama</label>
+                <label htmlFor="description" className={labelClass}>
+                  Açıklama <span className="text-red-500">*</span>
+                </label>
                 <textarea
                   id="description"
                   name="description"
@@ -395,7 +452,7 @@ export default function AddNewTour() {
                   rows={5}
                   className={inputClass}
                   required
-                ></textarea>
+                />
               </div>
               
               {/* Tur Programı */}
@@ -412,58 +469,41 @@ export default function AddNewTour() {
                             onClick={() => handleRemoveProgramDay(index)}
                             className="text-red-600 hover:text-red-800"
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
+                            Sil
                           </button>
                         )}
                       </div>
                       <div className="grid grid-cols-1 gap-3">
-                        <div>
-                          <label htmlFor={`day-${index}`} className="block text-xs font-medium text-gray-700">Gün Bilgisi</label>
-                          <input
-                            type="text"
-                            id={`day-${index}`}
-                            value={day.day}
-                            onChange={(e) => handleProgramChange(index, 'day', e.target.value)}
-                            placeholder="Örn: 11 Nisan 2025, Cuma - 1. Gün"
-                            className={inputClass}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor={`title-${index}`} className="block text-xs font-medium text-gray-700">Başlık</label>
-                          <input
-                            type="text"
-                            id={`title-${index}`}
-                            value={day.title}
-                            onChange={(e) => handleProgramChange(index, 'title', e.target.value)}
-                            placeholder="Örn: Hareket Günü"
-                            className={inputClass}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor={`description-${index}`} className="block text-xs font-medium text-gray-700">Açıklama</label>
-                          <textarea
-                            id={`description-${index}`}
-                            value={day.description}
-                            onChange={(e) => handleProgramChange(index, 'description', e.target.value)}
-                            rows={3}
-                            placeholder="Gün programı açıklaması"
-                            className={inputClass}
-                          ></textarea>
-                        </div>
+                        <input
+                          type="text"
+                          value={day.day}
+                          onChange={(e) => handleProgramChange(index, 'day', e.target.value)}
+                          placeholder="Gün bilgisi (Örn: 1. Gün)"
+                          className={inputClass}
+                        />
+                        <input
+                          type="text"
+                          value={day.title}
+                          onChange={(e) => handleProgramChange(index, 'title', e.target.value)}
+                          placeholder="Başlık"
+                          className={inputClass}
+                        />
+                        <textarea
+                          value={day.description}
+                          onChange={(e) => handleProgramChange(index, 'description', e.target.value)}
+                          rows={3}
+                          placeholder="Açıklama"
+                          className={inputClass}
+                        />
                       </div>
                     </div>
                   ))}
                   <button
                     type="button"
                     onClick={handleAddProgramDay}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Yeni Gün Ekle
+                    + Yeni Gün Ekle
                   </button>
                 </div>
               </div>
@@ -487,9 +527,7 @@ export default function AddNewTour() {
                           onClick={() => handleRemoveIncludedService(index)}
                           className="text-red-600 hover:text-red-800"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
+                          Sil
                         </button>
                       )}
                     </div>
@@ -497,12 +535,9 @@ export default function AddNewTour() {
                   <button
                     type="button"
                     onClick={handleAddIncludedService}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Dahil Hizmet Ekle
+                    + Hizmet Ekle
                   </button>
                 </div>
               </div>
@@ -526,9 +561,7 @@ export default function AddNewTour() {
                           onClick={() => handleRemoveExcludedService(index)}
                           className="text-red-600 hover:text-red-800"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
+                          Sil
                         </button>
                       )}
                     </div>
@@ -536,20 +569,16 @@ export default function AddNewTour() {
                   <button
                     type="button"
                     onClick={handleAddExcludedService}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Dahil Olmayan Hizmet Ekle
+                    + Hizmet Ekle
                   </button>
                 </div>
               </div>
               
               {/* Ek Hizmetler */}
               <div className="mb-6">
-                <label className={labelClass}>Ek Hizmetler</label>
-                <p className="text-sm text-gray-500 mb-2">Ek hizmetler müşterilerin tur rezervasyonu sırasında ek ücretle satın alabileceği hizmetlerdir. (Örn: Seyahat sigortası, VIP transfer, özel rehber)</p>
+                <label className={labelClass}>Ek Hizmetler (Ücretli)</label>
                 <div className="space-y-4">
                   {formData.additionalServices.map((service, index) => (
                     <div key={index} className="border p-4 rounded-md">
@@ -561,45 +590,33 @@ export default function AddNewTour() {
                             onClick={() => handleRemoveAdditionalService(index)}
                             className="text-red-600 hover:text-red-800"
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
+                            Sil
                           </button>
                         )}
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label htmlFor={`service-name-${index}`} className="block text-xs font-medium text-gray-700">Hizmet Adı</label>
-                          <input
-                            type="text"
-                            id={`service-name-${index}`}
-                            value={service.name}
-                            onChange={(e) => handleAdditionalServiceChange(index, 'name', e.target.value)}
-                            placeholder="Örn: Seyahat Sigortası"
-                            className={inputClass}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor={`service-price-${index}`} className="block text-xs font-medium text-gray-700">Fiyat (₺)</label>
-                          <input
-                            type="text"
-                            id={`service-price-${index}`}
-                            value={service.price}
-                            onChange={(e) => handleAdditionalServiceChange(index, 'price', e.target.value)}
-                            placeholder="Örn: 250"
-                            className={inputClass}
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          value={service.name}
+                          onChange={(e) => handleAdditionalServiceChange(index, 'name', e.target.value)}
+                          placeholder="Hizmet adı"
+                          className={inputClass}
+                        />
+                        <input
+                          type="text"
+                          value={service.price}
+                          onChange={(e) => handleAdditionalServiceChange(index, 'price', e.target.value)}
+                          placeholder="Fiyat"
+                          className={inputClass}
+                        />
                         <div className="sm:col-span-2">
-                          <label htmlFor={`service-description-${index}`} className="block text-xs font-medium text-gray-700">Açıklama</label>
                           <textarea
-                            id={`service-description-${index}`}
                             value={service.description}
                             onChange={(e) => handleAdditionalServiceChange(index, 'description', e.target.value)}
-                            placeholder="Hizmetin detaylı açıklaması"
+                            placeholder="Açıklama"
                             rows={2}
                             className={inputClass}
-                          ></textarea>
+                          />
                         </div>
                       </div>
                     </div>
@@ -607,19 +624,18 @@ export default function AddNewTour() {
                   <button
                     type="button"
                     onClick={handleAddAdditionalService}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Yeni Ek Hizmet Ekle
+                    + Ek Hizmet Ekle
                   </button>
                 </div>
               </div>
               
               {/* Durum */}
               <div className="mb-4">
-                <label htmlFor="status" className={labelClass}>Durum</label>
+                <label htmlFor="status" className={labelClass}>
+                  Durum
+                </label>
                 <select
                   id="status"
                   name="status"
@@ -634,7 +650,9 @@ export default function AddNewTour() {
               
               {/* Resim Yükleme */}
               <div className="mb-6">
-                <label htmlFor="image" className={labelClass}>Tur Görseli</label>
+                <label htmlFor="image" className={labelClass}>
+                  Tur Görseli <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="file"
                   id="image"
@@ -644,6 +662,7 @@ export default function AddNewTour() {
                   file:rounded-md file:border-0 file:text-sm file:font-semibold
                   file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   accept="image/*"
+                  required
                 />
                 
                 {formData.imagePreview && (
@@ -680,4 +699,4 @@ export default function AddNewTour() {
       </div>
     </div>
   );
-} 
+}

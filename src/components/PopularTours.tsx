@@ -97,7 +97,7 @@ export default function PopularTours() {
         setLoading(true);
         // Sadece aktif turları getir
         const data = await getTours({ isActive: true });
-        setTours(data.slice(0, 6)); // En fazla 6 tur göster
+        setTours(data.slice(0, 12)); // En fazla 12 tur göster
         setLoading(false);
       } catch (err) {
         console.error('Turları getirme hatası:', err);
@@ -122,7 +122,7 @@ export default function PopularTours() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden h-96 animate-pulse">
                 <div className="h-64 bg-gray-200"></div>
                 <div className="p-5">
@@ -177,7 +177,7 @@ export default function PopularTours() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tours.map((tour) => (
             <TourCard key={tour._id?.toString()} tour={tour} />
           ))}
