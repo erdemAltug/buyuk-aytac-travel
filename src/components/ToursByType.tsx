@@ -13,18 +13,23 @@ function TourCard({ tour }: { tour: ITour }) {
   // SEO-optimized alt text
   const optimizedAltText = `${tour.name} - ${tour.destination} ${tour.duration} - ${tour.accommodationType === 'daily' ? 'Günübirlik' : 'Konaklamalı'} Tur - Büyük Aytaç Travel`;
 
+  // Price and labels
+  const hasDiscount = (tour.discountRate ?? 0) > 0;
+  const finalPrice = hasDiscount ? Math.round(tour.price * (1 - (tour.discountRate as number) / 100)) : tour.price;
+  const accommodationLabel = tour.accommodationType === 'daily' ? 'Günübirlik' : 'Konaklamalı';
+
   return (
-    <article 
+    <article
       className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      itemScope 
+      itemScope
       itemType="https://schema.org/TouristTrip"
     >
       <div className="relative h-64 w-full overflow-hidden">
         {/* Skeleton loader */}
         <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
-        
+
         {/* Image */}
         {!imageError ? (
           <>
@@ -38,34 +43,62 @@ function TourCard({ tour }: { tour: ITour }) {
               loading="lazy"
               itemProp="image"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+            {/* Dark gradient overlay for better text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           </>
         ) : (
           <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
             <span className="text-gray-500">Görsel yüklenemedi</span>
           </div>
         )}
-        
-        {/* Badge */}
-        <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          <span itemProp="duration">{tour.duration}</span>
+
+        {/* Top-left stacked badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+            <span itemProp="duration">{tour.duration}</span>
+          </div>
+          <div className="bg-white/90 text-gray-900 px-3 py-1 rounded-full text-xs font-medium shadow">
+            {accommodationLabel}
+          </div>
         </div>
-        
-        {/* Price */}
-        <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-          <span itemProp="price">{tour.price.toLocaleString('tr-TR')}</span> 
-          <span itemProp="priceCurrency" content="TRY">₺</span>
+
+        {/* Top-right last minute badge */}
+        {tour.isLastMinute && (
+          <div className="absolute top-4 right-4 bg-gradient-to-r from-rose-600 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            Son Dakika
+          </div>
+        )}
+
+        {/* Price pill (supports discount) */}
+        <div
+          className="absolute bottom-4 right-4 bg-white rounded-xl shadow-lg px-4 py-2 text-right"
+          itemProp="offers"
+          itemScope
+          itemType="https://schema.org/Offer"
+        >
+          {hasDiscount ? (
+            <>
+              <div className="text-xs text-gray-400 line-through">{tour.price.toLocaleString('tr-TR')} ₺</div>
+              <div className="text-blue-700 font-extrabold text-lg" itemProp="price">{finalPrice.toLocaleString('tr-TR')}</div>
+              <span className="sr-only" itemProp="priceCurrency" content="TRY">TRY</span>
+            </>
+          ) : (
+            <>
+              <div className="text-blue-700 font-extrabold text-lg" itemProp="price">{tour.price.toLocaleString('tr-TR')}</div>
+              <span className="sr-only" itemProp="priceCurrency" content="TRY">TRY</span>
+            </>
+          )}
         </div>
-        
+
         {/* Tour Name */}
         <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg" itemProp="name">
           {tour.name}
         </h3>
       </div>
-      
+
       <div className="p-5">
         <p className="text-gray-600 mb-4 line-clamp-2 h-12" itemProp="description">{tour.description}</p>
-        
+
         {/* Tarih ve diğer önemli detaylar */}
         {tour.startDate && (
           <div className="flex items-center mb-2">
@@ -83,7 +116,7 @@ function TourCard({ tour }: { tour: ITour }) {
             </span>
           </div>
         )}
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="mr-2 text-gray-500">
@@ -92,9 +125,9 @@ function TourCard({ tour }: { tour: ITour }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
               </svg>
             </div>
-            <span className="text-sm text-gray-500" itemProp="touristType">{tour.destination}</span>
+            <span className="text-sm text-gray-500">{tour.destination}</span>
           </div>
-          
+
           <Link
             href={`/tours/${tour.slug}`}
             className="relative inline-flex items-center group-hover:text-blue-700 font-medium text-sm text-blue-600 transition-colors"
