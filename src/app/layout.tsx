@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import Link from 'next/link';
+import LayoutWrapper from '@/components/LayoutWrapper';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,19 +14,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
-  description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi. Yurtiçi ve yurtdışı tur paketleri.",
+  title: {
+    default: "Büyük Aytaç Travel | Çerkezköy Tur, Tekirdağ, Çorlu Tur ve Seyahat",
+    template: "%s | Büyük Aytaç Travel"
+  },
+  description: "Çerkezköy tur ve seyahat için en iyi seçenekler! Tekirdağ, Çorlu, Trakya bölgesinden günübirlik ve konaklamalı turlar. TÜRSAB üyesi güvenilir tur operatörünüz.",
   keywords: [
-    // Lokal anahtar kelimeler
-    "çerkezköy tur", "tekirdağ tur", "çorlu tur", "çerkezköy seyahat acentesi", "tekirdağ tur operatörü",
-    // Genel tur anahtar kelimeleri
-    "günübirlik turlar", "konaklamalı turlar", "yurtiçi turlar", "yurtdışı turlar", "avrupa turu", "balkan turu",
-    // Destinasyon anahtar kelimeleri
-    "kapadokya turu", "pamukkale turu", "istanbul turu", "yunanistan turu", "gürcistan turu", "italya turu",
-    // Hizmet anahtar kelimeleri
-    "seyahat acentesi", "tur operatörü", "TÜRSAB üyesi", "otobüs turu", "grup turu", "son dakika tur",
-    // Özgün anahtar kelimeler
-    "büyük aytaç travel", "uygun fiyatlı tur", "güvenli tur", "trakya turları", "çerkezköy çıkışlı tur"
+    "çerkezköy tur",
+    "çerkezköy seyahat",
+    "çerkezköy tur operatörü",
+    "tekirdağ tur",
+    "tekirdağ seyahat",
+    "çorlu tur",
+    "çorlu seyahat",
+    "trakya turları",
+    "günübirlik tur çerkezköy",
+    "hafta sonu tur çerkezköy",
+    "yurtiçi turlar",
+    "yurtdışı turlar",
+    "tur acentesi çerkezköy",
+    "TÜRSAB üyesi tur",
+    "büyük aytaç travel"
   ].join(", "),
   authors: [{ name: "Büyük Aytaç Travel" }],
   creator: "Büyük Aytaç Travel",
@@ -44,12 +50,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'tr-TR': '/',
+      'tr': '/',
     },
   },
   openGraph: {
-    title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
-    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi. Yurtiçi ve yurtdışı tur paketleri.",
+    title: "Büyük Aytaç Travel | Çerkezköy Tur ve Seyahat",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan en iyi turlar. Günübirlik ve konaklamalı tur seçenekleri. TÜRSAB üyesi güvenilir tur operatörünüz.",
     url: "https://www.buyukaytactravel.com",
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
@@ -73,10 +79,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@buyukaytactravel',
-    creator: '@buyukaytactravel',
-    title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
-    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
+    title: "Büyük Aytaç Travel | Çerkezköy Tur",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan en iyi turlar. TÜRSAB üyesi güvenilir tur operatörünüz.",
     images: ['/images/LOGO.png'],
   },
   robots: {
@@ -91,6 +95,12 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  category: 'travel',
+  other: {
+    'geo.region': 'TR-59',
+    'geo.placename': 'Çerkezköy',
+    'ICBM': '41.2833, 28.0000',
   },
   verification: {
     google: 'your-google-search-console-verification-code-here', // Google Search Console doğrulama kodunuzu buraya ekleyin
@@ -203,22 +213,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div>
-          <Navbar />
-          <div className="fixed top-5 right-16 z-50 lg:right-5">
-            <Link 
-              href="/admin/login" 
-              className="px-3 py-1.5 bg-white/80 backdrop-blur-sm text-blue-600 rounded-full text-xs sm:text-sm font-medium shadow-md hover:bg-white transition-all duration-300 flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 mr-1">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
-              </svg>
-              Giriş
-            </Link>
-          </div>
+        <LayoutWrapper>
           {children}
-          <Footer />
-        </div>
+        </LayoutWrapper>
       </body>
     </html>
   );

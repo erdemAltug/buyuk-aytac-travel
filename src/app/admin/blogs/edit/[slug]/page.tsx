@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AdminSidebar from '@/components/admin/AdminSidebar';
-import AdminHeader from '@/components/admin/AdminHeader';
 import { getBlogBySlug, updateBlog } from '@/services/blogService';
 import { uploadFile } from '@/services/uploadService';
 
@@ -188,47 +186,30 @@ export default function EditBlogPage({ params }: { params: { slug: string } }) {
   
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-  
+
   if (notFound) {
     return (
-      <div className="flex h-screen bg-gray-100">
-        <AdminSidebar />
-        
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <AdminHeader />
-          
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-            <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-              <h1 className="text-2xl font-semibold text-gray-800 mb-6">Blog Bulunamadı</h1>
-              <p className="text-gray-600 mb-6">Düzenlemek istediğiniz blog yazısı bulunamadı.</p>
-              <button
-                onClick={() => router.push('/admin/blogs')}
-                className="rounded-md px-3 py-1.5 text-sm font-semibold text-gray-900 border border-gray-300 hover:bg-gray-50"
-              >
-                Blog Listesine Dön
-              </button>
-            </div>
-          </main>
-        </div>
+      <div className="max-w-3xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow">
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Blog Bulunamadı</h1>
+        <p className="text-gray-600 mb-6">Düzenlemek istediğiniz blog yazısı bulunamadı.</p>
+        <button
+          onClick={() => router.push('/admin/blogs')}
+          className="rounded-md px-3 py-1.5 text-sm font-semibold text-gray-900 border border-gray-300 hover:bg-gray-50"
+        >
+          Blog Listesine Dön
+        </button>
       </div>
     );
   }
   
   return (
-    <div className="flex h-screen bg-gray-100">
-      <AdminSidebar />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminHeader />
-        
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-          <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-            <h1 className="text-2xl font-semibold text-gray-800 mb-6">Blog Yazısını Düzenle</h1>
+    <div className="max-w-3xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow">
+      <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Blog Yazısını Düzenle</h1>
             
             {error && (
               <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md">
@@ -429,9 +410,6 @@ export default function EditBlogPage({ params }: { params: { slug: string } }) {
                 </button>
               </div>
             </form>
-          </div>
-        </main>
-      </div>
     </div>
   );
 } 

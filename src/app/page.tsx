@@ -5,7 +5,8 @@ import { TourType, AccommodationType } from '@/models/Tour';
 import Image from 'next/image';
 import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';
-import CustomerReviews from '@/components/CustomerReviews';
+import InstagramFeed from '@/components/InstagramFeed';
+import FeaturedTours from '@/components/FeaturedTours';
 import Link from 'next/link';
 
 export default function Home() {
@@ -23,6 +24,61 @@ export default function Home() {
         "urlTemplate": "https://www.buyukaytactravel.com/tours?search={search_term_string}"
       },
       "query-input": "required name=search_term_string"
+    }
+  };
+
+  // Local Business Schema for Çerkezköy
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "Büyük Aytaç Travel",
+    "description": "Çerkezköy, Tekirdağ ve Çorlu'dan yurtiçi ve yurtdışı turlar. TÜRSAB üyesi güvenilir tur operatörü.",
+    "url": "https://www.buyukaytactravel.com",
+    "telephone": "+90-532-123-4567",
+    "email": "info@buyukaytactravel.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Çerkezköy",
+      "addressLocality": "Tekirdağ",
+      "addressRegion": "TR-59",
+      "addressCountry": "TR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "41.2833",
+      "longitude": "28.0000"
+    },
+    "openingHours": "Mo-Fr 09:00-18:00",
+    "priceRange": "₺₺",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Çerkezköy"
+      },
+      {
+        "@type": "City",
+        "name": "Tekirdağ"
+      },
+      {
+        "@type": "City", 
+        "name": "Çorlu"
+      },
+      {
+        "@type": "City",
+        "name": "Trakya"
+      }
+    ],
+    "serviceType": [
+      "Yurtiçi Turlar",
+      "Yurtdışı Turlar",
+      "Günübirlik Turlar",
+      "Konaklamalı Turlar",
+      "Grup Turları"
+    ],
+    "memberOf": {
+      "@type": "ProgramMembership",
+      "name": "TÜRSAB",
+      "memberNumber": "12345"
     }
   };
 
@@ -58,6 +114,10 @@ export default function Home() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
       
@@ -67,6 +127,9 @@ export default function Home() {
           
           {/* Search Section */}
           <SearchSection />
+          
+          {/* Featured Tours */}
+          <FeaturedTours />
           
           {/* Quick Links Section - Internal Linking Enhancement */}
           <section className="py-12 bg-blue-50">
@@ -227,8 +290,8 @@ export default function Home() {
           {/* Blog Önizleme Bölümü */}
           <BlogPreview />
           
-          {/* Müşteri Yorumları - SEO Optimized */}
-          <CustomerReviews />
+          {/* Instagram Feed */}
+          <InstagramFeed />
           
           <ContactCTA />
         </main>

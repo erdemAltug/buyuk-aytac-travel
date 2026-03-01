@@ -47,8 +47,25 @@ export async function GET(req: NextRequest) {
       filter.isLastMinute = isLastMinute === 'true';
     }
     
-    // Turları al - sadece aktif turları getir, tarih filtresi olmadan
-    const tours = await Tour.find(filter).sort({ createdAt: -1 }).lean();
+    // Sıralama parametresi - Mongoose sort formatına dönüştür
+    const sortParam = params.get('sort');
+    const sortOrder = params.get('sortOrder') === 'asc' ? 1 : -1;
+    let sortQuery: string | { [key: string]: 1 | -1 } = { createdAt: -1 };
+    
+    if (sortParam && ['createdAt', 'startDate', 'price', 'name'].includes(sortParam)) {
+      sortQuery = { [sortParam]: sortOrder };
+    }
+    
+    // Limit parametresi
+    const limitParam = params.get('limit');
+    const limit = limitParam ? parseInt(limitParam) : 0;
+    
+    // Turları al
+    let query = Tour.find(filter).sort(sortQuery);
+    if (limit > 0 && !isNaN(limit)) {
+      query = query.limit(limit);
+    }
+    const tours = await query.lean();
     
     return NextResponse.json(tours, { status: 200 });
   } catch (error) {
