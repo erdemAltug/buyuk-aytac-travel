@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { IBlog } from '@/models/Blog';
+import Blog from '@/models/Blog';
+import dbConnect from '@/lib/dbConnect';
 import { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 
@@ -17,32 +19,46 @@ const formatDate = (dateString: string | Date) => {
 // Blog sayfaları için metadata oluşturma
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
-    // API yerine doğrudan veritabanından çeken yaklaşımı kullan
-    await import('@/lib/dbConnect').then((module) => module.default());
-    const Blog = (await import('@/models/Blog')).default;
-    
-    const blog = await Blog.findOne({ slug: params.slug }).lean();
-    
+    await dbConnect();
+    const blog = await Blog.findOne({ slug: params.slug, isPublished: true }).lean();
+
     if (!blog) {
       return {
         title: 'Blog Yazısı Bulunamadı | Büyük Aytaç Travel',
-        description: 'Aradığınız blog yazısı bulunamadı veya kaldırılmış olabilir.',
+        description: 'Aradığınız blog yazısı bulunamadı.',
       };
     }
-    
+
+    // SEO anahtar kelimeleri oluştur
+    const seoKeywords = [
+      ...(blog.keywords || []),
+      ...(blog.categories || []),
+      'büyük aytaç travel',
+      'çerkezköy tur',
+      'tekirdağ seyahat',
+      'tur operatörü',
+      'seyahat acentesi'
+    ].join(', ');
+
     return {
       title: `${blog.title} | Büyük Aytaç Travel Blog`,
-      description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
+      description: blog.metaDescription || blog.summary || blog.title,
+      keywords: seoKeywords,
+      authors: [{ name: blog.author }],
+      category: blog.categories?.[0] || 'Seyahat',
       openGraph: {
         title: blog.title,
-        description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
-        type: 'article',
-        publishedTime: blog.publishDate?.toString(),
-        modifiedTime: blog.updatedAt?.toString(),
+        description: blog.metaDescription || blog.summary,
         url: `https://www.buyukaytactravel.com/blog/${blog.slug}`,
+        type: 'article',
+        publishedTime: blog.publishDate?.toISOString(),
+        modifiedTime: blog.updatedAt?.toISOString(),
+        authors: [blog.author],
+        section: blog.categories?.[0] || 'Seyahat',
+        tags: blog.keywords || blog.categories || [],
         images: [
           {
-            url: blog.image,
+            url: blog.image.startsWith('http') ? blog.image : `https://www.buyukaytactravel.com${blog.image}`,
             width: 1200,
             height: 630,
             alt: blog.title,
@@ -52,15 +68,28 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       twitter: {
         card: 'summary_large_image',
         title: blog.title,
-        description: blog.summary || blog.content.substring(0, 160).replace(/<[^>]*>/g, ''),
-        images: [blog.image],
+        description: blog.metaDescription || blog.summary,
+        images: [blog.image.startsWith('http') ? blog.image : `https://www.buyukaytactravel.com${blog.image}`],
+      },
+      alternates: {
+        canonical: `https://www.buyukaytactravel.com/blog/${blog.slug}`,
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large',
+        },
       },
     };
   } catch (error) {
-    console.error('Metadata generation error:', error);
+    console.error('Blog metadata oluşturma hatası:', error);
     return {
       title: 'Blog | Büyük Aytaç Travel',
-      description: 'Büyük Aytaç Travel gezi blogları, seyahat yazıları ve tur önerileri',
+      description: 'Seyahat rehberleri ve tur deneyimleri',
     };
   }
 }

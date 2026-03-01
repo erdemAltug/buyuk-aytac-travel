@@ -252,10 +252,23 @@ export default function NewBlogPage() {
                         required
                       >
                         <option value="">Kategori Seçin</option>
-                        <option value="travel-tips">Seyahat Tavsiyeleri</option>
-                        <option value="destinations">Destinasyonlar</option>
-                        <option value="culture">Kültür ve Tarih</option>
-                        <option value="food">Yemek ve Gastronomi</option>
+                        <option value="yurtiçi-turlar">Yurtiçi Turlar</option>
+                        <option value="yurtdışı-turlar">Yurtdışı Turlar</option>
+                        <option value="günübirlik-turlar">Günübirlik Turlar</option>
+                        <option value="konaklamalı-turlar">Konaklamalı Turlar</option>
+                        <option value="son-dakika">Son Dakika Fırsatları</option>
+                        <option value="çocuklu-aile">Çocuklu Aile Turları</option>
+                        <option value="solo-travel">Tek Kişilik Seyahat</option>
+                        <option value="kültür-turu">Kültür Turları</option>
+                        <option value="doğa-yürüyüşü">Doğa Yürüyüşü</option>
+                        <option value="gastronomi">Gastronomi Turları</option>
+                        <option value="wellness">Wellness & Spa</option>
+                        <option value="fotoğraf-turu">Fotoğraf Turları</option>
+                        <option value="festival-etkinlik">Festival & Etkinlikler</option>
+                        <option value="bütçe-dostu">Bütçe Dostu Turlar</option>
+                        <option value="lüks-tatil">Lüks Tatil</option>
+                        <option value="seyahat-tavsiyeleri">Seyahat Tavsiyeleri</option>
+                        <option value="destinasyon-rehberi">Destinasyon Rehberleri</option>
                       </select>
                       {index > 0 && (
                         <button
