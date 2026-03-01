@@ -66,6 +66,24 @@ function TourCard({ tour }: { tour: ITour }) {
       <div className="p-5">
         <p className="text-gray-600 mb-4 line-clamp-2 h-12" itemProp="description">{tour.description}</p>
         
+        {/* Tarih ve diğer önemli detaylar */}
+        {tour.startDate && (
+          <div className="flex items-center mb-2">
+            <div className="mr-2 text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M16.5 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </div>
+            <span className="text-sm font-bold text-gray-800">
+              {new Date(tour.startDate).toLocaleDateString('tr-TR', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short'
+              })}
+            </span>
+          </div>
+        )}
+        
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="mr-2 text-gray-500">
@@ -77,7 +95,7 @@ function TourCard({ tour }: { tour: ITour }) {
             <span className="text-sm text-gray-500" itemProp="touristType">{tour.destination}</span>
           </div>
           
-          <Link 
+          <Link
             href={`/tours/${tour.slug}`}
             className="relative inline-flex items-center group-hover:text-blue-700 font-medium text-sm text-blue-600 transition-colors"
             aria-label={`${tour.name} tur detaylarını görüntüle`}
@@ -124,7 +142,39 @@ export default function ToursByType({
       try {
         setLoading(true);
         const data = await getTours(filterParams);
-        setTours(data.slice(0, 6)); // En fazla 6 tur göster
+        // Turları startDate'ye göre sırala, eğer startDate yoksa createdAt'e göre sırala
+        // En yakın tarihli turlar önce gösterilsin
+        const now = new Date();
+        const sortedData = data.sort((a, b) => {
+          // Önce startDate'ye göre sırala
+          if (a.startDate && b.startDate) {
+            const dateA = new Date(a.startDate);
+            const dateB = new Date(b.startDate);
+            // Geçmiş tarihli turları en sona at
+            const isPastA = dateA < now;
+            const isPastB = dateB < now;
+            
+            if (isPastA && !isPastB) return 1;
+            if (!isPastA && isPastB) return -1;
+            
+            // Her ikisi de geçmiş veya gelecek tarihliyse, tarihe göre sırala
+            return dateA.getTime() - dateB.getTime();
+          }
+          // Eğer birinin startDate'si varsa onu öne al
+          if (a.startDate && !b.startDate) {
+            const dateA = new Date(a.startDate);
+            // startDate'si olan tur geçmiş tarihliyse createdAt'e göre sırala
+            return dateA < now ? 1 : -1;
+          }
+          if (!a.startDate && b.startDate) {
+            const dateB = new Date(b.startDate);
+            // startDate'si olan tur geçmiş tarihliyse createdAt'e göre sırala
+            return dateB < now ? -1 : 1;
+          }
+          // Her ikisinin de startDate'si yoksa createdAt'e göre sırala (yeni olanlar önce)
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+        setTours(sortedData.slice(0, 12)); // En fazla 12 tur göster
         setLoading(false);
       } catch (err) {
         console.error('Turları getirme hatası:', err);
@@ -148,8 +198,8 @@ export default function ToursByType({
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {[...Array(12)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden h-96 animate-pulse">
                 <div className="h-64 bg-gray-200"></div>
                 <div className="p-5">
@@ -178,7 +228,7 @@ export default function ToursByType({
   }
 
   // Veri yoksa gösterme
-  if (tours.length === 0) {
+  if (!tours || tours.length === 0) {
     return null;
   }
 
@@ -193,10 +243,16 @@ export default function ToursByType({
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tours.map((tour) => (
-            <TourCard key={tour._id?.toString()} tour={tour} />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {tours.length > 0 ? (
+            tours.map((tour) => (
+              <TourCard key={tour._id?.toString()} tour={tour} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-500">Henüz tur bulunmamaktadır.</p>
+            </div>
+          )}
         </div>
         
         <div className="mt-12 text-center">

@@ -12,12 +12,15 @@ export async function GET(req: NextRequest) {
     const params = url.searchParams;
     
     // Filtre parametrelerini oluştur
-    const filter: Record<string, boolean | string> = {};
+    const filter: Record<string, any> = {};
     
-    // isActive parametresi
+    // isActive parametresi - varsayılan olarak aktif turları getir
     const isActive = params.get('isActive');
     if (isActive !== null) {
       filter.isActive = isActive === 'true';
+    } else {
+      // Varsayılan olarak sadece aktif turları getir
+      filter.isActive = true;
     }
     
     // destination parametresi
@@ -26,16 +29,16 @@ export async function GET(req: NextRequest) {
       filter.destination = destination;
     }
     
-    // tourType parametresi
+    // tourType parametresi - case insensitive
     const tourType = params.get('tourType');
     if (tourType) {
-      filter.tourType = tourType;
+      filter.tourType = { $regex: new RegExp(`^${tourType}$`, 'i') };
     }
     
-    // accommodationType parametresi
+    // accommodationType parametresi - case insensitive
     const accommodationType = params.get('accommodationType');
     if (accommodationType) {
-      filter.accommodationType = accommodationType;
+      filter.accommodationType = { $regex: new RegExp(`^${accommodationType}$`, 'i') };
     }
     
     // isLastMinute parametresi
@@ -89,9 +92,15 @@ export async function POST(req: NextRequest) {
       );
     }
     
-    // Slug otomatik oluşturulacak
+    // Slug otomatik oluşturulacak (model'de pre-save hook var)
     const slug = body.name
       .toLowerCase()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
       .replace(/\-\-+/g, '-')
@@ -116,11 +125,18 @@ export async function POST(req: NextRequest) {
       duration: body.duration,
       price: body.price,
       destination: body.destination,
+      departureCity: body.departureCity || 'Çerkezköy',
       tourType: body.tourType,
       accommodationType: body.accommodationType,
       startDate: body.startDate,
       endDate: body.endDate,
       isActive: body.isActive !== undefined ? body.isActive : true,
+      isLastMinute: body.isLastMinute || false,
+      discountRate: body.discountRate,
+      program: body.program,
+      includedServices: body.includedServices,
+      excludedServices: body.excludedServices,
+      additionalServices: body.additionalServices,
     });
     
     await tour.save();
@@ -133,4 +149,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}
