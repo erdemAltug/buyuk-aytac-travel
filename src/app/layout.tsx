@@ -14,9 +14,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Büyük Aytaç Travel | Çerkezköy, Tekirdağ ve Çorlu'dan Yurtiçi ve Yurtdışı Turlar",
-  description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
-  keywords: "çerkezköy tur, tekirdağ tur, çorlu tur, günübirlik turlar, konaklamalı turlar, yurtiçi turlar, yurtdışı turlar, seyahat acentesi, tur operatörü, TÜRSAB üyesi, büyük aytaç travel, trakya turları",
+  title: {
+    default: "Büyük Aytaç Travel | Çerkezköy Tur, Tekirdağ, Çorlu Tur ve Seyahat",
+    template: "%s | Büyük Aytaç Travel"
+  },
+  description: "Çerkezköy tur ve seyahat için en iyi seçenekler! Tekirdağ, Çorlu, Trakya bölgesinden günübirlik ve konaklamalı turlar. TÜRSAB üyesi güvenilir tur operatörünüz.",
+  keywords: [
+    "çerkezköy tur",
+    "çerkezköy seyahat",
+    "çerkezköy tur operatörü",
+    "tekirdağ tur",
+    "tekirdağ seyahat",
+    "çorlu tur",
+    "çorlu seyahat",
+    "trakya turları",
+    "günübirlik tur çerkezköy",
+    "hafta sonu tur çerkezköy",
+    "yurtiçi turlar",
+    "yurtdışı turlar",
+    "tur acentesi çerkezköy",
+    "TÜRSAB üyesi tur",
+    "büyük aytaç travel"
+  ].join(", "),
   authors: [{ name: "Büyük Aytaç Travel" }],
   creator: "Büyük Aytaç Travel",
   publisher: "Büyük Aytaç Travel",
@@ -28,10 +47,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.buyukaytactravel.com'),
   alternates: {
     canonical: '/',
+    languages: {
+      'tr': '/',
+    },
   },
   openGraph: {
-    title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
-    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
+    title: "Büyük Aytaç Travel | Çerkezköy Tur ve Seyahat",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan en iyi turlar. Günübirlik ve konaklamalı tur seçenekleri. TÜRSAB üyesi güvenilir tur operatörünüz.",
     url: "https://www.buyukaytactravel.com",
     siteName: 'Büyük Aytaç Travel',
     images: [
@@ -47,8 +69,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Büyük Aytaç Travel | Çerkezköy'den En İyi Tur Deneyimi",
-    description: "Çerkezköy, Tekirdağ ve Çorlu'dan günübirlik ve konaklamalı turlar. TÜRSAB üyesi Büyük Aytaç Travel ile güvenli, uygun fiyatlı tur deneyimi.",
+    title: "Büyük Aytaç Travel | Çerkezköy Tur",
+    description: "Çerkezköy, Tekirdağ ve Çorlu'dan en iyi turlar. TÜRSAB üyesi güvenilir tur operatörünüz.",
     images: ['/images/LOGO.png'],
   },
   robots: {
@@ -62,6 +84,11 @@ export const metadata: Metadata = {
     },
   },
   category: 'travel',
+  other: {
+    'geo.region': 'TR-59',
+    'geo.placename': 'Çerkezköy',
+    'ICBM': '41.2833, 28.0000',
+  },
   verification: {
     google: 'xxxxxxxxxxxxxxxxxxxx', // Google Search Console doğrulama kodunuzu buraya ekleyin
   },

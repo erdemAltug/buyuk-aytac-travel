@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeIcon, GlobeAltIcon, DocumentTextIcon, EnvelopeIcon, Cog6ToothIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, GlobeAltIcon, DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -24,8 +24,6 @@ export default function AdminSidebar({ isOpen = true, onClose }: AdminSidebarPro
     { name: 'Gösterge Paneli', href: '/admin', icon: HomeIcon },
     { name: 'Turlar', href: '/admin/tours', icon: GlobeAltIcon },
     { name: 'Blog', href: '/admin/blogs', icon: DocumentTextIcon },
-    { name: 'İletişim Formları', href: '/admin/contacts', icon: EnvelopeIcon },
-    { name: 'Ayarlar', href: '/admin/settings', icon: Cog6ToothIcon },
   ];
 
   useEffect(() => {
