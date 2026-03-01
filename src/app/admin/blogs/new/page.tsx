@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AdminSidebar from '@/components/admin/AdminSidebar';
-import AdminHeader from '@/components/admin/AdminHeader';
 import axios from 'axios';
 import { uploadFile } from '@/services/uploadService';
 import { IBlog } from '@/models/Blog';
@@ -166,21 +164,14 @@ export default function NewBlogPage() {
   
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-  
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <AdminSidebar />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminHeader />
-        
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-          <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+    <div className="max-w-3xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6">Yeni Blog Yazısı Ekle</h1>
             
             {error && (
@@ -370,9 +361,6 @@ export default function NewBlogPage() {
                 </button>
               </div>
             </form>
-          </div>
-        </main>
-      </div>
     </div>
   );
 } 
