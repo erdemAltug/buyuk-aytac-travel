@@ -2,39 +2,52 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 
-export default function AdminHeader() {
+interface AdminHeaderProps {
+  onMenuClick?: () => void;
+}
+
+export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const router = useRouter();
 
   const handleLogout = () => {
-    // Remove admin auth from localStorage
     localStorage.removeItem('adminLoggedIn');
-    
-    // Redirect to login page
     router.push('/admin/login');
   };
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="flex justify-between items-center px-6 py-3">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800">Büyük Aytaç Travel</h2>
+    <header className="bg-white shadow-sm sticky top-0 z-30">
+      <div className="flex justify-between items-center px-4 py-3">
+        <div className="flex items-center gap-3">
+          {/* Mobile menu button */}
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <Bars3Icon className="h-6 w-6 text-gray-600" />
+          </button>
+          
+          {/* Mobile'da logo göster */}
+          <span className="lg:hidden text-lg font-semibold text-blue-600">
+            Admin Panel
+          </span>
         </div>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <div className="relative">
             <button
-              className="flex items-center focus:outline-none"
+              className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             >
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
-                <span>A</span>
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
+                A
               </div>
-              <span className="ml-2 text-gray-700 hidden sm:block">Admin</span>
+              <span className="text-gray-700 text-sm hidden sm:block">Admin</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-1 text-gray-500"
+                className={`h-4 w-4 text-gray-500 transition-transform ${showProfileDropdown ? 'rotate-180' : ''}`}
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -47,7 +60,7 @@ export default function AdminHeader() {
             </button>
             
             {showProfileDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border">
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -61,4 +74,4 @@ export default function AdminHeader() {
       </div>
     </header>
   );
-} 
+}
