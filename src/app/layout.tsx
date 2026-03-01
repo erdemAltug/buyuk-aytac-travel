@@ -96,20 +96,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  category: 'travel',
   other: {
     'geo.region': 'TR-59',
     'geo.placename': 'Çerkezköy',
     'ICBM': '41.2833, 28.0000',
-  },
-  verification: {
-    google: 'your-google-search-console-verification-code-here', // Google Search Console doğrulama kodunuzu buraya ekleyin
-    yandex: 'your-yandex-verification-code-here', // Yandex Webmaster doğrulama kodu
-    yahoo: 'your-yahoo-verification-code-here', // Yahoo doğrulama kodu
-  },
-  applicationName: 'Büyük Aytaç Travel',
-  referrer: 'origin-when-cross-origin',
-  other: {
     'msapplication-TileColor': '#2563eb',
     'theme-color': '#2563eb',
     'apple-mobile-web-app-capable': 'yes',
