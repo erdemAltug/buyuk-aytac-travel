@@ -9,8 +9,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     await dbConnect();
     
-    // Veritabanından direkt tur verilerini getir
-    const tours = await getToursByDB();
+    // Veritabanından sadece aktif turları getir
+    const tours = await getToursByDB({ isActive: true });
     
     // Veritabanından yayınlanmış blog yazılarını getir
     const blogs = await Blog.find({ isPublished: true }).lean();
@@ -43,6 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
     
     // Statik sayfalar için sitemap entry'leri
+    // Sadece mevcut sayfaları ekleyin
     const routes = [
       {
         url: 'https://www.buyukaytactravel.com',
@@ -69,48 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       },
       {
-        url: 'https://www.buyukaytactravel.com/tours?tourType=domestic',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/tours?tourType=international',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/tours?accommodationType=with_accommodation',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/tours?accommodationType=daily',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/tour-calendar',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/group-tour',
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/annual-program',
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-      },
-      {
         url: 'https://www.buyukaytactravel.com/about',
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
@@ -123,22 +82,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       },
       {
-        url: 'https://www.buyukaytactravel.com/location',
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      },
-      {
         url: 'https://www.buyukaytactravel.com/faq',
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.6,
-      },
-      {
-        url: 'https://www.buyukaytactravel.com/reviews',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
       },
       {
         url: 'https://www.buyukaytactravel.com/terms',
@@ -151,6 +98,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.5,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/annual-program',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/group-tour',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tour-calendar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
       },
     ];
     
