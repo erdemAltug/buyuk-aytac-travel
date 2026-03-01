@@ -12,6 +12,13 @@ export interface IBlog extends Document {
   publishDate: Date;
   createdAt: Date;
   updatedAt: Date;
+  // SEO alanları
+  metaDescription?: string;
+  keywords?: string[];
+  focusKeyword?: string;
+  views?: number;
+  readingTime?: number;
+  featuredPost?: boolean;
 }
 
 const BlogSchema: Schema = new Schema(
@@ -31,6 +38,13 @@ const BlogSchema: Schema = new Schema(
     categories: [{ type: String }],
     isPublished: { type: Boolean, default: true },
     publishDate: { type: Date, default: Date.now },
+    // SEO alanları
+    metaDescription: { type: String, maxlength: 160 },
+    keywords: [{ type: String }],
+    focusKeyword: { type: String },
+    views: { type: Number, default: 0 },
+    readingTime: { type: Number, default: 5 },
+    featuredPost: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

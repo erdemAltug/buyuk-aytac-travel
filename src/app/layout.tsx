@@ -39,6 +39,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Büyük Aytaç Travel" }],
   creator: "Büyük Aytaç Travel",
   publisher: "Büyük Aytaç Travel",
+  category: "Travel",
+  classification: "Seyahat ve Turizm",
   formatDetection: {
     email: false,
     address: false,
@@ -56,16 +58,24 @@ export const metadata: Metadata = {
     description: "Çerkezköy, Tekirdağ ve Çorlu'dan en iyi turlar. Günübirlik ve konaklamalı tur seçenekleri. TÜRSAB üyesi güvenilir tur operatörünüz.",
     url: "https://www.buyukaytactravel.com",
     siteName: 'Büyük Aytaç Travel',
+    locale: 'tr_TR',
+    type: 'website',
     images: [
       {
         url: '/images/LOGO.png',
         width: 1200,
         height: 630,
         alt: 'Büyük Aytaç Travel - Çerkezköy Tur Operatörü Logo',
+        type: 'image/png',
+      },
+      {
+        url: '/images/hero-banner.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Büyük Aytaç Travel Tur Deneyimleri',
+        type: 'image/jpeg',
       },
     ],
-    locale: 'tr_TR',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
@@ -76,9 +86,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
@@ -90,7 +103,17 @@ export const metadata: Metadata = {
     'ICBM': '41.2833, 28.0000',
   },
   verification: {
-    google: 'xxxxxxxxxxxxxxxxxxxx', // Google Search Console doğrulama kodunuzu buraya ekleyin
+    google: 'your-google-search-console-verification-code-here', // Google Search Console doğrulama kodunuzu buraya ekleyin
+    yandex: 'your-yandex-verification-code-here', // Yandex Webmaster doğrulama kodu
+    yahoo: 'your-yahoo-verification-code-here', // Yahoo doğrulama kodu
+  },
+  applicationName: 'Büyük Aytaç Travel',
+  referrer: 'origin-when-cross-origin',
+  other: {
+    'msapplication-TileColor': '#2563eb',
+    'theme-color': '#2563eb',
+    'apple-mobile-web-app-capable': 'yes',
+    'mobile-web-app-capable': 'yes',
   },
   icons: {
     icon: [
@@ -170,6 +193,18 @@ export default function RootLayout({
         <link rel="icon" href="/images/LOGO.png" />
         <link rel="apple-touch-icon" href="/images/LOGO.png" />
         <link rel="shortcut icon" href="/images/LOGO.png" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+          `
+        }} />
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
