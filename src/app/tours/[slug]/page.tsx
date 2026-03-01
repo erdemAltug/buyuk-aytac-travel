@@ -130,11 +130,47 @@ export default async function TourDetail({ params }: { params: { slug: string } 
     }
   };
 
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Ana Sayfa',
+        'item': 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Turlar',
+        'item': 'https://www.buyukaytactravel.com/tours'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları',
+        'item': `https://www.buyukaytactravel.com/tours?tourType=${tour.tourType}`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 4,
+        'name': tour.name,
+        'item': `https://www.buyukaytactravel.com/tours/${tour.slug}`
+      }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -573,15 +609,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
     
     // Tur başlığına göre SEO meta verilerini oluştur
-    const title = `${tour.name} | ${tour.destination} | Büyük Aytaç Travel Turları`;
+    const title = `${tour.name} | ${tour.destination} | Çerkezköy Tur | Büyük Aytaç Travel`;
     
     // Açıklama tur açıklamasından oluşturulur (kısa tutmak için)
     const description = tour.description.length > 160 
       ? `${tour.description.substring(0, 157)}...` 
       : tour.description;
       
-    // Tur tipine ve özelliklerine göre anahtar kelimeleri ayarla
-    const keywordString = `${tour.name}, ${tour.destination}, ${tour.duration}, ${tour.price} TL, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik gezi'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, Büyük Aytaç Travel`;
+    // Tur tipine ve özelliklerine göre anahtar kelimeleri ayarla - Çerkezköy odaklı
+    const keywordString = `${tour.name}, ${tour.destination}, çerkezköy tur, çerkezköy'den tur, ${tour.duration}, ${tour.price} TL, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik gezi'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, trakya turları, büyük aytaç travel`;
     
     return {
       title,
@@ -593,7 +629,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         type: 'article',
         publishedTime: tour.createdAt?.toString(),
         modifiedTime: tour.updatedAt?.toString(),
-        url: `https://www.buyukaytacseyahat.com/tours/${tour.slug}`,
+        url: `https://www.buyukaytactravel.com/tours/${tour.slug}`,
         images: [
           {
             url: tour.image,

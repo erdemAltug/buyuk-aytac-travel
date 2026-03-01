@@ -96,7 +96,7 @@ export default function FeaturedTours() {
 
         {/* Tours Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tours.map((tour) => (
+          {tours.map((tour, index) => (
             <Link 
               href={`/tours/${tour.slug}`}
               key={tour.slug || tour._id?.toString()}
@@ -110,6 +110,7 @@ export default function FeaturedTours() {
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  priority={index < 2}
                 />
                 {/* Date Badge */}
                 {tour.startDate && (
