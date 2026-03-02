@@ -49,6 +49,12 @@ export default function AnnualProgramPage() {
     }
   };
 
+  const formatDate = (date: Date | string | undefined) => {
+    if (!date) return '';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    return d.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
+  };
+
   if (loading) {
     return (
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
@@ -79,9 +85,9 @@ export default function AnnualProgramPage() {
     <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">2025 Yıllık Program</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">2026 Yıllık Program</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Büyük Aytaç Travel 2025 yılı tur programları ve takvimi. Keyifli bir tatil deneyimi için erken rezervasyon fırsatlarını kaçırmayın!
+            Büyük Aytaç Travel 2026 yılı tur programları ve takvimi. Kapadokya, Karadeniz, GAP, Ege ve daha birçok destinasyonda unutulmaz bir tatil deneyimi için erken rezervasyon fırsatlarını kaçırmayın!
           </p>
         </div>
 
@@ -196,10 +202,7 @@ export default function AnnualProgramPage() {
                     <div className="mt-6 md:flex justify-between items-center">
                       <div className="mb-4 md:mb-0">
                         <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded mr-2">
-                          Nisan 2025
-                        </span>
-                        <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                          Mayıs 2025
+                          {formatDate(tour.startDate)}
                         </span>
                       </div>
                       <Link
@@ -218,71 +221,98 @@ export default function AnnualProgramPage() {
 
         {/* Yıllık Program Takvimi */}
         <div className="bg-white rounded-lg shadow-md p-6 mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">2025 Tur Takvimi</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">2026 Tur Takvimi</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-semibold text-blue-700 mb-4">İlkbahar Turları (Mart - Mayıs)</h3>
+              <h3 className="text-lg font-semibold text-blue-700 mb-4">İlkbahar Turları (Mart - Mayıs 2026)</h3>
               <ul className="space-y-3">
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Kapadokya Balon Turu</span>
-                  <span className="text-gray-500">11-13 Nisan</span>
+                <li className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                  <span className="text-gray-700 font-medium">Kapadokya Turu</span>
+                  <span className="text-gray-500 text-sm">20-22 Mart</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">İstanbul Klasik Turu</span>
-                  <span className="text-gray-500">25-26 Nisan</span>
+                <li className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                  <span className="text-gray-700 font-medium">Eskişehir Turu</span>
+                  <span className="text-gray-500 text-sm">21 Mart</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Antalya Kemer Turu</span>
-                  <span className="text-gray-500">3-7 Mayıs</span>
+                <li className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                  <span className="text-gray-700 font-medium">Bursa Şehir Turu</span>
+                  <span className="text-gray-500 text-sm">22 Mart</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Bodrum Günübirlik Turu</span>
-                  <span className="text-gray-500">18 Mayıs</span>
+                <li className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                  <span className="text-gray-700 font-medium">Adana Portakal Çiçeği Festivali</span>
+                  <span className="text-gray-500 text-sm">3-5 Nisan</span>
+                </li>
+                <li className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                  <span className="text-gray-700 font-medium">Safranbolu & Amasra Turu</span>
+                  <span className="text-gray-500 text-sm">10-12 Nisan</span>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-700 mb-4">Yaz Turları (Haziran - Ağustos)</h3>
+              <h3 className="text-lg font-semibold text-green-700 mb-4">Yaz Turları (Haziran - Ağustos 2026)</h3>
               <ul className="space-y-3">
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Bodrum Konaklamalı Turu</span>
-                  <span className="text-gray-500">15-20 Haziran</span>
+                <li className="flex justify-between items-center p-2 bg-green-50 rounded">
+                  <span className="text-gray-700 font-medium">Karadeniz Turu</span>
+                  <span className="text-gray-500 text-sm">Haziran</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Yunanistan Adalar Turu</span>
-                  <span className="text-gray-500">5-9 Temmuz</span>
+                <li className="flex justify-between items-center p-2 bg-green-50 rounded">
+                  <span className="text-gray-700 font-medium">GAP Turu</span>
+                  <span className="text-gray-500 text-sm">Temmuz</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">İtalya Klasik Turu</span>
-                  <span className="text-gray-500">20-27 Temmuz</span>
+                <li className="flex justify-between items-center p-2 bg-green-50 rounded">
+                  <span className="text-gray-700 font-medium">Ege Turları</span>
+                  <span className="text-gray-500 text-sm">Temmuz-Ağustos</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Karadeniz Yaylalar Turu</span>
-                  <span className="text-gray-500">8-12 Ağustos</span>
+                <li className="flex justify-between items-center p-2 bg-green-50 rounded">
+                  <span className="text-gray-700 font-medium">İstanbul Turları</span>
+                  <span className="text-gray-500 text-sm">Yaz Dönemi</span>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-700 mb-4">Sonbahar/Kış Turları (Eylül - Şubat)</h3>
+              <h3 className="text-lg font-semibold text-purple-700 mb-4">Sonbahar/Kış Turları (Eylül - Şubat)</h3>
               <ul className="space-y-3">
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Karadeniz Batum Turu</span>
-                  <span className="text-gray-500">10-15 Eylül</span>
+                <li className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                  <span className="text-gray-700 font-medium">Kapadokya Balon Turu</span>
+                  <span className="text-gray-500 text-sm">Ekim-Kasım</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Kapadokya Kış Turu</span>
-                  <span className="text-gray-500">5-7 Aralık</span>
+                <li className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                  <span className="text-gray-700 font-medium">Karadeniz Batum Turu</span>
+                  <span className="text-gray-500 text-sm">Eylül</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Uludağ Kar Turu</span>
-                  <span className="text-gray-500">25-28 Aralık</span>
+                <li className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                  <span className="text-gray-700 font-medium">Konya Şeb-i Arus</span>
+                  <span className="text-gray-500 text-sm">Aralık</span>
                 </li>
-                <li className="flex justify-between">
-                  <span className="text-gray-700">Palandöken Kayak Turu</span>
-                  <span className="text-gray-500">15-19 Ocak</span>
+                <li className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                  <span className="text-gray-700 font-medium">Yılbaşı Turları</span>
+                  <span className="text-gray-500 text-sm">Aralık</span>
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* SEO İçerik Bölümü */}
+        <div className="bg-white rounded-lg shadow-md p-8 mt-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Büyük Aytaç Travel 2026 Tur Takvimi</h2>
+          <div className="prose max-w-none text-gray-600">
+            <p className="mb-4">
+              <strong>Büyük Aytaç Travel</strong> olarak 2026 yılında da siz değerli müşterilerimiz için unutulmaz tatil deneyimleri hazırlıyoruz. 
+              Çerkezköy merkezli organizasyonlarımız, Türkiye'nin en güzel destinasyonlarını kapsamaktadır.
+            </p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">2026'da Neler Var?</h3>
+            <ul className="list-disc pl-6 space-y-2 mb-4">
+              <li><strong>Kapadokya Turları:</strong> Yıl boyunca düzenlenen Kapadokya turlarımızda balon turu, yeraltı şehri ve peri bacaları sizi bekliyor.</li>
+              <li><strong>Karadeniz Turları:</strong> Doğa harikası yaylalar, tarihi mekanlar ve eşsiz Karadeniz mutfağı.</li>
+              <li><strong>GAP Turu:</strong> Güneydoğu Anadolu'nun tarihi ve kültürel zenginliklerini keşfedin.</li>
+              <li><strong>Festivaller:</strong> Adana Portakal Çiçeği Festivali, Alaçatı Ot Festivali ve daha fazlası.</li>
+              <li><strong>Günübirlik Turlar:</strong> Hafta sonu kaçışları için İstanbul, Bursa, Eskişehir turları.</li>
+            </ul>
+            <p className="mb-4">
+              Tüm turlarımız <strong>ücretsiz rezervasyon iptali</strong>, <strong>seyahat sigortası</strong> ve 
+              <strong>profesyonel rehberlik</strong> hizmeti içermektedir. Erken rezervasyon avantajlarından yararlanmak için hemen iletişime geçin!
+            </p>
           </div>
         </div>
 
