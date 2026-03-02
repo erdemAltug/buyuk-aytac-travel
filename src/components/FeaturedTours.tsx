@@ -103,12 +103,12 @@ export default function FeaturedTours() {
               className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-72 overflow-hidden">
                 <Image
                   src={tour.image || '/images/hero-banner.jpg'}
                   alt={tour.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-fill group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   priority={index < 2}
                 />
