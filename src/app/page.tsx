@@ -138,7 +138,7 @@ export default function Home() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Popüler Tur Kategorileri</h2>
                 <p className="text-gray-600">En çok tercih edilen tur tiplerini keşfedin</p>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <Link 
                   href="/tours?tourType=domestic"
                   className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
@@ -156,20 +156,36 @@ export default function Home() {
                   <p className="text-sm text-gray-500 mt-1">Dünyayı keşfedin</p>
                 </Link>
                 <Link 
-                  href="/tours?accommodationType=daily"
+                  href="/gap-turu"
                   className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
                 >
-                  <div className="text-3xl mb-2">🌅</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Günübirlik</h3>
-                  <p className="text-sm text-gray-500 mt-1">Hızlı kaçamaklar</p>
+                  <div className="text-3xl mb-2">🏛️</div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">GAP Turu</h3>
+                  <p className="text-sm text-gray-500 mt-1">Güneydoğu</p>
                 </Link>
                 <Link 
-                  href="/tours?accommodationType=with_accommodation"
+                  href="/karadeniz-turu"
                   className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
                 >
-                  <div className="text-3xl mb-2">🏨</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Konaklamalı</h3>
-                  <p className="text-sm text-gray-500 mt-1">Uzun tatiller</p>
+                  <div className="text-3xl mb-2">🌲</div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Karadeniz</h3>
+                  <p className="text-sm text-gray-500 mt-1">Yaylalar</p>
+                </Link>
+                <Link 
+                  href="/kapadokya-turu"
+                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
+                >
+                  <div className="text-3xl mb-2">🎈</div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Kapadokya</h3>
+                  <p className="text-sm text-gray-500 mt-1">Peri Bacaları</p>
+                </Link>
+                <Link 
+                  href="/populer-turlar"
+                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
+                >
+                  <div className="text-3xl mb-2">🔍</div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Tüm Turlar</h3>
+                  <p className="text-sm text-gray-500 mt-1">Keşfedin</p>
                 </Link>
               </div>
             </div>

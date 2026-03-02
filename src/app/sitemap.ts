@@ -117,6 +117,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'weekly' as const,
         priority: 0.8,
       },
+      // Yeni SEO sayfaları
+      {
+        url: 'https://www.buyukaytactravel.com/gap-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/karadeniz-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/kapadokya-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/populer-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.9,
+      },
     ];
     
     // Tüm sitemap entry'lerini birleştir

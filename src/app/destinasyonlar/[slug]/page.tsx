@@ -101,11 +101,41 @@ export default async function DestinationDetailPage({ params }: { params: { slug
     }),
   };
 
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Ana Sayfa',
+        'item': 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Destinasyonlar',
+        'item': 'https://www.buyukaytactravel.com/destinasyonlar'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': destination.name,
+        'item': `https://www.buyukaytactravel.com/destinasyonlar/${destination.slug}`
+      }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         {/* Hero Bölümü */}
