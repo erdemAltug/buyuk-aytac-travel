@@ -47,10 +47,10 @@ export async function GET(req: NextRequest) {
       filter.isLastMinute = isLastMinute === 'true';
     }
     
-    // Sıralama parametresi - Mongoose sort formatına dönüştür
+    // Sıralama parametresi - Varsayılan: en yakın tarihli turlar önce
     const sortParam = params.get('sort');
-    const sortOrder = params.get('sortOrder') === 'asc' ? 1 : -1;
-    let sortQuery: string | { [key: string]: 1 | -1 } = { createdAt: -1 };
+    const sortOrder = params.get('sortOrder') === 'desc' ? -1 : 1;
+    let sortQuery: string | { [key: string]: 1 | -1 } = { startDate: 1 }; // En yakın tarihli turlar önce
     
     if (sortParam && ['createdAt', 'startDate', 'price', 'name'].includes(sortParam)) {
       sortQuery = { [sortParam]: sortOrder };
