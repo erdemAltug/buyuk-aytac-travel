@@ -146,15 +146,15 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Adres</h3>
                 <p className="text-gray-600">
-                  Maslak Mh. Büyükdere Cd. No:255<br />
-                  Sarıyer / İstanbul<br />
-                  Türkiye
+                  Gazi Mustafa Kemalpaşa, Tokuşlar Sk.<br />
+                  Güneşler İş Merkezi No:7 Kat:1 Daire:1<br />
+                  59500 Çerkezköy / Tekirdağ
                 </p>
               </div>
               
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Telefon</h3>
-                <p className="text-gray-600">+90 (212) 555 66 77</p>
+                <p className="text-gray-600">+90 530 060 9559</p>
               </div>
               
               <div>
