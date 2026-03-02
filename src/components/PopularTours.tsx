@@ -16,7 +16,7 @@ function TourCard({ tour }: { tour: ITour }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-64 w-full overflow-hidden">
+      <div className="relative h-72 w-full overflow-hidden">
         {/* Skeleton loader */}
         <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
         
@@ -27,7 +27,7 @@ function TourCard({ tour }: { tour: ITour }) {
               src={tour.image}
               alt={tour.name}
               fill
-              className={`object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
+              className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onError={() => setImageError(true)}
             />
