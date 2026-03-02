@@ -239,6 +239,123 @@ export default function Home() {
             }}
           />
           
+          {/* 2026 Yıllık Tur Takvimi */}
+          <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">2026 Yıllık Tur Programı</h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Bu yıl sizler için hazırladığımız tur programları ve takvimi. 
+                  Kapadokya, Karadeniz, GAP ve daha birçok destinasyonda unutulmaz tatil deneyimleri sizi bekliyor!
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                {/* İlkbahar */}
+                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-500">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900">İlkbahar 2026</h3>
+                    <span className="text-2xl">🌸</span>
+                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Kapadokya Turu</span>
+                      <span className="text-green-600 font-medium">20-22 Mar</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Eskişehir Turu</span>
+                      <span className="text-green-600 font-medium">21 Mar</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Bursa Şehir Turu</span>
+                      <span className="text-green-600 font-medium">22 Mar</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Adana Festival</span>
+                      <span className="text-green-600 font-medium">3-5 Nis</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Safranbolu Turu</span>
+                      <span className="text-green-600 font-medium">10-12 Nis</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* Yaz */}
+                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-orange-500">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900">Yaz 2026</h3>
+                    <span className="text-2xl">☀️</span>
+                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Karadeniz Turu</span>
+                      <span className="text-orange-600 font-medium">Haziran</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">GAP Turu</span>
+                      <span className="text-orange-600 font-medium">Temmuz</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Ege Turları</span>
+                      <span className="text-orange-600 font-medium">Temmuz-Ağu</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">İstanbul Turları</span>
+                      <span className="text-orange-600 font-medium">Yaz Dönemi</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Bodrum Turu</span>
+                      <span className="text-orange-600 font-medium">Ağustos</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* Sonbahar/Kış */}
+                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-purple-500">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900">Sonbahar/Kış</h3>
+                    <span className="text-2xl">🍂</span>
+                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Kapadokya Balon</span>
+                      <span className="text-purple-600 font-medium">Ekim-Kas</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Batum Turu</span>
+                      <span className="text-purple-600 font-medium">Eylül</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Konya Şeb-i Arus</span>
+                      <span className="text-purple-600 font-medium">Aralık</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Yılbaşı Turları</span>
+                      <span className="text-purple-600 font-medium">Aralık</span>
+                    </li>
+                    <li className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">Uludağ Kayak</span>
+                      <span className="text-purple-600 font-medium">Ocak</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <Link 
+                  href="/annual-program"
+                  className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                  </svg>
+                  Tam Takvimi İncele
+                </Link>
+              </div>
+            </div>
+          </section>
+          
           {/* TÜRSAB Üyelik Bölümü */}
           <section className="bg-gray-100 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
