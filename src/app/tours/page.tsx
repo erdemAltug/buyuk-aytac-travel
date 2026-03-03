@@ -6,12 +6,12 @@ import ToursContent from './components/ToursContent';
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Turlarımız | Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel',
-  description: 'Büyük Aytaç Travel ile unutulmaz yurtiçi ve yurtdışı turları keşfedin. Konaklamalı turlar, günübirlik turlar, kültür turları ve doğa turları. Çerkezköy\'den kalkan turlar.',
-  keywords: 'turlar, yurtiçi turlar, yurtdışı turlar, konaklamalı turlar, günübirlik turlar, çerkezköy turlar, tatil turları, kültür turları',
+  title: 'Çerkezköy Turları | Günübirlik ve Konaklamalı Turlar 2026 | Büyük Aytaç Travel',
+  description: 'Çerkezköy tur fırsatları. Günübirlik turlar, konaklamalı turlar, yurtiçi ve yurtdışı turlar. Çerkezköy, Çorlu ve Tekirdağ\'dan kalkan turlar. En uygun fiyatlarla rezervasyon yapın.',
+  keywords: 'çerkezköy tur, çerkezköy turlar, günübirlik tur, konaklamalı tur, yurtiçi turlar, yurtdışı turlar, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çorlu tur, tekirdag tur, trakya tur, 2026 tur paketleri',
   openGraph: {
-    title: 'Turlarımız | Büyük Aytaç Travel',
-    description: 'Büyük Aytaç Travel ile unutulmaz yurtiçi ve yurtdışı turları keşfedin.',
+    title: 'Çerkezköy Turları | Büyük Aytaç Travel',
+    description: 'Çerkezköy\'den günübirlik ve konaklamalı turlar. En popüler destinasyonlar sizi bekliyor.',
     url: 'https://www.buyukaytactravel.com/tours',
     type: 'website',
     images: [
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: 'https://www.buyukaytactravel.com/images/tours-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Büyük Aytaç Travel Turları',
+        alt: 'Çerkezköy Turları - Büyük Aytaç Travel',
       },
     ],
   },

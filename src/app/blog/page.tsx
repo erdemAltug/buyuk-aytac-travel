@@ -23,12 +23,12 @@ interface BlogData {
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Blog | Seyahat Yazıları ve Gezi Rehberleri | Büyük Aytaç Travel',
-  description: 'Büyük Aytaç Travel blog sayfası. Seyahat ipuçları, gezi rehberleri, destinasyon önerileri ve Çerkezköy\'den çıkan tur deneyimleri.',
-  keywords: 'seyahat blog, gezi yazıları, tur deneyimleri, seyahat rehberi, çerkezköy gezi, tatil önerileri, destinasyon rehberi',
+  title: 'Blog | Çerkezköy Tur Yazıları ve Seyahat Rehberleri | Büyük Aytaç Travel',
+  description: 'Büyük Aytaç Travel blog sayfası. Çerkezköy tur yazıları, seyahat ipuçları, gezi rehberleri, günübirlik tur önerileri ve destinasyon rehberleri.',
+  keywords: 'çerkezköy tur blog, seyahat blog, gezi yazıları, tur deneyimleri, seyahat rehberi, çerkezköy gezi, günübirlik tur, konaklamalı tur, tatil önerileri, destinasyon rehberi',
   openGraph: {
-    title: 'Blog | Büyük Aytaç Travel',
-    description: 'Seyahat ipuçları, gezi rehberleri ve tur deneyimlerini keşfedin.',
+    title: 'Blog | Büyük Aytaç Travel - Çerkezköy Tur Yazıları',
+    description: 'Çerkezköy tur yazıları, seyahat ipuçları ve gezi rehberlerini keşfedin.',
     url: 'https://www.buyukaytactravel.com/blog',
     type: 'website',
     images: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         url: 'https://www.buyukaytactravel.com/images/blog-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Büyük Aytaç Travel Blog',
+        alt: 'Büyük Aytaç Travel Blog - Çerkezköy Tur Yazıları',
       },
     ],
   },

@@ -3,12 +3,12 @@ import Link from 'next/link';
 
 // SEO için metadata - Popüler Turlar
 export const metadata: Metadata = {
-  title: 'Popüler Turlar 2025 | En Çok Tercih Edilen Tur Rotaları | Büyük Aytaç Travel',
-  description: 'Büyük Aytaç Travel popüler turları keşfedin. Kapadokya, Karadeniz, GAP, Pamukkale, İstanbul ve daha birçok destinasyon. Çerkezköy\'den kalkan en çok tercih edilen turlar.',
-  keywords: 'popüler turlar, en çok tercih edilen turlar, kapadokya turu, karadeniz turu, gap turu, pamukkale turu, istanbul turu, efes turu, çerkezköy turlar, 2025 popüler turlar',
+  title: 'Popüler Turlar 2026 | Çerkezköy Tur Rotaları - En Çok Tercih Edilen Turlar | Büyük Aytaç Travel',
+  description: 'Çerkezköy\'den en popüler turlar. Kapadokya, Karadeniz, GAP, Pamukkale, İstanbul ve daha birçok destinasyon. Günübirlik ve konaklamalı tur seçenekleri.',
+  keywords: 'çerkezköy tur, popüler turlar, en çok tercih edilen turlar, kapadokya turu, karadeniz turu, gap turu, pamukkale turu, istanbul turu, günübirlik tur, konaklamalı tur, çerkezköy günübirlik tur, 2026 popüler turlar',
   openGraph: {
-    title: 'Popüler Turlar 2025 | Büyük Aytaç Travel',
-    description: 'En çok tercih edilen tur rotalarını keşfedin. Türkiye\'nin en güzel destinasyonları sizi bekliyor.',
+    title: 'Popüler Turlar 2026 | Çerkezköy Tur - Büyük Aytaç Travel',
+    description: 'Çerkezköy\'den en popüler tur rotalarını keşfedin. Günübirlik ve konaklamalı turlar.',
     url: 'https://www.buyukaytactravel.com/populer-turlar',
     type: 'website',
     images: [

@@ -34,7 +34,7 @@ export default function TermsPage() {
               <div className="bg-blue-50 border-l-4 border-blue-600 p-4 my-8">
                 <h2 className="text-2xl font-bold text-blue-800 mb-4">BÜYÜK AYTAÇ TRAVEL TUR SATIŞ BİLGİLENDİRME VE İPTAL İADE KOŞULLARI</h2>
                 <ol className="list-decimal pl-5 text-gray-700 space-y-2">
-                  <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin minimum %50&apos;sidir. Günübirlik turlarda turun hareket tarihinden 7 gün önce, konaklamalı turlarda 15 gün önce kalan tur bedelinin tamamlanması gerekir.</li>
+                  <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin belirli bir kısmıdır. Günübirlik turlarda turun hareket tarihinden 7 gün önce, konaklamalı turlarda 15 gün önce kalan tur bedelinin tamamlanması gerekir.</li>
                   <li>İptaller GÜNÜBİRLİK TURLARDA son 7 gün öncesine kadar yapılmaktadır.</li>
                   <li>İptaller KONAKLAMALI TURLARDA son 15 gün öncesine kadar yapılmaktadır.</li>
                   <li>Hava muhalefeti nedeni ile olabilecek değişikliklerden, acentemiz sorumlu değildir ve Acente programda değişiklik hakkına sahiptir.</li>
@@ -66,8 +66,8 @@ export default function TermsPage() {
                 Tur rezervasyonları için ön ödeme veya tam ödeme gereklidir. Ödeme koşulları tur tipine göre değişiklik gösterebilir ve rezervasyon sırasında belirtilir.
               </p>
               <ul className="list-disc pl-5 text-gray-700 mb-4">
-                <li className="mb-2">Yurtiçi turlar için genellikle %30 ön ödeme, kalan ödeme tur başlangıcından 7 gün önce</li>
-                <li className="mb-2">Yurtdışı turlar için genellikle %50 ön ödeme, kalan ödeme tur başlangıcından 15 gün önce</li>
+                <li className="mb-2">Yurtiçi turlar için genellikle ön ödeme alınır, kalan ödeme tur başlangıcından 7 gün önce</li>
+                <li className="mb-2">Yurtdışı turlar için genellikle ön ödeme alınır, kalan ödeme tur başlangıcından 15 gün önce</li>
                 <li className="mb-2">Özel dönem ve bayram turları için belirtilen özel ödeme koşulları geçerlidir</li>
               </ul>
               <p className="text-gray-700 mb-4">
@@ -79,10 +79,9 @@ export default function TermsPage() {
                 İptal koşulları her tur için farklılık gösterebilir. Genel iptal politikamız aşağıdaki gibidir:
               </p>
               <ul className="list-disc pl-5 text-gray-700 mb-4">
-                <li className="mb-2">Tur başlangıcından 30 gün öncesine kadar yapılan iptallerde ödemenin tamamı iade edilir.</li>
-                <li className="mb-2">Tur başlangıcından 15-29 gün öncesine kadar yapılan iptallerde ödemenin %70&apos;i iade edilir.</li>
-                <li className="mb-2">Tur başlangıcından 8-14 gün öncesine kadar yapılan iptallerde ödemenin %50&apos;si iade edilir.</li>
-                <li className="mb-2">Tur başlangıcından 7 gün veya daha az süre kala yapılan iptallerde iade yapılmaz.</li>
+                <li className="mb-2">Tur başlangıcından belirli bir süre öncesine kadar yapılan iptallerde ödemenin tamamı iade edilebilir.</li>
+                <li className="mb-2">Tur başlangıcından belirli bir süre öncesine kadar yapılan iptallerde ödemenin bir kısmı iade edilebilir.</li>
+                <li className="mb-2">Tur başlangıcından kısa süre kala yapılan iptallerde iade yapılmamaktadır.</li>
               </ul>
               <p className="text-gray-700 mb-4">
                 Tur iptali Büyük Aytaç Travel tarafından yapılırsa, ödemenin tamamı iade edilir veya alternatif tur imkanı sunulur.
