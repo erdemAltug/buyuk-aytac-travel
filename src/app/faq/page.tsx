@@ -19,11 +19,11 @@ export default function FAQPage() {
   const faqs = [
     {
       question: "Tur rezervasyonu nasıl yapabilirim?",
-      answer: "Tur rezervasyonlarınızı web sitemiz üzerinden online olarak, ofisimize gelerek veya 0530 060 95 59 / 0539 345 95 59 numaralı telefonlardan yapabilirsiniz. Web sitemizden yapılan tur talepleri için en kısa sürede sizinle iletişime geçilecektir."
+      answer: "Tur rezervasyonlarınızı web sitemiz üzerinden online olarak, ofisimize gelerek veya 0530 060 95 59 numaralı telefondan yapabilirsiniz. Web sitemizden yapılan tur talepleri için en kısa sürede sizinle iletişime geçilecektir."
     },
     {
       question: "Tur ödemelerini nasıl yapabilirim?",
-      answer: "Ödemenizi nakit, havale/EFT ya da kredi kartı ile yapabilirsiniz. Ödemeler genellikle ön ödeme ve bakiye şeklinde iki aşamada gerçekleştirilir. Rezervasyon sırasında minimum %50 ön ödeme alınmaktadır. Günübirlik turlarda hareket tarihinden 7 gün önce, konaklamalı turlarda ise 15 gün önce kalan tur bedelinin tamamlanması gerekir."
+      answer: "Ödemenizi nakit, havale/EFT ya da kredi kartı ile yapabilirsiniz. Ödemeler genellikle ön ödeme ve bakiye şeklinde iki aşamada gerçekleştirilir. Rezervasyon sırasında ön ödeme alınmaktadır. Günübirlik turlarda hareket tarihinden 7 gün önce, konaklamalı turlarda ise 15 gün önce kalan tur bedelinin tamamlanması gerekir."
     },
     {
       question: "Tur fiyatlarına neler dahildir?",
@@ -75,7 +75,7 @@ export default function FAQPage() {
     },
     {
       question: "Erken rezervasyon avantajları nelerdir?",
-      answer: "Erken rezervasyon yaptırdığınızda tur fiyatlarında %5-15 arasında indirim sağlayabilirsiniz. Ayrıca, erken rezervasyon sayesinde oda tipi ve oturma düzeni konusunda öncelik elde edersiniz. Sezon içinde dolabilecek popüler turlarımız için erken rezervasyon yapmanızı öneririz."
+      answer: "Erken rezervasyon yaptırdığınızda tur fiyatlarında indirim sağlayabilirsiniz. Ayrıca, erken rezervasyon sayesinde oda tipi ve oturma düzeni konusunda öncelik elde edersiniz. Sezon içinde dolabilecek popüler turlarımız için erken rezervasyon yapmanızı öneririz."
     },
     {
       question: "Son dakika rezervasyonu yapabilir miyim?",
@@ -83,7 +83,7 @@ export default function FAQPage() {
     },
     {
       question: "Tek kişi olarak katılabilir miyim? Tek kişi farkı nedir?",
-      answer: "Evet, tek kişi olarak turlarımıza katılabilirsiniz. Konaklamalı turlarda odaları genellikle çift kişilik olarak düzenlediğimiz için tek kişi konaklama durumunda 'tek kişi farkı' ödemeniz gerekir. Bu fark, tur fiyatının yaklaşık %25-30'u kadardır ve tur detay sayfasında belirtilir."
+      answer: "Evet, tek kişi olarak turlarımıza katılabilirsiniz. Konaklamalı turlarda odaları genellikle çift kişilik olarak düzenlediğimiz için tek kişi konaklama durumunda 'tek kişi farkı' ödemeniz gerekir. Bu fark tur detay sayfasında belirtilir."
     },
     {
       question: "Engelli misafirler için uygun turlarınız var mı?",

@@ -83,12 +83,12 @@ export default function BlogContent({
           {blogs.map((blog) => (
             <article key={blog._id?.toString()} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <Link href={`/blog/${blog.slug}`}>
-                <div className="relative h-56 w-full">
+                <div className="relative h-72 w-full">
                   <Image
                     src={blog.image}
                     alt={blog.title}
                     fill
-                    className="object-cover"
+                    className="object-cover hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
