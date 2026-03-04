@@ -142,6 +142,70 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'weekly' as const,
         priority: 0.9,
       },
+      // Çerkezköy turları
+      {
+        url: 'https://www.buyukaytactravel.com/cerkezkoy-gunubirlik-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/cerkezkoy-konakamali-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      // Bölgesel turlar
+      {
+        url: 'https://www.buyukaytactravel.com/location',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/location/tekirdag',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      // Destinations (English)
+      {
+        url: 'https://www.buyukaytactravel.com/destinations',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      // Tur kategorileri
+      {
+        url: 'https://www.buyukaytactravel.com/tours/daily',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/overnight',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/domestic',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/international',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/last-minute',
+        lastModified: new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 0.9,
+      },
     ];
     
     // Tüm sitemap entry'lerini birleştir
@@ -197,7 +261,116 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.6,
-      }
+      },
+      // Çerkezköy turları
+      {
+        url: 'https://www.buyukaytactravel.com/cerkezkoy-gunubirlik-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/cerkezkoy-konakamali-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      // Bölgesel turlar
+      {
+        url: 'https://www.buyukaytactravel.com/location',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/location/tekirdag',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      // Tur kategorileri
+      {
+        url: 'https://www.buyukaytactravel.com/tours/daily',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/overnight',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/domestic',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/international',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tours/last-minute',
+        lastModified: new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 0.9,
+      },
+      // Destinations (English)
+      {
+        url: 'https://www.buyukaytactravel.com/destinations',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      },
+      // Popüler turlar
+      {
+        url: 'https://www.buyukaytactravel.com/populer-turlar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.9,
+      },
+      // Özel tur sayfaları
+      {
+        url: 'https://www.buyukaytactravel.com/gap-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/karadeniz-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/kapadokya-turu',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      // Diğer sayfalar
+      {
+        url: 'https://www.buyukaytactravel.com/annual-program',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/group-tour',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      },
+      {
+        url: 'https://www.buyukaytactravel.com/tour-calendar',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
     ];
   }
 } 

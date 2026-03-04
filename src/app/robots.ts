@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/'],
+      disallow: ['/admin/', '/api/', '/test-sentry'],
     },
     sitemap: 'https://www.buyukaytactravel.com/sitemap.xml',
   }
