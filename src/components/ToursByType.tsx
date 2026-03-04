@@ -5,112 +5,130 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
 import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import ReservationModal from './ReservationModal';
 
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // SEO-optimized alt text
   const optimizedAltText = `${tour.name} - ${tour.destination} ${tour.duration} - ${tour.accommodationType === 'daily' ? 'Günübirlik' : 'Konaklamalı'} Tur - Büyük Aytaç Travel`;
 
   return (
-    <article 
-      className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      itemScope 
-      itemType="https://schema.org/TouristTrip"
-    >
-      <div className="relative h-72 w-full overflow-hidden">
-        {/* Skeleton loader */}
-        <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
-        
-        {/* Image */}
-        {!imageError ? (
-          <>
-            <Image
-              src={tour.image}
-              alt={optimizedAltText}
-              fill
-              className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              onError={() => setImageError(true)}
-              loading="lazy"
-              itemProp="image"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
-          </>
-        ) : (
-          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">Görsel yüklenemedi</span>
-          </div>
-        )}
-        
-        {/* Badge */}
-        <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          <span itemProp="duration">{tour.duration}</span>
-        </div>
-        
-        {/* Price */}
-        <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-          <span itemProp="price">{tour.price.toLocaleString('tr-TR')}</span> 
-          <span itemProp="priceCurrency" content="TRY">₺</span>
-        </div>
-        
-        {/* Tour Name */}
-        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg" itemProp="name">
-          {tour.name}
-        </h3>
-      </div>
-      
-      <div className="p-5">
-        <p className="text-gray-600 mb-4 line-clamp-2 h-12" itemProp="description">{tour.description}</p>
-        
-        {/* Tarih ve diğer önemli detaylar */}
-        {tour.startDate && (
-          <div className="flex items-center mb-2">
-            <div className="mr-2 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M16.5 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
+    <>
+      <article 
+        className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        itemScope 
+        itemType="https://schema.org/TouristTrip"
+      >
+        <div className="relative h-72 w-full overflow-hidden">
+          {/* Skeleton loader */}
+          <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
+          
+          {/* Image */}
+          {!imageError ? (
+            <>
+              <Image
+                src={tour.image}
+                alt={optimizedAltText}
+                fill
+                className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                onError={() => setImageError(true)}
+                loading="lazy"
+                itemProp="image"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500">Görsel yüklenemedi</span>
             </div>
-            <span className="text-sm font-bold text-gray-800">
-              {new Date(tour.startDate).toLocaleDateString('tr-TR', {
-                weekday: 'short',
-                day: '2-digit',
-                month: 'short'
-              })}
-            </span>
-          </div>
-        )}
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="mr-2 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-              </svg>
-            </div>
-            <span className="text-sm text-gray-500" itemProp="touristType">{tour.destination}</span>
+          )}
+          
+          {/* Badge */}
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+            <span itemProp="duration">{tour.duration}</span>
           </div>
           
-          <Link
-            href={`/tours/${tour.slug}`}
-            className="relative inline-flex items-center group-hover:text-blue-700 font-medium text-sm text-blue-600 transition-colors"
-            aria-label={`${tour.name} tur detaylarını görüntüle`}
-            itemProp="url"
-          >
-            <span className="mr-6">Detaylar</span>
-            <span className="absolute right-0 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
-                <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-              </svg>
-            </span>
-          </Link>
+          {/* Price */}
+          <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+            <span itemProp="price">{tour.price.toLocaleString('tr-TR')}</span> 
+            <span itemProp="priceCurrency" content="TRY">₺</span>
+          </div>
+          
+          {/* Tour Name */}
+          <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1 drop-shadow-lg" itemProp="name">
+            {tour.name}
+          </h3>
         </div>
-      </div>
-    </article>
+        
+        <div className="p-5">
+          <p className="text-gray-600 mb-4 line-clamp-2 h-12" itemProp="description">{tour.description}</p>
+          
+          {/* Tarih ve diğer önemli detaylar */}
+          {tour.startDate && (
+            <div className="flex items-center mb-2">
+              <div className="mr-2 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M16.5 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+              </div>
+              <span className="text-sm font-bold text-gray-800">
+                {new Date(tour.startDate).toLocaleDateString('tr-TR', {
+                  weekday: 'short',
+                  day: '2-digit',
+                  month: 'short'
+                })}
+              </span>
+            </div>
+          )}
+
+          {/* Rezervasyon Butonu - Öne çıkarıldı */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="w-full mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+            </svg>
+            Hemen Rezervasyon Yap
+          </button>
+          
+          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+            <div className="flex items-center">
+              <div className="mr-2 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </div>
+              <span className="text-sm text-gray-500" itemProp="touristType">{tour.destination}</span>
+            </div>
+            
+            <Link
+              href={`/tours/${tour.slug}`}
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors"
+              aria-label={`${tour.name} tur detaylarını görüntüle`}
+              itemProp="url"
+            >
+              Detaylar →
+            </Link>
+          </div>
+        </div>
+      </article>
+
+      {/* Reservation Modal */}
+      <ReservationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        tourName={tour.name}
+        tourSlug={tour.slug}
+      />
+    </>
   );
 }
 
@@ -269,4 +287,4 @@ export default function ToursByType({
       </div>
     </section>
   );
-} 
+}
