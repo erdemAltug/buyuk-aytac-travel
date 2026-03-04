@@ -7,16 +7,6 @@ Sentry.init({
   // Performance monitoring - %100 trace
   tracesSampleRate: 1.0,
   
-  // Web Vitals - her sayfa yüklenmesinde otomatik topla
-  // Bu LCP, FID, CLS, TTFB, INP'yi otomatik izler
-  vitals: [
-    { name: 'LCP', endpoint: '/vital' },
-    { name: 'FID', endpoint: '/vital' },
-    { name: 'CLS', endpoint: '/vital' },
-    { name: 'TTFB', endpoint: '/vital' },
-    { name: 'INP', endpoint: '/vital' },
-  ],
-  
   // Session replay - kullanıcı davranışları
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
@@ -30,24 +20,12 @@ Sentry.init({
   // Release - versiyon takibi için
   release: "buyuk-aytac-travel@1.0.0",
   
-  // Integrations - TÜMÜ EKLENMELİ
+  // Integrations - Browser Tracing ve Replay
   integrations: [
-    // Browser routing izleme - Next.js router
     Sentry.replayIntegration({
       maskAllText: true,
       blockAllMedia: true,
     }),
-    // Browser tracing - web vitals ve performans
-    Sentry.browserTracingIntegration({
-      // Routing izleme için
-      tracePropagationTargets: ['localhost', /^\//],
-    }),
+    Sentry.browserTracingIntegration(),
   ],
-  
-  // Başlangıçta transaction başlat
-  initialScope: {
-    tags: {
-      app: 'buyuk-aytac-travel',
-    },
-  },
 });
