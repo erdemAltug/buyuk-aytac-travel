@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 
+// Sentry config import
+import './sentry.client.config.js';
+import './sentry.server.config.js';
+
 const nextConfig = {
   webpack: (config) => {
     // MongoDB playground dosyalarını hariç tut
