@@ -7,10 +7,6 @@ Sentry.init({
   // Performance monitoring - %100 trace
   tracesSampleRate: 1.0,
   
-  // Session replay - kullanıcı davranışları
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-  
   // Debug mode - sadece development'ta
   debug: process.env.NODE_ENV === "development",
   
@@ -20,12 +16,8 @@ Sentry.init({
   // Release - versiyon takibi için
   release: "buyuk-aytac-travel@1.0.0",
   
-  // Integrations - Browser Tracing ve Replay
+  // Integrations - Browser Tracing (Replay yok - bellek tasarrufu)
   integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
     Sentry.browserTracingIntegration(),
   ],
 });
