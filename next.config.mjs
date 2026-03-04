@@ -31,7 +31,9 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    domains: ['buyukaytactravel.com', 'images.unsplash.com'],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   // SEO iyileştirmeleri
   experimental: {
@@ -58,6 +60,26 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      // Static files caching
+      {
+        source: '/:path*.(jpg|jpeg|png|webp|avif|svg|ico)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Static pages caching
+      {
+        source: '/:path*.(js|css)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
