@@ -45,10 +45,10 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${navbarBg}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
+        <div className="flex justify-between h-20">
+          <div className="flex items-center gap-4">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <div className="relative h-16 w-16 mr-2">
+              <div className="relative h-16 w-16">
                 <Image
                   src="/images/LOGO.png"
                   alt="Büyük Aytaç Travel"
@@ -57,14 +57,14 @@ export default function Navbar() {
                   priority
                 />
               </div>
-              <span className={`hidden md:block font-bold text-lg ${(!isHomepage || scrolled) ? 'text-blue-600' : 'text-white'} transition-colors duration-300 ml-1`}>
+              <span className={`hidden md:block font-bold text-xl ${(!isHomepage || scrolled) ? 'text-blue-600' : 'text-white'} transition-colors duration-300`}>
                 <span className={(!isHomepage || scrolled) ? 'text-gray-800' : 'text-white'}>Büyük Aytaç Travel</span>
               </span>
             </Link>
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
+          <div className="hidden lg:ml-10 lg:flex lg:space-x-8">
             <Link
               href="/"
               className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}

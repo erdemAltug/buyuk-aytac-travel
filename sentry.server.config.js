@@ -11,4 +11,7 @@ Sentry.init({
 
   // Environment
   environment: process.env.NODE_ENV || "development",
+  
+  // Release - önemli!
+  release: "buyuk-aytac-travel@1.0.0",
 });
