@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import * as Sentry from '@sentry/nextjs';
 
 export default function Error({
   error,
@@ -12,7 +13,10 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Hata loglaması yapılabilir
+    // Sentry'ye hata raporu gönder
+    Sentry.captureException(error);
+    
+    // Console'a logla
     console.error(error);
   }, [error]);
 
@@ -55,4 +59,4 @@ export default function Error({
       </div>
     </div>
   );
-} 
+}
