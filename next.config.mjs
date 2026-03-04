@@ -1,8 +1,18 @@
 /** @type {import('next').NextConfig} */
 
-// Sentry config import
-import './sentry.client.config.js';
-import './sentry.server.config.js';
+// Sentry config - doğru import sırası önemli
+import { withSentryConfig } from '@sentry/nextjs';
+
+const sentryWebpackPluginOptions = {
+  org: 'buyuk-aytac-travel',
+  project: 'buyuk-aytac-travel',
+  // Auth token Vercel'de environment variable olarak ayarlanmalı
+  // SENTRY_AUTH_TOKEN
+  silent: true,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+};
 
 const nextConfig = {
   webpack: (config) => {
@@ -92,4 +102,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig; 
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions); 
