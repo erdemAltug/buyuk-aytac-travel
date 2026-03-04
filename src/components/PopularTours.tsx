@@ -5,84 +5,101 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
 import { ITour } from '@/models/Tour';
+import ReservationModal from './ReservationModal';
 
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div 
-      className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative h-72 w-full overflow-hidden">
-        {/* Skeleton loader */}
-        <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
-        
-        {/* Image */}
-        {!imageError ? (
-          <>
-            <Image
-              src={tour.image}
-              alt={tour.name}
-              fill
-              className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              onError={() => setImageError(true)}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
-          </>
-        ) : (
-          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">Görsel yüklenemedi</span>
-          </div>
-        )}
-        
-        {/* Badge */}
-        <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          {tour.duration} Gün
-        </div>
-        
-        {/* Price */}
-        <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg">
-          {tour.price.toLocaleString('tr-TR')} ₺
-        </div>
-        
-        {/* Tour Name */}
-        <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1">
-          {tour.name}
-        </h3>
-      </div>
-      
-      <div className="p-5">
-        <p className="text-gray-600 mb-4 line-clamp-2 h-12">{tour.description}</p>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="mr-2 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-              </svg>
+    <>
+      <div 
+        className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="relative h-72 w-full overflow-hidden">
+          {/* Skeleton loader */}
+          <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
+          
+          {/* Image */}
+          {!imageError ? (
+            <>
+              <Image
+                src={tour.image}
+                alt={tour.name}
+                fill
+                className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                onError={() => setImageError(true)}
+              />ss
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500">Görsel yüklenemedi</span>
             </div>
-            <span className="text-sm text-gray-500">İstanbul</span>
+          )}
+          
+          {/* Badge */}
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+            {tour.duration} Gün
           </div>
           
-          <Link 
-            href={`/tours/${tour.slug}`}
-            className="relative inline-flex items-center group-hover:text-blue-700 font-medium text-sm text-blue-600 transition-colors"
+          {/* Price */}
+          <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg">
+            {tour.price.toLocaleString('tr-TR')} ₺
+          </div>
+          
+          {/* Tour Name */}
+          <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1">
+            {tour.name}
+          </h3>
+        </div>
+        
+        <div className="p-5">
+          <p className="text-gray-600 mb-4 line-clamp-2 h-12">{tour.description}</p>
+          
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="mr-2 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </div>
+              <span className="text-sm text-gray-500">İstanbul</span>
+            </div>
+          </div>
+
+          {/* Rezervasyon Butonu */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
           >
-            <span className="mr-6">Detaylar</span>
-            <span className="absolute right-0 w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
-                <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-              </svg>
-            </span>
-          </Link>
+            Rezervasyon Yap
+          </button>
+
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+            <Link 
+              href={`/tours/${tour.slug}`}
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors"
+            >
+              Tur Detayları →
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Reservation Modal */}
+      <ReservationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        tourName={tour.name}
+        tourSlug={tour.slug}
+      />
+    </>
   );
 }
 
@@ -173,7 +190,7 @@ export default function PopularTours() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Popüler Turlarımız</h2>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mb-6 rounded-full"></div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            En çok tercih edilen turlarımızla Türkiye&apos;nin güzelliklerini keşfedin
+            En çok tercih edilen turlarımızla Türkiye'nin güzelliklerini keşfedin
           </p>
         </div>
         
@@ -197,4 +214,4 @@ export default function PopularTours() {
       </div>
     </section>
   );
-} 
+}

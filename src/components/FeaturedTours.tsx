@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ITour } from '@/models/Tour';
+import ReservationButton from './ReservationButton';
 
 export default function FeaturedTours() {
   const [tours, setTours] = useState<ITour[]>([]);
@@ -158,6 +159,15 @@ export default function FeaturedTours() {
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                     {tour.duration}
                   </span>
+                </div>
+                
+                {/* Rezervasyon Butonu - Kartın altında */}
+                <div className="mt-4 pt-3 border-t border-gray-100" onClick={(e) => e.preventDefault()}>
+                  <ReservationButton 
+                    tourName={tour.name} 
+                    tourSlug={tour.slug}
+                    variant="compact"
+                  />
                 </div>
               </div>
             </Link>

@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ITour } from '@/models/Tour';
 import PriceCalculator from '@/components/PriceCalculator';
-import ContactForm from '@/components/ContactForm';
 import Breadcrumb from '@/components/Breadcrumb';
+import ReservationButton from '@/components/ReservationButton';
 
 
 // Tur sayfaları için Server Component kullanımı
@@ -477,8 +477,8 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında Bilgi Alın</h2>
                   
-                  {/* Burada client-side iletişim formu komponenti kullanılabilir */}
-                  <ContactForm tourName={tour.name} />
+                  {/* Rezervasyon yapmak için */}
+                  <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
                 </div>
               </div>
             </div>
