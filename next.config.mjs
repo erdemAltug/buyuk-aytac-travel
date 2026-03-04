@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   webpack: (config) => {
     // MongoDB playground dosyalarını hariç tut
