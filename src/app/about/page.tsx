@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata: Metadata = {
   title: "Çerkezköy'ün En Güvenilir Tur Şirketi | Büyük Aytaç Travel Hakkında",
@@ -23,8 +24,34 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Ana Sayfa',
+        item: 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Hakkımızda',
+        item: 'https://www.buyukaytactravel.com/about'
+      }
+    ]
+  };
+
   return (
-    <main className="pt-28 pb-16 min-h-screen bg-gray-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <Breadcrumb />
+      <main className="pt-28 pb-16 min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">500 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-8">
@@ -85,5 +112,6 @@ export default function AboutPage() {
         </div>
       </div>
     </main>
+    </>
   );
 } 

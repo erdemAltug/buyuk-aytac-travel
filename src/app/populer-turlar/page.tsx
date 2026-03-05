@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO için metadata - Popüler Turlar
 export const metadata: Metadata = {
@@ -127,6 +128,26 @@ const seasonalTours = [
 ];
 
 export default function PopulerTurlarPage() {
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Ana Sayfa',
+        item: 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Popüler Turlar',
+        item: 'https://www.buyukaytactravel.com/populer-turlar'
+      }
+    ]
+  };
+
   return (
     <>
       <script
@@ -151,6 +172,11 @@ export default function PopulerTurlarPage() {
           }),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <Breadcrumb />
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
