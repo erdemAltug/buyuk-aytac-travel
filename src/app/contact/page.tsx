@@ -2,8 +2,28 @@
 
 import { useState } from 'react';
 import { submitContactForm } from '@/services/contactService';
+import Breadcrumb from '@/components/Breadcrumb';
 
 export default function ContactPage() {
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Ana Sayfa',
+        item: 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'İletişim',
+        item: 'https://www.buyukaytactravel.com/contact'
+      }
+    ]
+  };
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,7 +71,13 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="py-16 bg-gray-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <Breadcrumb />
+      <main className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">İletişim</h1>
@@ -170,10 +196,26 @@ export default function ContactPage() {
                   Pazar: Kapalı
                 </p>
               </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Google Benim İşletmem</h3>
+                <a 
+                  href="https://share.google/TXmURBEsf6Xgq6tMN" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  </svg>
+                  Google Profilimizi Görüntüleyin
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </main>
+    </>
   );
 } 

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO metadata
 export const metadata: Metadata = {
@@ -93,7 +94,33 @@ const popularRegions = [
 ];
 
 export default function CerkezkoyKonaklamaliTurlarPage() {
+  // BreadcrumbList schema for SEO
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Ana Sayfa',
+        item: 'https://www.buyukaytactravel.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Konaklamalı Turlar',
+        item: 'https://www.buyukaytactravel.com/cerkezkoy-konakamali-turlar'
+      }
+    ]
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <Breadcrumb />
     <main className="pt-20 min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Hero Section */}
       <section className="relative py-16 bg-gradient-to-r from-green-600 to-teal-600">
@@ -258,5 +285,6 @@ export default function CerkezkoyKonaklamaliTurlarPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://www.buyukaytactravel.com'),
+  verification: {
+    google: 'WB7jOjiD5zJ2avmZc3CwZXANs8ZbkEBoOTlxxpptcLY',
+  },
   alternates: {
     canonical: '/',
     languages: {
