@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "Büyük Aytaç Travel | Çerkezköy Tur, Tekirdağ, Çorlu Tur ve Seyahat",
     template: "%s | Büyük Aytaç Travel"
   },
-  description: "Çerkezköy tur ve seyahat için en iyi seçenekler! Tekirdağ, Çorlu, Trakya bölgesinden günübirlik ve konaklamalı turlar. TÜRSAB üyesi güvenilir tur operatörünüz.",
+  description: "Çerkezköy tur ve seyahat için en iyi seçenekler! Günübirlik turlar, konaklamalı tatil paketleri, hafta sonu kaçamakları. İstanbul, Bursa, Kapadokya, Karadeniz turları. Çerkezköy, Çorlu ve Tekirdağdan kalkan turlar. Hemen rezervasyon yapın!",
   keywords: [
     "çerkezköy tur",
     "çerkezköy seyahat",

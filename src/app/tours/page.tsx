@@ -6,9 +6,9 @@ import ToursContent from './components/ToursContent';
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Çerkezköy Turları | Günübirlik ve Konaklamalı Turlar 2026 | Büyük Aytaç Travel',
-  description: 'Çerkezköy tur fırsatları. Günübirlik turlar, konaklamalı turlar, yurtiçi ve yurtdışı turlar. Çerkezköy, Çorlu ve Tekirdağ\'dan kalkan turlar. En uygun fiyatlarla rezervasyon yapın.',
-  keywords: 'çerkezköy tur, çerkezköy turlar, günübirlik tur, konaklamalı tur, yurtiçi turlar, yurtdışı turlar, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çorlu tur, tekirdag tur, trakya tur, 2026 tur paketleri',
+  title: 'Çerkezköy Turları 2026 | Günübirlik, Konaklamalı, Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel',
+  description: 'Çerkezköy tur fırsatları burada! Günübirlik turlar, konaklamalı tatil paketleri, yurtiçi ve yurtdışı turlar. Çerkezköy, Çorlu ve Tekirdağdan kalkan turlar. Kapadokya, Karadeniz, İstanbul, Bursa turları. En uygun fiyatlar ve profesyonel rehberlik.',
+  keywords: 'çerkezköy tur, çerkezköy turlar, günübirlik tur, konaklamalı tur, yurtiçi turlar, yurtdışı turlar, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çorlu tur, tekirdag tur, trakya tur, 2026 tur paketleri, kapadokya tur, karadeniz tur, istanbul tur, bursa tur',
   openGraph: {
     title: 'Çerkezköy Turları | Büyük Aytaç Travel',
     description: 'Çerkezköy\'den günübirlik ve konaklamalı turlar. En popüler destinasyonlar sizi bekliyor.',
