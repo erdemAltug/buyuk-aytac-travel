@@ -144,10 +144,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       // Çerkezköy turları
       {
+        url: 'https://www.buyukaytactravel.com/cerkezkoy-tur',
+        lastModified: new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 1.0,
+      },
+      {
         url: 'https://www.buyukaytactravel.com/cerkezkoy-gunubirlik-turlar',
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
-        priority: 0.8,
+        priority: 0.9,
       },
       {
         url: 'https://www.buyukaytactravel.com/cerkezkoy-konakamali-turlar',
