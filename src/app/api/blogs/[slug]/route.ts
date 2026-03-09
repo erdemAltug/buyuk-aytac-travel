@@ -14,14 +14,22 @@ export async function GET(req: NextRequest, { params }: Params) {
     await dbConnect();
     
     const { slug } = params;
-    const blog = await Blog.findOne({ slug }).lean();
+    const blogRaw = await Blog.findOne({ slug }).lean();
     
-    if (!blog) {
+    if (!blogRaw) {
       return NextResponse.json(
         { success: false, message: 'Blog bulunamadı' },
         { status: 404 }
       );
     }
+    
+    // Tarih alanlarını güvenli şekilde Date nesnesine dönüştür
+    const blog = {
+      ...blogRaw,
+      createdAt: blogRaw.createdAt ? new Date(blogRaw.createdAt) : undefined,
+      updatedAt: blogRaw.updatedAt ? new Date(blogRaw.updatedAt) : undefined,
+      publishDate: blogRaw.publishDate ? new Date(blogRaw.publishDate as any) : undefined,
+    };
     
     return NextResponse.json(blog);
   } catch (error) {
