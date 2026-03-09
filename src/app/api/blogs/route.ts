@@ -39,15 +39,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Blogları getir
-    const blogsRaw = await query.lean();
+    const blogsRaw = await query;
     
-    // Tarih alanlarını güvenli şekilde Date nesnesine dönüştür
-    const blogs = blogsRaw.map(blog => ({
-      ...blog,
-      createdAt: blog.createdAt ? new Date(blog.createdAt) : undefined,
-      updatedAt: blog.updatedAt ? new Date(blog.updatedAt) : undefined,
-      publishDate: blog.publishDate ? new Date(blog.publishDate as any) : undefined,
-    }));
+    // Mongoose document'larını object'e çevir
+    const blogs = blogsRaw.map(blog => blog.toObject());
 
     return NextResponse.json(blogs);
   } catch (error) {

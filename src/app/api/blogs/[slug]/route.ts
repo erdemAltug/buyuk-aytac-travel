@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: Params) {
     await dbConnect();
     
     const { slug } = params;
-    const blogRaw = await Blog.findOne({ slug }).lean();
+    const blogRaw = await Blog.findOne({ slug });
     
     if (!blogRaw) {
       return NextResponse.json(
@@ -23,13 +23,8 @@ export async function GET(req: NextRequest, { params }: Params) {
       );
     }
     
-    // Tarih alanlarını güvenli şekilde Date nesnesine dönüştür
-    const blog = {
-      ...blogRaw,
-      createdAt: blogRaw.createdAt ? new Date(blogRaw.createdAt) : undefined,
-      updatedAt: blogRaw.updatedAt ? new Date(blogRaw.updatedAt) : undefined,
-      publishDate: blogRaw.publishDate ? new Date(blogRaw.publishDate as any) : undefined,
-    };
+    // Mongoose document'ını object'e çevir
+    const blog = blogRaw.toObject();
     
     return NextResponse.json(blog);
   } catch (error) {
