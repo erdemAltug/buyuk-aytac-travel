@@ -13,10 +13,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const tours = await getToursByDB({ isActive: true });
     
     // Veritabanından yayınlanmış blog yazılarını getir
-    const blogs = await Blog.find({ isPublished: true }).lean();
+    const blogsRaw = await Blog.find({ isPublished: true }).lean();
+    // Blog tarihlerini güvenli şekilde dönüştür
+    const blogs = blogsRaw.map(blog => ({
+      ...blog,
+      publishDate: blog.publishDate ? new Date(blog.publishDate) : undefined,
+      createdAt: blog.createdAt ? new Date(blog.createdAt) : undefined,
+      updatedAt: blog.updatedAt ? new Date(blog.updatedAt) : undefined,
+    }));
     
     // Veritabanından aktif destinasyonları getir
-    const destinations = await Destination.find({ isActive: true }).lean();
+    const destinationsRaw = await Destination.find({ isActive: true }).lean();
+    // Destinasyon tarihlerini güvenli şekilde dönüştür
+    const destinations = destinationsRaw.map(dest => ({
+      ...dest,
+      createdAt: dest.createdAt ? new Date(dest.createdAt) : undefined,
+      updatedAt: dest.updatedAt ? new Date(dest.updatedAt) : undefined,
+    }));
     
     // Turlar için sitemap entry'leri oluştur
     const tourEntries = tours.map((tour: ITour) => ({
