@@ -60,13 +60,22 @@ export async function GET(req: NextRequest) {
     const limitParam = params.get('limit');
     const limit = limitParam ? parseInt(limitParam) : 0;
     
-    // Turları al
+    // Turları al (lean kullanmadan)
     let query = Tour.find(filter).sort(sortQuery);
     if (limit > 0 && !isNaN(limit)) {
       query = query.limit(limit);
     }
-    const tours = await query.lean();
+    const toursRaw = await query;
     
+    // Mongoose document'larını plain object'e çevir
+    const tours = toursRaw.map(tour => {
+      const obj = tour.toObject() as Record<string, any>;
+      return {
+        ...obj,
+        _id: String(obj._id),
+      };
+    });
+
     return NextResponse.json(tours, { status: 200 });
   } catch (error) {
     console.error('Tours GET Error:', error);

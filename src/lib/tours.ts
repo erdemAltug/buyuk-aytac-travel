@@ -41,26 +41,14 @@ export async function getToursByDB(params?: {
       }
     }
     
-    // Turları al
+    // Turları al (lean() kullanarak plain object olarak al, Mongoose document değil)
     const tours = await Tour.find(filter).lean();
     
-    // Lean objelerini normal objeler olarak döndür ve _id'i string'e çevir
-    return tours.map(tour => {
-      // Date nesneleri için güvenli dönüşüm
-      const createdAt = tour.createdAt ? new Date(tour.createdAt) : undefined;
-      const updatedAt = tour.updatedAt ? new Date(tour.updatedAt) : undefined;
-      const startDate = tour.startDate ? new Date(tour.startDate) : undefined;
-      const endDate = tour.endDate ? new Date(tour.endDate) : undefined;
-      
-      return {
-        ...tour,
-        _id: tour._id.toString(),
-        createdAt,
-        updatedAt,
-        startDate,
-        endDate,
-      } as ITour;
-    });
+    // Lean query zaten plain object döndürür, _id'yi string yap
+    return tours.map(tour => ({
+      ...tour,
+      _id: tour._id.toString(),
+    })) as ITour[];
   } catch (error) {
     console.error('Veritabanından turları getirme hatası:', error);
     return []; // Hata durumunda boş dizi döndür
