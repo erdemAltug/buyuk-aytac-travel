@@ -49,12 +49,16 @@ export async function getToursByDB(params?: {
       // Date nesneleri için güvenli dönüşüm
       const createdAt = tour.createdAt ? new Date(tour.createdAt) : undefined;
       const updatedAt = tour.updatedAt ? new Date(tour.updatedAt) : undefined;
+      const startDate = tour.startDate ? new Date(tour.startDate) : undefined;
+      const endDate = tour.endDate ? new Date(tour.endDate) : undefined;
       
       return {
         ...tour,
         _id: tour._id.toString(),
         createdAt,
         updatedAt,
+        startDate,
+        endDate,
       } as ITour;
     });
   } catch (error) {
