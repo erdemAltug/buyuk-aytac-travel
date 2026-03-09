@@ -39,7 +39,15 @@ export async function GET(req: NextRequest) {
     }
 
     // Blogları getir
-    const blogs = await query.lean();
+    const blogsRaw = await query.lean();
+    
+    // Tarih alanlarını güvenli şekilde Date nesnesine dönüştür
+    const blogs = blogsRaw.map(blog => ({
+      ...blog,
+      createdAt: blog.createdAt ? new Date(blog.createdAt) : undefined,
+      updatedAt: blog.updatedAt ? new Date(blog.updatedAt) : undefined,
+      publishDate: blog.publishDate ? new Date(blog.publishDate as any) : undefined,
+    }));
 
     return NextResponse.json(blogs);
   } catch (error) {
