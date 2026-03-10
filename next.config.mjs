@@ -78,6 +78,16 @@ const nextConfig = {
           },
         ],
       },
+      // Görsel optimizasyon endpoint'i indirme yerine sayfada gösterilsin (Googlebot + tarayıcı)
+      {
+        source: '/_next/image',
+        headers: [
+          {
+            key: 'Content-Disposition',
+            value: 'inline',
+          },
+        ],
+      },
       // Static files caching
       {
         source: '/:path*.(jpg|jpeg|png|webp|avif|svg|ico)',
