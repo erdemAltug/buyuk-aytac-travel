@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next';
 import { getToursByDB } from '@/lib/tours';
-import { ITour } from '@/models/Tour';
 import Blog from '@/models/Blog';
 import Destination from '@/models/Destination';
 import dbConnect from '@/lib/dbConnect';
@@ -23,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const destinations = destinationsRaw.map(dest => dest.toObject());
     
     // Turlar için sitemap entry'leri oluştur
-    const tourEntries = tours.map((tour: ITour) => ({
+    const tourEntries = tours.map((tour) => ({
       url: `https://www.buyukaytactravel.com/tours/${tour.slug}`,
       lastModified: tour.updatedAt || new Date(),
       changeFrequency: 'weekly' as const,
