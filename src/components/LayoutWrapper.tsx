@@ -18,7 +18,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       <Navbar />
       <div className="fixed top-5 right-16 z-50 lg:right-5">
         <Link 
-          href="/admin/login" 
+          href="/admin/login"
+          prefetch={false}
           className="px-3 py-1.5 bg-white/80 backdrop-blur-sm text-blue-600 rounded-full text-xs sm:text-sm font-medium shadow-md hover:bg-white transition-all duration-300 flex items-center"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 mr-1">
