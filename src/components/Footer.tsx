@@ -380,7 +380,7 @@ export default function Footer() {
                 <Link href="/faq" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b-2 border-blue-400 pb-1 px-2 py-1">Sık Sorulan Sorular</Link>
               </li>
               <li className="mb-2 mx-1">
-                <Link href="/admin/login" className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Yönetici Girişi</Link>
+                <Link href="/admin/login" prefetch={false} className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Yönetici Girişi</Link>
               </li>
             </ul>
           </div>
