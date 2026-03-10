@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getLatestBlogs } from '@/services/blogService';
 import type { IBlog } from '@/types/blog';
+import { formatDateLong } from '@/lib/formatDate';
 
 type BlogPreviewProps = {
   /** Sunucudan gelen ilk veri - Googlebot ve ilk açılışta içerik hemen görünür */
@@ -36,15 +37,8 @@ export default function BlogPreview({ initialBlogs = [] }: BlogPreviewProps) {
     fetchLatestBlogs();
   }, [initialBlogs.length]);
 
-  // Tarihi formatla
-  const formatDate = (dateString: string | Date) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('tr-TR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(date);
-  };
+  // Tarihi formatla (sabit timezone = hydration uyumu)
+  const formatDate = (dateString: string | Date) => formatDateLong(dateString);
 
   if (loading) {
     return (
