@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getLatestBlogs } from '@/services/blogService';
-import { IBlog } from '@/models/Blog';
+import type { IBlog } from '@/types/blog';
 
 export default function BlogPreview() {
   const [latestBlogs, setLatestBlogs] = useState<IBlog[]>([]);

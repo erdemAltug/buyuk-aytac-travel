@@ -1,45 +1,14 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
+import type { ITour as ITourBase } from '@/types/tour';
+import { TourType, AccommodationType } from '@/types/tour';
 
-export enum TourType {
-  DOMESTIC = 'domestic',
-  INTERNATIONAL = 'international'
-}
+// Re-export for server-side code that imports from @/models/Tour
+export { TourType, AccommodationType } from '@/types/tour';
 
-export enum AccommodationType {
-  WITH_ACCOMMODATION = 'with_accommodation',
-  DAILY = 'daily'
-}
-
-export interface ITour extends Document {
-  name: string;
-  description: string;
-  image: string;
-  slug: string;
-  duration: string;
-  price: number;
-  destination: string;
-  destinationRef?: Types.ObjectId; // Destination modeline referans
-  departureCity?: string; // Kalkış şehri (örn: Çerkezköy)
-  tourType: TourType;
-  accommodationType: AccommodationType;
-  startDate?: Date;  // Tur başlangıç tarihi
-  endDate?: Date;    // Tur bitiş tarihi
-  isActive: boolean;
-  isLastMinute?: boolean; // Son dakika fırsatı
-  discountRate?: number;  // İndirim oranı
-  viewCount?: number;     // Görüntülenme sayısı
-  additionalServices?: Array<{
-    name: string;
-    price: number;
-    description?: string;
-  }>;
-  program?: Array<{
-    day: string;
-    title: string;
-    description: string;
-  }>;
-  includedServices?: string[];
-  excludedServices?: string[];
+export interface ITour extends ITourBase, Document {
+  destinationRef?: Types.ObjectId;
+  startDate?: Date;
+  endDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

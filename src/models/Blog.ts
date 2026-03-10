@@ -1,24 +1,10 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import type { IBlog as IBlogBase } from '@/types/blog';
 
-export interface IBlog extends Document {
-  title: string;
-  content: string;
-  image: string;
-  slug: string;
-  summary: string;
-  author: string;
-  categories: string[];
-  isPublished: boolean;
+export interface IBlog extends IBlogBase, Document {
   publishDate: Date;
   createdAt: Date;
   updatedAt: Date;
-  // SEO alanları
-  metaDescription?: string;
-  keywords?: string[];
-  focusKeyword?: string;
-  views?: number;
-  readingTime?: number;
-  featuredPost?: boolean;
 }
 
 const BlogSchema: Schema = new Schema(

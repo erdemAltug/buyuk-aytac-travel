@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import type { ITour } from '@/types/tour';
+import { TourType, AccommodationType } from '@/types/tour';
 import ReservationModal from './ReservationModal';
 
 function TourCard({ tour }: { tour: ITour }) {
