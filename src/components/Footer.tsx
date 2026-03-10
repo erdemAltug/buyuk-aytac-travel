@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { getTours } from '@/services/tourService';
 import type { ITour } from '@/types/tour';
+import { getCurrentYear } from '@/lib/formatDate';
 
 interface SocialIcon {
   name: string;
@@ -349,7 +350,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <p className="text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} Büyük Aytaç Travel. Tüm hakları saklıdır.
+              &copy; {getCurrentYear()} Büyük Aytaç Travel. Tüm hakları saklıdır.
             </p>
             <a 
               href="https://www.tursab.org.tr/" 

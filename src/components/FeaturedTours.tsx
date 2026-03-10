@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import ReservationButton from './ReservationButton';
+import { formatDateLong } from '@/lib/formatDate';
 
 type FeaturedToursProps = {
   /** Sunucudan gelen ilk veri - Googlebot ve ilk açılışta içerik hemen görünür */
@@ -49,10 +50,9 @@ export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps)
     fetchTours();
   }, [initialTours.length]);
 
-  const formatDate = (dateString?: Date) => {
+  const formatDate = (dateString?: Date | string) => {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return formatDateLong(dateString);
   };
 
   const formatPrice = (price: number) => {

@@ -12,9 +12,14 @@ const sentryWebpackPluginOptions = {
   widenClientFileUpload: true,
   hideSourceMaps: true,
   disableLogger: true,
+  // CORS hatasını önlemek için: event'ler kendi domain'imiz üzerinden Sentry'ye iletilir
+  tunnelRoute: '/monitoring',
 };
 
 const nextConfig = {
+  // Googlebot / test araçları tam HTML görsün: streaming yerine sayfa bitene kadar bekle
+  htmlLimitedBots: /.*/,
+
   webpack: (config) => {
     // MongoDB playground dosyalarını hariç tut
     config.module.rules.push({

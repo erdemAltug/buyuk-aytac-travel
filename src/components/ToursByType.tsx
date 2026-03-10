@@ -7,6 +7,7 @@ import { getTours } from '@/services/tourService';
 import type { ITour } from '@/types/tour';
 import { TourType, AccommodationType } from '@/types/tour';
 import ReservationModal from './ReservationModal';
+import { formatDateShort } from '@/lib/formatDate';
 
 function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
@@ -79,11 +80,7 @@ function TourCard({ tour }: { tour: ITour }) {
                 </svg>
               </div>
               <span className="text-sm font-bold text-gray-800">
-                {new Date(tour.startDate).toLocaleDateString('tr-TR', {
-                  weekday: 'short',
-                  day: '2-digit',
-                  month: 'short'
-                })}
+                {formatDateShort(tour.startDate)}
               </span>
             </div>
           )}

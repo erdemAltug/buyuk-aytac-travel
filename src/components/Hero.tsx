@@ -1,8 +1,10 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 
+/**
+ * Server Component: Hero ilk HTML'de gelir, JS yüklenmeden Googlebot/test görür.
+ * Sadece statik içerik (Link, Image) — client gerekmez.
+ */
 export default function Hero() {
   return (
     <div className="relative h-[100vh] w-full overflow-hidden">
