@@ -17,8 +17,8 @@ const sentryWebpackPluginOptions = {
 };
 
 const nextConfig = {
-  // Googlebot / test araçları tam HTML görsün: streaming yerine sayfa bitene kadar bekle
-  htmlLimitedBots: /.*/,
+  // Googlebot tam HTML alsın - önceki ayar tüm botları engelliyordu
+  // htmlLimitedBots: /.*/,
 
   webpack: (config) => {
     // MongoDB playground dosyalarını hariç tut
