@@ -39,6 +39,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    // Hydration uyumsuzluğunu önlemek: tüm Image src'leri göreli URL (sunucu/istemci aynı)
+    loader: 'default',
+    loaderFile: './imageLoader.js',
     remotePatterns: [
       {
         protocol: 'https',
