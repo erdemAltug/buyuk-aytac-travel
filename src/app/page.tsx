@@ -10,6 +10,9 @@ import FeaturedTours from '@/components/FeaturedTours';
 import Link from 'next/link';
 import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
 
+// SEO için: her zaman sunucuda render et
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   // Sunucuda veriyi çek: ilk HTML'de turlar ve bloglar olsun (Googlebot JS beklemeden görsün)
   const [initialTours, initialBlogs] = await Promise.all([
