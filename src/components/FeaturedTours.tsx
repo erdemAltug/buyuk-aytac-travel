@@ -6,21 +6,26 @@ import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import ReservationButton from './ReservationButton';
 
-export default function FeaturedTours() {
-  const [tours, setTours] = useState<ITour[]>([]);
-  const [loading, setLoading] = useState(true);
+type FeaturedToursProps = {
+  /** Sunucudan gelen ilk veri - Googlebot ve ilk açılışta içerik hemen görünür */
+  initialTours?: ITour[];
+};
+
+export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps) {
+  const [tours, setTours] = useState<ITour[]>(initialTours);
+  const [loading, setLoading] = useState(initialTours.length === 0);
 
   useEffect(() => {
+    if (initialTours.length > 0) {
+      setLoading(false);
+      return;
+    }
     async function fetchTours() {
       try {
-        // First get active tours without sorting by date
         const response = await fetch('/api/tours?isActive=true&limit=20');
         if (response.ok) {
           const data = await response.json();
-          // API returns { tours: [...] } or just [...] 
           const allTours = data.tours || data || [];
-          
-          // Filter tours that have a start date in the future
           const now = new Date();
           const upcomingTours = allTours
             .filter((tour: ITour) => tour.startDate && new Date(tour.startDate) >= now)
@@ -29,8 +34,6 @@ export default function FeaturedTours() {
               return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
             })
             .slice(0, 4);
-          
-          // If no upcoming tours, show recent active tours
           if (upcomingTours.length === 0) {
             setTours(allTours.slice(0, 4));
           } else {
@@ -44,7 +47,7 @@ export default function FeaturedTours() {
       }
     }
     fetchTours();
-  }, []);
+  }, [initialTours.length]);
 
   const formatDate = (dateString?: Date) => {
     if (!dateString) return '';

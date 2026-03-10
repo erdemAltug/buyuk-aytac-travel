@@ -6,12 +6,21 @@ import Image from 'next/image';
 import { getLatestBlogs } from '@/services/blogService';
 import type { IBlog } from '@/types/blog';
 
-export default function BlogPreview() {
-  const [latestBlogs, setLatestBlogs] = useState<IBlog[]>([]);
-  const [loading, setLoading] = useState(true);
+type BlogPreviewProps = {
+  /** Sunucudan gelen ilk veri - Googlebot ve ilk açılışta içerik hemen görünür */
+  initialBlogs?: IBlog[];
+};
+
+export default function BlogPreview({ initialBlogs = [] }: BlogPreviewProps) {
+  const [latestBlogs, setLatestBlogs] = useState<IBlog[]>(initialBlogs);
+  const [loading, setLoading] = useState(initialBlogs.length === 0);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (initialBlogs.length > 0) {
+      setLoading(false);
+      return;
+    }
     const fetchLatestBlogs = async () => {
       try {
         const blogs = await getLatestBlogs(3);
@@ -25,7 +34,7 @@ export default function BlogPreview() {
     };
 
     fetchLatestBlogs();
-  }, []);
+  }, [initialBlogs.length]);
 
   // Tarihi formatla
   const formatDate = (dateString: string | Date) => {

@@ -8,8 +8,14 @@ import BlogPreview from '@/components/BlogPreview';
 import InstagramFeed from '@/components/InstagramFeed';
 import FeaturedTours from '@/components/FeaturedTours';
 import Link from 'next/link';
+import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
 
-export default function Home() {
+export default async function Home() {
+  // Sunucuda veriyi çek: ilk HTML'de turlar ve bloglar olsun (Googlebot JS beklemeden görsün)
+  const [initialTours, initialBlogs] = await Promise.all([
+    getFeaturedToursForHome().catch(() => []),
+    getLatestBlogsForHome().catch(() => []),
+  ]);
   // Website için kapsamlı structured data
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -128,8 +134,8 @@ export default function Home() {
           {/* Search Section */}
           <SearchSection />
           
-          {/* Featured Tours */}
-          <FeaturedTours />
+          {/* Featured Tours - initialTours ile ilk HTML'de içerik gelir (SEO) */}
+          <FeaturedTours initialTours={initialTours} />
           
           {/* Quick Links Section - Internal Linking Enhancement */}
           <section className="py-12 bg-blue-50">
@@ -420,8 +426,8 @@ export default function Home() {
             </div>
           </section>
           
-          {/* Blog Önizleme Bölümü */}
-          <BlogPreview />
+          {/* Blog Önizleme - initialBlogs ile ilk HTML'de içerik gelir (SEO) */}
+          <BlogPreview initialBlogs={initialBlogs} />
           
           {/* Instagram Feed */}
           <InstagramFeed />
