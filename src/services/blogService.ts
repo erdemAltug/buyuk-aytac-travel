@@ -1,7 +1,5 @@
-import { IBlog } from '@/models/Blog';
+import type { IBlog } from '@/types/blog';
 import axios from 'axios';
-import Blog from '@/models/Blog';
-import dbConnect from '@/lib/dbConnect';
 
 // Tüm blogları getir
 export const getBlogs = async (published?: boolean, adminMode: boolean = false) => {
@@ -57,8 +55,10 @@ export const getBlogsByCategory = async (category: string) => {
   }
 };
 
-// ID'ye göre blog yazısı getir
+// ID'ye göre blog yazısı getir (server-only - uses Mongoose)
 export async function getBlogById(id: string): Promise<IBlog | null> {
+  const dbConnect = (await import('@/lib/dbConnect')).default;
+  const Blog = (await import('@/models/Blog')).default;
   await dbConnect();
   return Blog.findById(id);
 }
@@ -77,15 +77,17 @@ export const getRecentBlogs = async (limit: number = 3) => {
 // getLatestBlogs - Son N blog yazısını getir (alternatif isim)
 export const getLatestBlogs = getRecentBlogs;
 
-// Server tarafı blog oluşturma 
+// Server tarafı blog oluşturma (server-only - uses Mongoose)
 export async function createBlogServerSide(blogData: Partial<IBlog>): Promise<IBlog> {
+  const dbConnect = (await import('@/lib/dbConnect')).default;
+  const Blog = (await import('@/models/Blog')).default;
   await dbConnect();
-  
+
   // Slug oluştur (eğer verilmediyse)
   if (!blogData.slug && blogData.title) {
     blogData.slug = createSlugFromTitle(blogData.title);
   }
-  
+
   return Blog.create(blogData);
 }
 

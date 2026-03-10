@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { getTours } from '@/services/tourService';
-import { ITour } from '@/models/Tour';
+import type { ITour } from '@/types/tour';
 
 interface SocialIcon {
   name: string;

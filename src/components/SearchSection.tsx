@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TourType, AccommodationType } from '@/models/Tour';
+import { TourType, AccommodationType } from '@/types/tour';
 
 export default function SearchSection() {
   const router = useRouter();

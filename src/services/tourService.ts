@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import type { ITour } from '@/types/tour';
+import { TourType, AccommodationType } from '@/types/tour';
 
 const API_URL = '/api/tours';
 

@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero';
 import SearchSection from '@/components/SearchSection';
 import ToursByType from '@/components/ToursByType';
-import { TourType, AccommodationType } from '@/models/Tour';
+import { TourType, AccommodationType } from '@/types/tour';
 import Image from 'next/image';
 import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';

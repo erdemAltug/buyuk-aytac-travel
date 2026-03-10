@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ITour } from '@/models/Tour';
+import type { ITour } from '@/types/tour';
 import ReservationButton from './ReservationButton';
 
 export default function FeaturedTours() {
