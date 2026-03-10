@@ -22,6 +22,10 @@ export default function GlobalError({
 
   return (
     <html lang="tr" className="h-full">
+      <head>
+        <title>Hata - Büyük Aytaç Travel</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
       <body className="h-full">
         <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
           <div className="max-w-lg w-full text-center">
