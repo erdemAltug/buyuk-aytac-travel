@@ -60,7 +60,7 @@ export const localBusinessSchema = {
   },
   "sameAs": [
     "https://www.instagram.com/buyukaytactravel",
-    "https://www.facebook.com/buyukaytactravel"
+    "https://www.facebook.com/people/B%C3%9CY%C3%9CK-AYTA%C3%87-Travel/61581407056598/"
   ],
   "image": "https://www.buyukaytactravel.com/images/LOGO.png"
 };
@@ -196,7 +196,7 @@ export const organizationSchema = {
   },
   "sameAs": [
     "https://instagram.com/buyukaytactravel",
-    "https://facebook.com/buyukaytactravel"
+    "https://www.facebook.com/people/B%C3%9CY%C3%9CK-AYTA%C3%87-Travel/61581407056598/"
   ]
 };
 

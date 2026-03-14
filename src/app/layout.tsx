@@ -137,7 +137,7 @@ export default function RootLayout({
     "url": "https://www.buyukaytactravel.com",
     "logo": "https://www.buyukaytactravel.com/images/LOGO.png",
     "sameAs": [
-      "https://www.facebook.com/buyukaytactravel",
+      "https://www.facebook.com/people/B%C3%9CY%C3%9CK-AYTA%C3%87-Travel/61581407056598/",
       "https://www.instagram.com/buyukaytactravel",
       "https://twitter.com/buyukaytactravel"
     ],
