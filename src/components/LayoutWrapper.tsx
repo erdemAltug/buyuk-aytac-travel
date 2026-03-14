@@ -71,8 +71,8 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-blue-600">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                   </svg>
-                  <a href="tel:+905300609559" className="text-sm font-medium text-gray-800 hover:text-blue-600">
-                    +90 530 060 9559
+                  <a href="tel:+905393459559" className="text-sm font-medium text-gray-800 hover:text-blue-600">
+                    +90 539 345 95 59
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
         {/* WhatsApp Button */}
         <a
-          href="https://wa.me/905300609559"
+          href="https://wa.me/905393459559"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"

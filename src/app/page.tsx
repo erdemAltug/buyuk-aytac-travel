@@ -43,7 +43,7 @@ export default async function Home() {
     "name": "Büyük Aytaç Travel",
     "description": "Çerkezköy, Tekirdağ ve Çorlu'dan yurtiçi ve yurtdışı turlar. TÜRSAB üyesi güvenilir tur operatörü.",
     "url": "https://www.buyukaytactravel.com",
-    "telephone": "+90-532-123-4567",
+    "telephone": "+90-539-345-95-59",
     "email": "info@buyukaytactravel.com",
     "address": {
       "@type": "PostalAddress",

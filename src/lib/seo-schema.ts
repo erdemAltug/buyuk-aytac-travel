@@ -8,7 +8,7 @@ export const localBusinessSchema = {
   "name": "Büyük Aytaç Travel",
   "description": "Çerkezköy, Tekirdağ ve Çorlu'dan yurtiçi ve yurtdışı turlar. TÜRSAB üyesi güvenilir tur operatörü. Günübirlik turlar, konaklamalı turlar ve özel grup turları.",
   "url": "https://www.buyukaytactravel.com",
-  "telephone": "+90-532-123-4567",
+  "telephone": "+90-539-345-95-59",
   "email": "info@buyukaytactravel.com",
   "address": {
     "@type": "PostalAddress",
@@ -189,7 +189,7 @@ export const organizationSchema = {
   },
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+90-532-123-4567",
+    "telephone": "+90-539-345-95-59",
     "contactType": "customer service",
     "email": "info@buyukaytactravel.com",
     "availableLanguage": ["Turkish"]

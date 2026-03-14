@@ -174,7 +174,7 @@ export default function RootLayout({
         "closes": "16:00"
       }
     ],
-    "telephone": "+902828000000",
+    "telephone": "+905393459559",
     "email": "info@buyukaytactravel.com",
     "priceRange": "$$"
   };

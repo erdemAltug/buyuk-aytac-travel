@@ -166,7 +166,7 @@ function TourCard({ tour }: { tour: ITour }) {
                 Kapat
               </button>
               <a
-                href="tel:+905300609559"
+                href="tel:+905393459559"
                 className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center font-medium shadow-md hover:shadow-lg hover:scale-105"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">

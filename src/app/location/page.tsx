@@ -292,7 +292,7 @@ export default async function LocationPage() {
                 Rezervasyon Yap
               </Link>
               <Link 
-                href="tel:+905300609559"
+                href="tel:+905393459559"
                 className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-md transition-colors"
               >
                 Hemen Ara

@@ -323,7 +323,7 @@ export default function CerkezkoyTurPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+905321234567"
+              href="tel:+905393459559"
               className="bg-yellow-500 text-blue-900 font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition-colors inline-flex items-center justify-center"
             >
               📞 Ara: +90 532 123 45 67
