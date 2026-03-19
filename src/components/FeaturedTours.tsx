@@ -23,22 +23,26 @@ export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps)
     }
     async function fetchTours() {
       try {
-        const response = await fetch('/api/tours?isActive=true&limit=20');
+        const response = await fetch('/api/tours?isActive=true&isFeatured=true&limit=10');
         if (response.ok) {
           const data = await response.json();
-          const allTours = data.tours || data || [];
-          const now = new Date();
-          const upcomingTours = allTours
-            .filter((tour: ITour) => tour.startDate && new Date(tour.startDate) >= now)
-            .sort((a: ITour, b: ITour) => {
-              if (!a.startDate || !b.startDate) return 0;
-              return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-            })
-            .slice(0, 4);
-          if (upcomingTours.length === 0) {
-            setTours(allTours.slice(0, 4));
+          const featuredTours = data.tours || data || [];
+          
+          // Eğer isFeatured turlar varsa onları göster, yoksa yaklaşan turları göster
+          if (featuredTours.length > 0) {
+            setTours(featuredTours.slice(0, 4));
           } else {
-            setTours(upcomingTours);
+            // Yedek: Yaklaşan turları göster
+            const allTours = data.tours || data || [];
+            const now = new Date();
+            const upcomingTours = allTours
+              .filter((tour: ITour) => tour.startDate && new Date(tour.startDate) >= now)
+              .sort((a: ITour, b: ITour) => {
+                if (!a.startDate || !b.startDate) return 0;
+                return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+              })
+              .slice(0, 4);
+            setTours(upcomingTours.length > 0 ? upcomingTours : allTours.slice(0, 4));
           }
         }
       } catch (error) {

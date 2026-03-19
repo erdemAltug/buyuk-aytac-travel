@@ -47,6 +47,12 @@ export async function GET(req: NextRequest) {
       filter.isLastMinute = isLastMinute === 'true';
     }
     
+    // isFeatured parametresi
+    const isFeatured = params.get('isFeatured');
+    if (isFeatured !== null) {
+      filter.isFeatured = isFeatured === 'true';
+    }
+    
     // Sıralama parametresi - Varsayılan: en yakın tarihli turlar önce
     const sortParam = params.get('sort');
     const sortOrder = params.get('sortOrder') === 'desc' ? -1 : 1;
