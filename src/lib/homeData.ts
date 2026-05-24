@@ -8,6 +8,7 @@ import Tour from '@/models/Tour';
 import Blog from '@/models/Blog';
 import type { ITour } from '@/types/tour';
 import type { IBlog } from '@/types/blog';
+import { filterUpcomingTours } from '@/lib/tourUpcoming';
 
 /** Mongoose Buffer/ObjectId ve Date'i plain string'e çevirir; Client Component'e güvenle geçilir. */
 function toPlainValue(value: unknown): unknown {
@@ -39,22 +40,19 @@ function toPlainValue(value: unknown): unknown {
 export async function getFeaturedToursForHome(): Promise<ITour[]> {
   await dbConnect();
   const now = new Date();
-  const featuredTours = await Tour.find({ isActive: true, isFeatured: true })
-    .sort({ startDate: 1 })
-    .limit(10)
-    .lean();
-  const dailyTours = await Tour.find({
+
+  const featuredTours = await Tour.find({
     isActive: true,
-    accommodationType: 'daily',
-    isFeatured: { $ne: true },
+    isFeatured: true,
+    $or: [{ endDate: { $gte: now } }, { startDate: { $gte: now } }],
   })
     .sort({ startDate: 1 })
-    .limit(10)
+    .limit(12)
     .lean();
-  const tours = [...featuredTours, ...dailyTours];
-  const asObjects = tours.map((t) => {
+
+  const asObjects = featuredTours.map((t) => {
     const o = t as Record<string, unknown>;
-    const plain = toPlainValue({
+    return toPlainValue({
       ...o,
       _id: o._id,
       startDate: o.startDate ? new Date(o.startDate as Date).toISOString() : undefined,
@@ -62,16 +60,9 @@ export async function getFeaturedToursForHome(): Promise<ITour[]> {
       createdAt: o.createdAt ? new Date(o.createdAt as Date).toISOString() : undefined,
       updatedAt: o.updatedAt ? new Date(o.updatedAt as Date).toISOString() : undefined,
     }) as Record<string, unknown>;
-    return plain;
   });
-  const upcoming = asObjects
-    .filter((t) => t.startDate && new Date(t.startDate as string) >= now)
-    .sort((a, b) =>
-      a.startDate && b.startDate ? new Date(a.startDate as string).getTime() - new Date(b.startDate as string).getTime() : 0
-    )
-    .slice(0, 4);
-  const list = upcoming.length > 0 ? upcoming : asObjects.slice(0, 4);
-  return list as unknown as ITour[];
+
+  return filterUpcomingTours(asObjects).slice(0, 4) as unknown as ITour[];
 }
 
 export async function getLatestBlogsForHome(): Promise<IBlog[]> {

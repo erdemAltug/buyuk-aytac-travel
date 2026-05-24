@@ -52,6 +52,13 @@ export async function GET(req: NextRequest) {
     if (isFeatured !== null) {
       filter.isFeatured = isFeatured === 'true';
     }
+
+    // upcoming parametresi — sadece gelecek turlar (startDate veya endDate >= bugün)
+    const upcoming = params.get('upcoming');
+    if (upcoming === 'true' || isFeatured === 'true') {
+      const now = new Date();
+      filter.$or = [{ endDate: { $gte: now } }, { startDate: { $gte: now } }];
+    }
     
     // Sıralama parametresi - Varsayılan: en yakın tarihli turlar önce
     const sortParam = params.get('sort');

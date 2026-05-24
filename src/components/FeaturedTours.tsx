@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import { formatDateLong } from '@/lib/formatDate';
+import { filterUpcomingTours } from '@/lib/tourUpcoming';
 import TourCard from './TourCard';
 
 const TOUR_GRID_CLASS =
@@ -14,57 +15,27 @@ type FeaturedToursProps = {
 };
 
 export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps) {
-  const [tours, setTours] = useState<ITour[]>(initialTours);
+  const [tours, setTours] = useState<ITour[]>(() => filterUpcomingTours(initialTours).slice(0, 4));
   const [loading, setLoading] = useState(initialTours.length === 0);
 
   useEffect(() => {
-    if (initialTours.length > 0) {
-      setLoading(false);
-      return;
-    }
     async function fetchTours() {
       try {
-        const [featuredResponse, dailyResponse] = await Promise.all([
-          fetch('/api/tours?isActive=true&isFeatured=true&limit=10'),
-          fetch('/api/tours?isActive=true&accommodationType=daily&limit=10'),
-        ]);
+        const response = await fetch('/api/tours?isActive=true&isFeatured=true&limit=20');
+        if (!response.ok) return;
 
-        let allTours: ITour[] = [];
-
-        if (featuredResponse.ok) {
-          const featuredData = await featuredResponse.json();
-          const featuredTours = featuredData.tours || featuredData || [];
-          allTours = [...featuredTours];
-        }
-
-        if (dailyResponse.ok) {
-          const dailyData = await dailyResponse.json();
-          const dailyTours = dailyData.tours || dailyData || [];
-          dailyTours.forEach((tour: ITour) => {
-            if (!allTours.find((t) => t._id === tour._id)) {
-              allTours.push(tour);
-            }
-          });
-        }
-
-        const now = new Date();
-        const sortedTours = allTours
-          .filter((tour: ITour) => tour.startDate && new Date(tour.startDate) >= now)
-          .sort((a: ITour, b: ITour) => {
-            if (!a.startDate || !b.startDate) return 0;
-            return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
-          })
-          .slice(0, 4);
-
-        setTours(sortedTours.length > 0 ? sortedTours : allTours.slice(0, 4));
+        const data = await response.json();
+        const list: ITour[] = data.tours || data || [];
+        setTours(filterUpcomingTours(list).slice(0, 4));
       } catch (error) {
         console.error('Error fetching tours:', error);
       } finally {
         setLoading(false);
       }
     }
+
     fetchTours();
-  }, [initialTours.length]);
+  }, []);
 
   const formatDate = (dateString?: Date | string) => {
     if (!dateString) return '';
