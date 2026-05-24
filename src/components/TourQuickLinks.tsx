@@ -53,16 +53,20 @@ const tourLinks = [
 
 const blogLinks = [
   {
-    href: '/blog/cerkezkoyden-kalkan-turlar-2026',
-    label: 'Çerkezköyden Kalkan Turlar',
+    href: '/blog/haziran-2026-cerkezkoy-tur-takvimi',
+    label: 'Haziran 2026 Tur Takvimi',
   },
   {
-    href: '/blog/cerkezkoy-gunubirlik-tur-rehberi',
-    label: 'Günübirlik Tur Rehberi',
+    href: '/blog/kapadokya-turu-2026-cerkezkoy-rehberi',
+    label: 'Kapadokya Tur Rehberi',
   },
   {
-    href: '/blog/cerkezkoy-tur-paketleri-2026-guncel',
-    label: '2026 Tur Paketleri',
+    href: '/blog/isparta-gul-hasadi-salda-golu-turu-rehber',
+    label: 'Gül Hasadı & Salda',
+  },
+  {
+    href: '/blog/cerkezkoy-tur-fiyatlari-2026-guncel-liste',
+    label: '2026 Tur Fiyatları',
   },
   {
     href: '/blog',

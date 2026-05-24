@@ -84,10 +84,12 @@ export default function Footer() {
   ];
 
   const blogLinks = [
-    { name: 'Çerkezköyden Kalkan Turlar', href: '/blog/cerkezkoyden-kalkan-turlar-2026' },
-    { name: 'Günübirlik Tur Rehberi', href: '/blog/cerkezkoy-gunubirlik-tur-rehberi' },
-    { name: '2026 Tur Paketleri', href: '/blog/cerkezkoy-tur-paketleri-2026-guncel' },
-    { name: 'Tur Rezervasyonu', href: '/blog/cerkezkoy-tur-rezervasyonu-nasil-yapilir' },
+    { name: 'Haziran 2026 Tur Takvimi', href: '/blog/haziran-2026-cerkezkoy-tur-takvimi' },
+    { name: 'Kapadokya Tur Rehberi', href: '/blog/kapadokya-turu-2026-cerkezkoy-rehberi' },
+    { name: 'Safranbolu Amasra Turu', href: '/blog/safranbolu-amasra-turu-rehberi-2026' },
+    { name: 'Salda & Pamukkale Turları', href: '/blog/salda-golu-pamukkale-turu-karsilastirma' },
+    { name: '2026 Tur Fiyatları', href: '/blog/cerkezkoy-tur-fiyatlari-2026-guncel-liste' },
+    { name: 'Tüm Blog Yazıları', href: '/blog' },
   ];
 
   return (
