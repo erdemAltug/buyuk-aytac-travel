@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getTours, deleteTour, updateTour } from '@/services/tourService';
-import { ITour } from '@/models/Tour';
+import { ITour } from '@/types/tour';
 import TourImage from '@/components/admin/TourImage';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getTours } from '@/services/tourService';
-import { ITour, AccommodationType } from '@/models/Tour';
+import { ITour, AccommodationType } from '@/types/tour';
 import Link from 'next/link';
 import Image from 'next/image';
 

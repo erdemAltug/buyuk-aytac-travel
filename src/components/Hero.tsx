@@ -24,7 +24,7 @@ export default function Hero() {
       <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div>
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-            Çerkezköy Günübirlik ve Konaklamalı Turlar | Büyük Aytaç Travel
+            Çerkezköy Çıkışlı Günübirlik ve Konaklamalı Turlar
           </h1>
           <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light text-white">
             Çerkezköy kalkışlı yurtiçi ve yurtdışı turlar. TÜRSAB üyesi tur operatörü ile profesyonel rehberler eşliğinde güvenli seyahat deneyimi. Tekirdağ ve Çorlu'dan da katılım imkanı.

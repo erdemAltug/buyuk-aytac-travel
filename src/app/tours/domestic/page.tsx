@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getTours } from '@/services/tourService';
-import { ITour, TourType } from '@/models/Tour';
+import { ITour, TourType } from '@/types/tour';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -10,7 +10,10 @@ function TourCard({ tour }: { tour: ITour }) {
   const [imageError, setImageError] = useState(false);
   
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg hover:-translate-y-1">
+    <Link
+      href={`/tours/${tour.slug}`}
+      className="block bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg hover:-translate-y-1"
+    >
       <div className="relative h-56 w-full">
         {!imageError ? (
           <Image
@@ -36,15 +39,12 @@ function TourCard({ tour }: { tour: ITour }) {
         <p className="text-gray-600 mb-4 line-clamp-2">{tour.description}</p>
         <div className="flex justify-between items-center">
           <span className="text-blue-600 font-bold">{tour.price.toLocaleString('tr-TR')} ₺</span>
-          <Link 
-            href={`/tours/${tour.slug}`} 
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md px-3 py-1.5 text-sm transition-colors"
-          >
+          <span className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md px-3 py-1.5 text-sm transition-colors">
             Detaylar
-          </Link>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -22,13 +22,14 @@ export interface ITour {
   duration: string;
   price: number;
   destination: string;
-  destinationRef?: string;
+  destinationRef?: string | { _id: string; name: string; slug?: string };
   departureCity?: string;
   tourType: TourType;
   accommodationType: AccommodationType;
   startDate?: Date | string;
   endDate?: Date | string;
   isActive: boolean;
+  isFeatured?: boolean;
   isLastMinute?: boolean;
   discountRate?: number;
   viewCount?: number;

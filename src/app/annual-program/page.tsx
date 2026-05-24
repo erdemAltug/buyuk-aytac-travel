@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import { ITour, TourType, AccommodationType } from '@/types/tour';
 
 export default function AnnualProgramPage() {
   const [tours, setTours] = useState<ITour[]>([]);
@@ -153,7 +153,11 @@ export default function AnnualProgramPage() {
         ) : (
           <div className="space-y-10">
             {filteredTours.map((tour) => (
-              <div key={tour._id?.toString()} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <Link
+                key={tour._id?.toString()}
+                href={`/tours/${tour.slug}`}
+                className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              >
                 <div className="md:flex">
                   <div className="md:w-1/3 relative">
                     <div className="h-64 md:h-full w-full relative">
@@ -205,16 +209,13 @@ export default function AnnualProgramPage() {
                           {formatDate(tour.startDate)}
                         </span>
                       </div>
-                      <Link
-                        href={`/tours/${tour.slug}`}
-                        className="w-full md:w-auto inline-block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-5 py-2.5 transition-colors"
-                      >
+                      <span className="w-full md:w-auto inline-block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-5 py-2.5 transition-colors">
                         Detayları Gör
-                      </Link>
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

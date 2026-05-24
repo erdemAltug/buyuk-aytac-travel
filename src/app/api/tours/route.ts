@@ -146,6 +146,7 @@ export async function POST(req: NextRequest) {
       startDate: body.startDate,
       endDate: body.endDate,
       isActive: body.isActive !== undefined ? body.isActive : true,
+      isFeatured: body.isFeatured || false,
       isLastMinute: body.isLastMinute || false,
       discountRate: body.discountRate,
       program: body.program,

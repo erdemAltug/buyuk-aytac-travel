@@ -52,6 +52,7 @@ const TourSchema: Schema = new Schema(
     startDate: { type: Date },  // Tur başlangıç tarihi
     endDate: { type: Date },    // Tur bitiş tarihi
     isActive: { type: Boolean, default: true },
+    isFeatured: { type: Boolean, default: false },
     isLastMinute: { type: Boolean, default: false }, // Son dakika fırsatı
     discountRate: { type: Number }, // İndirim oranı
     viewCount: { type: Number, default: 0 },     // Görüntülenme sayısı

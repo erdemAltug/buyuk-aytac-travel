@@ -65,26 +65,29 @@ export default function Footer() {
   ];
 
   const quickLinks = [
-    {
-      name: 'Ana Sayfa',
-      href: '/',
-    },
-    {
-      name: 'Turlar',
-      href: '/tours',
-    },
-    {
-      name: 'Blog',
-      href: '/blog',
-    },
-    {
-      name: 'Hakkımızda',
-      href: '/about',
-    },
-    {
-      name: 'İletişim',
-      href: '/contact',
-    },
+    { name: 'Ana Sayfa', href: '/' },
+    { name: 'Tüm Turlar', href: '/tours' },
+    { name: 'Çerkezköy Turları', href: '/cerkezkoy-tur' },
+    { name: '2026 Tur Takvimi', href: '/annual-program' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Hakkımızda', href: '/about' },
+    { name: 'İletişim', href: '/contact' },
+  ];
+
+  const tourCategoryLinks = [
+    { name: 'Yurtiçi Turlar', href: '/tours?tourType=domestic' },
+    { name: 'Yurtiçi Günübirlik Turlar', href: '/tours?accommodationType=daily' },
+    { name: 'Yurtiçi Konaklamalı Turlar', href: '/tours?accommodationType=with_accommodation' },
+    { name: 'Yurtdışı Turlar', href: '/tours?tourType=international' },
+    { name: 'Çerkezköy Günübirlik', href: '/cerkezkoy-gunubirlik-turlar' },
+    { name: 'Çerkezköy Konaklamalı', href: '/cerkezkoy-konakamali-turlar' },
+  ];
+
+  const blogLinks = [
+    { name: 'Çerkezköyden Kalkan Turlar', href: '/blog/cerkezkoyden-kalkan-turlar-2026' },
+    { name: 'Günübirlik Tur Rehberi', href: '/blog/cerkezkoy-gunubirlik-tur-rehberi' },
+    { name: '2026 Tur Paketleri', href: '/blog/cerkezkoy-tur-paketleri-2026-guncel' },
+    { name: 'Tur Rezervasyonu', href: '/blog/cerkezkoy-tur-rezervasyonu-nasil-yapilir' },
   ];
 
   return (
@@ -164,17 +167,17 @@ export default function Footer() {
                   {
                     '@type': 'Offer',
                     name: 'Yurtiçi Konaklamalı Turlar',
-                    url: 'https://www.buyukaytactravel.com/tours?type=domestic&accommodation=with_accommodation'
+                    url: 'https://www.buyukaytactravel.com/tours?accommodationType=with_accommodation'
                   },
                   {
                     '@type': 'Offer',
                     name: 'Yurtiçi Günübirlik Turlar',
-                    url: 'https://www.buyukaytactravel.com/tours?type=domestic&accommodation=daily'
+                    url: 'https://www.buyukaytactravel.com/tours?accommodationType=daily'
                   },
                   {
                     '@type': 'Offer',
                     name: 'Yurtdışı Turlar',
-                    url: 'https://www.buyukaytactravel.com/tours?type=international'
+                    url: 'https://www.buyukaytactravel.com/tours?tourType=international'
                   }
                 ]
               },
@@ -194,7 +197,7 @@ export default function Footer() {
             })
           }}
         />
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           <div className="mb-10 md:mb-0">
             <div className="flex items-center mb-6">
               <div className="relative h-24 w-40 mr-3">
@@ -249,40 +252,43 @@ export default function Footer() {
               Tur Kategorileri
             </h3>
             <ul className="space-y-3">
+              {tourCategoryLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
+                  >
+                    <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400 shrink-0" />
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mb-10 md:mb-0">
+            <h3 className="text-lg font-semibold mb-4 text-white">
+              Çerkezköy Blog
+            </h3>
+            <ul className="space-y-3">
+              {blogLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
+                  >
+                    <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400 shrink-0" />
+                    <span className="line-clamp-2">{link.name}</span>
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link
-                  href="/tours?type=domestic&accommodation=with_accommodation"
-                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
+                  href="/blog"
+                  className="text-blue-300 hover:text-white transition-colors duration-300 flex items-center font-medium"
                 >
-                  <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
-                  Yurtiçi Konaklamalı Turlar
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tours?type=domestic&accommodation=daily"
-                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
-                >
-                  <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
-                  Yurtiçi Günübirlik Turlar
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tours?type=international&accommodation=with_accommodation"
-                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
-                >
-                  <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
-                  Yurtdışı Konaklamalı Turlar
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tours?type=international&accommodation=daily"
-                  className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center"
-                >
-                  <ChevronRightIcon className="h-4 w-4 mr-2 text-blue-400" />
-                  Yurtdışı Günübirlik Turlar
+                  <ChevronRightIcon className="h-4 w-4 mr-2 shrink-0" />
+                  Tüm yazılar →
                 </Link>
               </li>
             </ul>

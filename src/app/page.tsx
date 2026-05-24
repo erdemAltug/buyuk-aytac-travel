@@ -7,6 +7,7 @@ import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';
 import InstagramFeed from '@/components/InstagramFeed';
 import FeaturedTours from '@/components/FeaturedTours';
+import TourQuickLinks from '@/components/TourQuickLinks';
 import Link from 'next/link';
 import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
 
@@ -139,66 +140,8 @@ export default async function Home() {
           
           {/* Featured Tours - initialTours ile ilk HTML'de içerik gelir (SEO) */}
           <FeaturedTours initialTours={initialTours} />
-          
-          {/* Quick Links Section - Internal Linking Enhancement */}
-          <section className="py-12 bg-blue-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Popüler Tur Kategorileri</h2>
-                <p className="text-gray-600">En çok tercih edilen tur tiplerini keşfedin</p>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <Link 
-                  href="/tours?tourType=domestic"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">🏔️</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Yurtiçi Turlar</h3>
-                  <p className="text-sm text-gray-500 mt-1">Türkiye'yi keşfedin</p>
-                </Link>
-                <Link 
-                  href="/tours?tourType=international"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">✈️</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Yurtdışı Turlar</h3>
-                  <p className="text-sm text-gray-500 mt-1">Dünyayı keşfedin</p>
-                </Link>
-                <Link 
-                  href="/gap-turu"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">🏛️</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">GAP Turu</h3>
-                  <p className="text-sm text-gray-500 mt-1">Güneydoğu</p>
-                </Link>
-                <Link 
-                  href="/karadeniz-turu"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">🌲</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Karadeniz</h3>
-                  <p className="text-sm text-gray-500 mt-1">Yaylalar</p>
-                </Link>
-                <Link 
-                  href="/kapadokya-turu"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">🎈</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Kapadokya</h3>
-                  <p className="text-sm text-gray-500 mt-1">Peri Bacaları</p>
-                </Link>
-                <Link 
-                  href="/populer-turlar"
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center group"
-                >
-                  <div className="text-3xl mb-2">🔍</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">Tüm Turlar</h3>
-                  <p className="text-sm text-gray-500 mt-1">Keşfedin</p>
-                </Link>
-              </div>
-            </div>
-          </section>
+
+          <TourQuickLinks />
           
           {/* Yurtiçi Turları */}
           <ToursByType 

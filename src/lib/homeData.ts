@@ -39,10 +39,19 @@ function toPlainValue(value: unknown): unknown {
 export async function getFeaturedToursForHome(): Promise<ITour[]> {
   await dbConnect();
   const now = new Date();
-  const tours = await Tour.find({ isActive: true })
+  const featuredTours = await Tour.find({ isActive: true, isFeatured: true })
     .sort({ startDate: 1 })
-    .limit(20)
+    .limit(10)
     .lean();
+  const dailyTours = await Tour.find({
+    isActive: true,
+    accommodationType: 'daily',
+    isFeatured: { $ne: true },
+  })
+    .sort({ startDate: 1 })
+    .limit(10)
+    .lean();
+  const tours = [...featuredTours, ...dailyTours];
   const asObjects = tours.map((t) => {
     const o = t as Record<string, unknown>;
     const plain = toPlainValue({

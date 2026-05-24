@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour } from '@/models/Tour';
+import { ITour } from '@/types/tour';
 import ReservationModal from './ReservationModal';
 
 function TourCard({ tour }: { tour: ITour }) {
@@ -14,8 +14,9 @@ function TourCard({ tour }: { tour: ITour }) {
 
   return (
     <>
-      <div 
-        className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
+      <Link
+        href={`/tours/${tour.slug}`}
+        className="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -33,7 +34,7 @@ function TourCard({ tour }: { tour: ITour }) {
                 className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 onError={() => setImageError(true)}
-              />ss
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
             </>
           ) : (
@@ -90,7 +91,7 @@ function TourCard({ tour }: { tour: ITour }) {
             </Link>
           </div>
         </div>
-      </div>
+      </Link>
 
       {/* Reservation Modal */}
       <ReservationModal

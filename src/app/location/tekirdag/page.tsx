@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour } from '@/models/Tour';
+import { ITour } from '@/types/tour';
 
 export default function TekirgagToursPage() {
   const [tours, setTours] = useState<ITour[]>([]);
