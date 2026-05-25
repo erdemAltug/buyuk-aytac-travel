@@ -477,7 +477,6 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında Bilgi Alın</h2>
                   
-                  {/* Rezervasyon yapmak için */}
                   <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
                 </div>
               </div>

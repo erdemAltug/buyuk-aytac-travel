@@ -7,6 +7,8 @@ import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';
 import InstagramFeed from '@/components/InstagramFeed';
 import FeaturedTours from '@/components/FeaturedTours';
+import FutureTourVote from '@/components/FutureTourVote';
+import GoogleReviews from '@/components/GoogleReviews';
 import TourQuickLinks from '@/components/TourQuickLinks';
 import Link from 'next/link';
 import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
@@ -307,6 +309,10 @@ export default async function Home() {
               </div>
             </div>
           </section>
+
+          <FutureTourVote />
+
+          <GoogleReviews />
           
           {/* TÜRSAB Üyelik Bölümü */}
           <section className="bg-gray-100 py-16">

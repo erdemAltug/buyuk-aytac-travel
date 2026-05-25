@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import WeekendAssistant from '@/components/WeekendAssistant';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -42,8 +43,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       </div>
 
       {/* Floating Buttons Container - Bottom Right */}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-3">
-        
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-3 items-end">
+        <WeekendAssistant />
+
         {/* Phone Button with Popup */}
         <div className="relative" onClick={(e) => e.stopPropagation()}>
           <button
