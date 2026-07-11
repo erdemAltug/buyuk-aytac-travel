@@ -61,6 +61,7 @@ async function sync() {
     'ayvalik-cunda-turu-1-agustos-2026',
     'ayvalik-cunda-turu-16-agustos-2026',
     'ayvalik-cunda-turu-30-agustos-2026',
+    'bozcaada-turu-26-temmuz-2026',
   ];
 
   const uniqueSlugs = [...new Set(featuredSlugs)];
