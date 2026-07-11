@@ -23,7 +23,7 @@ function isUpcoming(tour: { startDate?: Date; endDate?: Date }) {
 }
 
 async function sync() {
-  await mongoose.connect(MONGODB_URI);
+  await mongoose.connect(MONGODB_URI as string);
   const now = new Date();
 
   const allActive = await Tour.find({ isActive: true });
@@ -52,6 +52,15 @@ async function sync() {
     'kapadokya-turu-19-21-haziran-2026',
     'assos-turu',
     'lavanta-hasadi-salda-golu-pamukkale-turu-4-5-temmuz-2026',
+    'gokceada-turu-12-temmuz-2026',
+    'canakkale-kaz-daglari-turu-15-temmuz-2026',
+    'ayvalik-cunda-turu-28-haziran-2026',
+    'ayvalik-cunda-turu-11-temmuz-2026',
+    'ayvalik-cunda-turu-19-temmuz-2026',
+    'ayvalik-cunda-turu-25-temmuz-2026',
+    'ayvalik-cunda-turu-1-agustos-2026',
+    'ayvalik-cunda-turu-16-agustos-2026',
+    'ayvalik-cunda-turu-30-agustos-2026',
   ];
 
   const uniqueSlugs = [...new Set(featuredSlugs)];
