@@ -617,32 +617,30 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       
     // Tur tipine ve özelliklerine göre anahtar kelimeleri ayarla - Çerkezköy odaklı
     const keywordString = `${tour.name}, ${tour.destination}, çerkezköy tur, çerkezköy'den tur, ${tour.duration}, ${tour.price} TL, ${tour.accommodationType === 'with_accommodation' ? 'konaklamalı tur' : 'günübirlik gezi'}, ${tour.tourType === 'domestic' ? 'yurtiçi tur' : 'yurtdışı tur'}, trakya turları, büyük aytaç travel`;
+
+    const { toAbsoluteUrl, SITE_URL } = await import('@/lib/seo');
+    const ogImage = toAbsoluteUrl(tour.image);
+    const canonical = `${SITE_URL}/tours/${tour.slug}`;
     
     return {
       title,
       description,
       keywords: keywordString,
+      alternates: { canonical },
       openGraph: {
         title,
         description,
         type: 'article',
         publishedTime: tour.createdAt?.toString(),
         modifiedTime: tour.updatedAt?.toString(),
-        url: `https://www.buyukaytactravel.com/tours/${tour.slug}`,
-        images: [
-          {
-            url: tour.image,
-            width: 1200,
-            height: 630,
-            alt: tour.name,
-          },
-        ],
+        url: canonical,
+        images: [{ url: ogImage, width: 1200, height: 630, alt: tour.name }],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: [tour.image],
+        images: [ogImage],
       },
     };
   } catch (error) {

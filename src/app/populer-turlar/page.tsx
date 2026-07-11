@@ -29,6 +29,15 @@ export const metadata: Metadata = {
 // Popüler tur kategorileri ve etiketleri
 const popularTourCategories = [
   {
+    id: 'balkan',
+    name: 'Balkan Turları',
+    slug: 'balkan-turlari',
+    emoji: '🌍',
+    description: 'Belgrad, Saraybosna, Budva, Kotor — vizesiz',
+    color: 'indigo',
+    destinations: ['Belgrad', 'Saraybosna', 'Mostar', 'Budva', 'Kotor', 'Ohrid']
+  },
+  {
     id: 'guneydogu',
     name: 'Güneydoğu Anadolu',
     slug: 'gap-turu',
@@ -104,6 +113,7 @@ const popularTourCategories = [
 
 // Bölgesel turlar
 const regionalTours = [
+  { name: 'Balkan Turları', slug: '/balkan-turlari', description: 'Vizesiz Balkan rotaları, Belgrad, Saraybosna' },
   { name: 'Trakya Turu', slug: '/tours?destination=Trakya', description: 'Edirne, Tekirdağ, Kırklareli turları' },
   { name: 'Bursa Turu', slug: '/tours?destination=Bursa', description: 'Uludağ, Cumalıkızık, İznik' },
   { name: 'İstanbul Turu', slug: '/tours?destination=İstanbul', description: 'Tarihi yarımada, Boğaz turları' },

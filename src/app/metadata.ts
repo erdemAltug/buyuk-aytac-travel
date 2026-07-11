@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Büyük Aytaç Travel | Çerkezköy Tur, Günübirlik ve Konaklamalı Turlar',
   description: 'Çerkezköy\'nin en güvenilir tur acentesi Büyük Aytaç Travel. Çerkezköy, Çorlu ve Tekirdağ\'dan günübirlik turlar, konaklamalı turlar, yurtiçi ve yurtdışı turlar. TÜRSAB üyesi, 20 yıllık deneyim.',
-  keywords: 'çerkezköy tur, çerkezköy tur firmaları, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çerkezköy tur paketleri, günübirlik tur, konaklamalı tur, yurtiçi tur, yurtdışı tur, çorlu tur, tekirdag tur, trakya tur',
+  keywords: 'çerkezköy tur, çerkezköy tur firmaları, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, günübirlik tur, yurtiçi tur, yurtdışı tur, balkan turları, ege turları, ayvalık turu, gökçeada turu, bozcaada turu, kapadokya turu, çorlu tur, tekirdag tur, trakya tur, 2026 tur paketleri',
   openGraph: {
     title: 'Büyük Aytaç Travel | Çerkezköy Tur, Günübirlik ve Konaklamalı Turlar',
     description: 'Çerkezköy\'nin en güvenilir tur acentesi. Günübirlik turlar, konaklamalı turlar, yurtiçi ve yurtdışı turlar.',

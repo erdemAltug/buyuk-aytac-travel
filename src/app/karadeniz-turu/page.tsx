@@ -7,11 +7,11 @@ import Link from 'next/link';
 
 // SEO için metadata - Karadeniz Turu - Çerkezköy Odaklı
 export const metadata: Metadata = {
-  title: 'Karadeniz Turu 2025 | Çerkezköyden Kalkan Karadeniz Turları | Büyük Aytaç Travel',
+  title: 'Karadeniz Turu 2026 | Çerkezköyden Kalkan Karadeniz Turları | Büyük Aytaç Travel',
   description: 'Büyük Aytaç Travel ile Karadeniz turları. Trabzon, Ayder, Rize, Samsun, Amasra turları. Çerkezköy, Çorlu, Kapaklı ve Tekirdağdan kalkan Karadeniz turları. Doğu ve Batı Karadeniz rotaları.',
-  keywords: 'karadeniz turu, karadeniz turları, çerkezköy karadeniz turu, çorlu karadeniz turu, kapaklı karadeniz, tekirdağ karadeniz, trabzon turu, ayder turu, rize turu, samsun turu, amȧsra turu, doğu karadeniz, batı karadeniz, 2025 karadeniz turları',
+  keywords: 'karadeniz turu, karadeniz turları, çerkezköy karadeniz turu, çorlu karadeniz turu, kapaklı karadeniz, tekirdağ karadeniz, trabzon turu, ayder turu, rize turu, samsun turu, amȧsra turu, doğu karadeniz, batı karadeniz, 2026 karadeniz turları',
   openGraph: {
-    title: 'Karadeniz Turu 2025 | Büyük Aytaç Travel - Çerkezköy',
+    title: 'Karadeniz Turu 2026 | Büyük Aytaç Travel - Çerkezköy',
     description: 'Çerkezköy ve çevresinden kalkan Karadeniz turları. Trabzon, Rize, Ayder ve yaylalar sizi bekliyor.',
     url: 'https://www.buyukaytactravel.com/karadeniz-turu',
     type: 'website',

@@ -6,11 +6,11 @@ import ToursContent from '@/app/tours/components/ToursContent';
 
 // SEO için metadata - GAP Turu - Çerkezköy Odaklı
 export const metadata: Metadata = {
-  title: 'GAP Turu 2025 | Çerkezköyden Kalkan GAP Turları | Büyük Aytaç Travel',
+  title: 'GAP Turu 2026 | Çerkezköyden Kalkan GAP Turları | Büyük Aytaç Travel',
   description: 'Büyük Aytaç Travel ile GAP turları. Gaziantep, Şanlıurfa, Mardin, Diyarbakır turları. Çerkezköy, Çorlu ve Kapaklıdan kalkan GAP turları. Güneydoğu Anadolu kültür ve lezzet turları.',
-  keywords: 'GAP turu, güneydoğu turları, gaziantep turu, şanlıurfa turu, mardin turu, diyarbakır turu, doğu anadolu turları, çerkezköy GAP turu, çorlu GAP, kapaklı GAP, tekirdağ GAP, 2025 gap turları',
+  keywords: 'GAP turu, güneydoğu turları, gaziantep turu, şanlıurfa turu, mardin turu, diyarbakır turu, doğu anadolu turları, çerkezköy GAP turu, çorlu GAP, kapaklı GAP, tekirdağ GAP, 2026 gap turları',
   openGraph: {
-    title: 'GAP Turu 2025 | Büyük Aytaç Travel - Çerkezköy',
+    title: 'GAP Turu 2026 | Büyük Aytaç Travel - Çerkezköy',
     description: 'Çerkezköy ve çevresinden kalkan GAP turları ile Gaziantep, Şanlıurfa, Mardin ve Diyarbakırı keşfedin.',
     url: 'https://www.buyukaytactravel.com/gap-turu',
     type: 'website',

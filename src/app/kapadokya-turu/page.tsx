@@ -7,11 +7,11 @@ import Link from 'next/link';
 
 // SEO için metadata - Kapadokya Turu - Çerkezköy Odaklı
 export const metadata: Metadata = {
-  title: 'Kapadokya Turu 2025 | Çerkezköyden Kalkan Kapadokya Turları | Büyük Aytaç Travel',
+  title: 'Kapadokya Turu 2026 | Çerkezköyden Kalkan Kapadokya Turları | Büyük Aytaç Travel',
   description: 'Büyük Aytaç Travel ile Kapadokya turları. Nevşehir, Ürgüp, Avanos turları ve balon turu. Çerkezköy, Çorlu ve Kapaklıdan kalkan Kapadokya turları. Peri bacaları ve kaya oteller.',
-  keywords: 'kapadokya turu, kapadokya turları, çerkezköy kapadokya, çorlu kapadokya, kapaklı kapadokya, tekirdağ kapadokya, nevşehir turu, ürgüp turu, avanos turu, balon turu, peri bacası, yeraltı şehri, çerkezköy kapadokya turu, 2025 kapadokya turları, kaya otel',
+  keywords: 'kapadokya turu, kapadokya turları, çerkezköy kapadokya, çorlu kapadokya, kapaklı kapadokya, tekirdağ kapadokya, nevşehir turu, ürgüp turu, avanos turu, balon turu, peri bacası, yeraltı şehri, çerkezköy kapadokya turu, 2026 kapadokya turları, kaya otel',
   openGraph: {
-    title: 'Kapadokya Turu 2025 | Büyük Aytaç Travel - Çerkezköy',
+    title: 'Kapadokya Turu 2026 | Büyük Aytaç Travel - Çerkezköy',
     description: 'Çerkezköy ve çevresinden kalkan Kapadokya turları. Balon turu, peri bacaları ve kaya oteller sizi bekliyor.',
     url: 'https://www.buyukaytactravel.com/kapadokya-turu',
     type: 'website',

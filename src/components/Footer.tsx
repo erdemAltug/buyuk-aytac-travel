@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { getTours } from '@/services/tourService';
 import type { ITour } from '@/types/tour';
 import { getCurrentYear } from '@/lib/formatDate';
 
@@ -21,9 +20,11 @@ export default function Footer() {
   useEffect(() => {
     const fetchPopularTours = async () => {
       try {
-        // Aktif turları getir ve son 5 tanesini göster
-        const tours = await getTours({ isActive: true });
-        setPopularTours(tours.slice(0, 5));
+        const response = await fetch('/api/tours?isActive=true&isFeatured=true&limit=6');
+        if (response.ok) {
+          const data = await response.json();
+          setPopularTours(Array.isArray(data) ? data.slice(0, 6) : []);
+        }
         setToursLoading(false);
       } catch (error) {
         console.error('Footer turları yüklenirken hata:', error);
@@ -75,6 +76,11 @@ export default function Footer() {
   ];
 
   const tourCategoryLinks = [
+    { name: 'Ege Turları', href: '/ege-turu' },
+    { name: 'Balkan Turları', href: '/balkan-turlari' },
+    { name: 'Kapadokya Turları', href: '/kapadokya-turu' },
+    { name: 'Karadeniz Turları', href: '/karadeniz-turu' },
+    { name: 'GAP Turları', href: '/gap-turu' },
     { name: 'Yurtiçi Turlar', href: '/tours?tourType=domestic' },
     { name: 'Yurtiçi Günübirlik Turlar', href: '/tours?accommodationType=daily' },
     { name: 'Yurtiçi Konaklamalı Turlar', href: '/tours?accommodationType=with_accommodation' },
@@ -84,10 +90,11 @@ export default function Footer() {
   ];
 
   const blogLinks = [
-    { name: 'Haziran 2026 Tur Takvimi', href: '/blog/haziran-2026-cerkezkoy-tur-takvimi' },
+    { name: 'Temmuz 2026 Tur Takvimi', href: '/blog/temmuz-2026-cerkezkoy-tur-takvimi-guncel' },
+    { name: 'Gökçeada Tur Rehberi', href: '/blog/gokceada-turu-rehberi-2026-cerkezkoy' },
+    { name: 'Ayvalık Cunda Rehberi', href: '/blog/ayvalik-cunda-turu-rehberi-2026' },
+    { name: 'Balkan Turları Rehberi', href: '/blog/balkan-turlari-2026-rehberi-vizesiz' },
     { name: 'Kapadokya Tur Rehberi', href: '/blog/kapadokya-turu-2026-cerkezkoy-rehberi' },
-    { name: 'Safranbolu Amasra Turu', href: '/blog/safranbolu-amasra-turu-rehberi-2026' },
-    { name: 'Salda & Pamukkale Turları', href: '/blog/salda-golu-pamukkale-turu-karsilastirma' },
     { name: '2026 Tur Fiyatları', href: '/blog/cerkezkoy-tur-fiyatlari-2026-guncel-liste' },
     { name: 'Tüm Blog Yazıları', href: '/blog' },
   ];
