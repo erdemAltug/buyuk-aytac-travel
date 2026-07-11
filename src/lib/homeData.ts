@@ -62,7 +62,7 @@ export async function getFeaturedToursForHome(): Promise<ITour[]> {
     }) as Record<string, unknown>;
   });
 
-  return filterUpcomingTours(asObjects).slice(0, 4) as unknown as ITour[];
+  return filterUpcomingTours(asObjects).slice(0, 8) as unknown as ITour[];
 }
 
 export async function getLatestBlogsForHome(): Promise<IBlog[]> {

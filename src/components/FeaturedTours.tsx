@@ -15,7 +15,7 @@ type FeaturedToursProps = {
 };
 
 export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps) {
-  const [tours, setTours] = useState<ITour[]>(() => filterUpcomingTours(initialTours).slice(0, 4));
+  const [tours, setTours] = useState<ITour[]>(() => filterUpcomingTours(initialTours).slice(0, 8));
   const [loading, setLoading] = useState(initialTours.length === 0);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function FeaturedTours({ initialTours = [] }: FeaturedToursProps)
 
         const data = await response.json();
         const list: ITour[] = data.tours || data || [];
-        setTours(filterUpcomingTours(list).slice(0, 4));
+        setTours(filterUpcomingTours(list).slice(0, 8));
       } catch (error) {
         console.error('Error fetching tours:', error);
       } finally {
