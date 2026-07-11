@@ -26,12 +26,17 @@ const tourDates = [
 ];
 
 const baseTour = {
-  name: 'Ayvalık Cunda Turu',
-  description: 'Sanat Köy - Şeytan Sofrası - Ayvalık - Cunda Adası',
+  description: `Belirlenen saat ve duraklardan siz değerli misafirlerimizi alarak Çanakkale 1915 Köprüsünü takiben araç içi ikramlar eşliğinde yolculuğumuza başlıyoruz. İlk durağımız Şeytan Sofrası olacaktır. Üzerinde Şeytan'ın ayak izi bulunduğuna inanılan, halkın madeni para atarak dilek dilediği eski bir lav birikintisidir. Demir kafes içine alınan ayak izine benzeyen şekil turistlerin özellikle uğradığı yerlerden biridir. Özel olarak işletilmektedir. (giriş ücreti alınan bölgesi bulunmaktadır) Burada vereceğimiz serbest zamanın ardından rotamızı Ayvalık bölgesinin Sanat köyü olarak bilinen Küçükköy'e çeviriyoruz. Köy eskiden bir Rum köyü olduğundan köydeki tüm evler tipik Rum mimarisi özelliklerini taşıyor. Boşnak göçlerinden dolayı da bölgenin Boşnak böreği oldukça meşhur. Dileyen misafirlerimiz burada verilecek zamanda kahvaltı edebilir. Egenin bu şirin Rum köyünü ziyaretimizden sonra Ayvalık merkeze doğru yolumuza devam ediyoruz. Tostuyla meşhur ilçemizde dileyen misafirlerimiz Tostçular çarşısında kahvaltı edebilir. Kısa Ayvalık merkez turumuzdan sonra tekne turuna katılmak isteyen misafirlerimizi sahilden teknelerine uğurluyoruz. (Ekstra - öğle yemekli)
+
+Tekne turuna katılmayan misafirlerimizle birlikte Türkiye'nin ilk Boğaz Köprüsünden aracımız ile geçiş yaparak Cunda adasına varıyoruz. Adada dileyen misafirlerimiz yüzme molası için sahile geçebilir, dileyen misafirlerimiz de merkezde ada lezzetlerini tadıp öğle yemeklerini alabilir. Akşam üzeri tekneden gelen misafirlerimizle de buluştuktan sonra birlikte Taksiyarhis Kilisesi ve Rahmi Koç müzesini ziyaret ediyor buradaki gezimizi tamamladıktan sonra dönüş yolculuğuna geçiyoruz. Siz değerli misafirlerimiz ile bir sonraki BÜYÜK AYTAÇ TRAVEL organizasyonunda buluşmak üzere vedalaşıyoruz.
+
+NOT: DİLEYEN MİSAFİRLERİMİZ (12:00-17:00) TEKNE TURUNA KATILIM SAĞLAYABİLİRLER (EKSTRA).
+NOT: TEKNE TURUNA BİNİŞ AYVALIKTAN OLUP İNİŞLER CUNDA ADASINDA OLACAKTIR. TEKNE TURU EKSTRADIR. ÖĞLE YEMEĞİ: BALIK veya TAVUK ŞİNİTZEL - MAKARNA - SALATA MENÜSÜ ŞEKLİNDEDİR.
+NOT: TEKNE TURUNA KATILMAYAN MİSAFİRLERİMİZ İÇİN; AYVALIK PROGRAMI SONRASI OTOBÜSÜMÜZ CUNDA ADASINA GEÇECEKTİR. BURADA YÜZME İÇİN SERBEST ZAMAN OLACAKTIR.`,
   image: '/images/Ayvalık-cunda.jpeg',
   duration: '1 Gün (Günübirlik)',
   price: 1750,
-  destination: 'Ayvalık, Cunda Adası, Sanat Köy, Şeytan Sofrası',
+  destination: 'Ayvalık, Cunda Adası, Küçükköy, Şeytan Sofrası, Taksiyarhis Kilisesi, Rahmi Koç Müzesi',
   departureCity: 'Çerkezköy',
   tourType: TourType.DOMESTIC,
   accommodationType: AccommodationType.DAILY,
@@ -39,23 +44,22 @@ const baseTour = {
   isFeatured: true,
   isLastMinute: false,
   includedServices: [
-    '46 veya 50 Kişilik Lüks Mercedes Travego veya Tourismo 2+2 Otobüslerle Ulaşım',
-    'Lezzetli yemek molası',
-    'Program dahilinde şehir turları ve çevre gezileri',
-    'Turizm Bakanlığı’ndan Kokartlı Profesyonel Rehberler',
-    '1618 Nolu Turizm Kanununa Göre Zorunlu Seyahat Sigortası',
+    'Lüks araçlar ile konforlu ulaşım ve araç içi ikramlar',
+    'Profesyonel kokartlı rehberlik hizmeti',
+    'Programda belirtilen tüm çevre gezileri',
   ],
   excludedServices: [
-    'Ekstra belirtilen tüm organizasyonlar',
-    'Müze ve ören yeri girişleri',
-    'Kişisel harcamalar',
+    'Ekstra Belirtilen Tüm Organizasyonlar',
+    'Müze ve Ören Yeri Girişleri',
+    'Tüm yemek öğünleri',
+    'Tur programı bölge yoğunluğuna göre değişiklik gösterebilir',
   ],
   program: [
     {
       day: '1. Gün',
-      title: 'Ayvalık – Cunda – Sanat Köy – Şeytan Sofrası',
+      title: 'Ayvalık – Cunda Turu – Şeytan Sofrası, Küçükköy, Tekne Turu',
       description:
-        "Çerkezköy'den hareket. Sanat Köy gezisi. Şeytan Sofrası manzara noktası. Ayvalık keşfi. Cunda Adası turu. Dönüş.",
+        "Çerkezköy'den hareket. Çanakkale 1915 Köprüsü geçişi. Şeytan Sofrası ziyareti. Küçükköy (Sanat Köy) gezisi. Ayvalık merkez turu. Tekne turu (12:00-17:00, ekstra) veya otobüsle Cunda Adası geçişi. Cunda'da yüzme molası veya öğle yemeği. Taksiyarhis Kilisesi ve Rahmi Koç Müzesi ziyareti. Dönüş.",
     },
   ],
   viewCount: 0,
@@ -67,13 +71,18 @@ async function addAyvalikCundaTours() {
     await mongoose.connect(MONGODB_URI as string);
     console.log('✅ MongoDB bağlantısı başarılı\n');
 
+    // Önceki hatalı kayıt (slug: ayvalik-cunda-turu)
+    await Tour.deleteOne({ slug: 'ayvalik-cunda-turu' });
+
     let added = 0;
     let updated = 0;
 
     for (const { date, label, slugSuffix } of tourDates) {
       const slug = `ayvalik-cunda-turu-${slugSuffix}`;
+      const dateLabel = label.replace(/ (Pazar|Cumartesi)$/, '');
       const tourData = {
         ...baseTour,
+        name: `Ayvalık Cunda Turu - ${dateLabel}`,
         slug,
         startDate: new Date(date),
         endDate: new Date(date),
