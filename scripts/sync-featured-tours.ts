@@ -65,6 +65,13 @@ async function sync() {
     'bozcaada-turu-12-eylul-2026',
     'iznik-kultur-turu-29-agustos-2026',
     'canakkale-kaz-daglari-turu-6-eylul-2026',
+    'safranbolu-amasra-turu-10-11-ekim-2026',
+    'fener-balat-turu-13-eylul-2026',
+    'kapadokya-turu-26-27-eylul-2026',
+    'ormanya-masukiye-turu-23-agustos-2026',
+    'tarihi-yarimada-turu-30-agustos-2026',
+    'seb-i-arus-konya-turu-9-11-aralik-2026',
+    'seb-i-arus-konya-turu-11-13-aralik-2026',
   ];
 
   const uniqueSlugs = [...new Set(featuredSlugs)];
