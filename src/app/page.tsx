@@ -9,7 +9,9 @@ import InstagramFeed from '@/components/InstagramFeed';
 import FeaturedTours from '@/components/FeaturedTours';
 import FutureTourVote from '@/components/FutureTourVote';
 import GoogleReviews from '@/components/GoogleReviews';
-import TourQuickLinks from '@/components/TourQuickLinks';
+import TrustPillsBar from '@/components/home/TrustPillsBar';
+import TrustValueBanner from '@/components/home/TrustValueBanner';
+import CategoryGrid from '@/components/home/CategoryGrid';
 import Link from 'next/link';
 import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
 
@@ -136,48 +138,44 @@ export default async function Home() {
       <div className="bg-white min-h-screen">
         <main>
           <Hero />
-          
-          {/* Search Section */}
           <SearchSection />
-          
-          {/* Featured Tours - initialTours ile ilk HTML'de içerik gelir (SEO) */}
+          <TrustPillsBar />
           <FeaturedTours initialTours={initialTours} />
+          <TrustValueBanner />
+          <CategoryGrid />
 
-          <TourQuickLinks />
-          
-          {/* Yurtiçi Turları */}
-          <ToursByType 
+          <ToursByType
             title="Yurtiçi Turlarımız"
             description="Türkiye'nin eşsiz güzelliklerini keşfedeceğiniz özel olarak hazırlanmış yurtiçi turlarımız"
             viewAllLink="/tours?tourType=domestic"
             viewAllText="Tüm Yurtiçi Turları"
             filterParams={{
               isActive: true,
-              tourType: TourType.DOMESTIC
+              tourType: TourType.DOMESTIC,
             }}
           />
-          
-          {/* Yurtdışı Turları */}
-          <ToursByType 
-            title="Yurtdışı Turlarımız"
-            description="Dünya'nın en güzel yerlerini keşfedeceğiniz özel olarak hazırlanmış yurtdışı turlarımız"
-            viewAllLink="/tours?tourType=international"
-            viewAllText="Tüm Yurtdışı Turları"
-            filterParams={{
-              isActive: true,
-              tourType: TourType.INTERNATIONAL
-            }}
-          />
-          
-          {/* Günübirlik Turlar */}
-          <ToursByType 
+
+          <ToursByType
             title="Günübirlik Turlarımız"
             description="Kısa zaman dilimlerinde maksimum keyif alabileceğiniz özel günübirlik tur programlarımız"
             viewAllLink="/tours?accommodationType=daily"
             viewAllText="Tüm Günübirlik Turlar"
             filterParams={{
               isActive: true,
-              accommodationType: AccommodationType.DAILY
+              accommodationType: AccommodationType.DAILY,
+            }}
+          />
+
+          <BlogPreview initialBlogs={initialBlogs} />
+
+          <ToursByType
+            title="Yurtdışı Turlarımız"
+            description="Dünya'nın en güzel yerlerini keşfedeceğiniz özel olarak hazırlanmış yurtdışı turlarımız"
+            viewAllLink="/tours?tourType=international"
+            viewAllText="Tüm Yurtdışı Turları"
+            filterParams={{
+              isActive: true,
+              tourType: TourType.INTERNATIONAL,
             }}
           />
           
@@ -377,9 +375,6 @@ export default async function Home() {
               </div>
             </div>
           </section>
-          
-          {/* Blog Önizleme - initialBlogs ile ilk HTML'de içerik gelir (SEO) */}
-          <BlogPreview initialBlogs={initialBlogs} />
           
           {/* Instagram Feed */}
           <InstagramFeed />
