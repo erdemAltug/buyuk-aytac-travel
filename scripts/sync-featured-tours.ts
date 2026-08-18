@@ -62,6 +62,9 @@ async function sync() {
     'ayvalik-cunda-turu-16-agustos-2026',
     'ayvalik-cunda-turu-30-agustos-2026',
     'bozcaada-turu-26-temmuz-2026',
+    'bozcaada-turu-12-eylul-2026',
+    'iznik-kultur-turu-29-agustos-2026',
+    'canakkale-kaz-daglari-turu-6-eylul-2026',
   ];
 
   const uniqueSlugs = [...new Set(featuredSlugs)];
