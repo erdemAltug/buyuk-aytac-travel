@@ -497,7 +497,7 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Tur iptal edilirse ücret iadesi yapılıyor mu?</h3>
                   <p className="text-gray-600">
-                    Turdan 15 gün öncesine kadar yapılan iptallerde kesinti olmadan iade yapılır. 7-14 gün kala yapılan iptallerde tur bedelinin %30u, 3-6 gün kala yapılan iptallerde %50si, son 48 saat içindeki iptallerde %100ü cezai işlem olarak kesilir.
+                    İptal ve iade koşulları tura ve rezervasyon tarihine göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.
                   </p>
                 </div>
                 <div>
@@ -515,7 +515,7 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Çocuklar için indirim var mı?</h3>
                   <p className="text-gray-600">
-                    Evet, 0-6 yaş arası çocuklar için %50, 7-12 yaş arası çocuklar için %30 indirim uygulanmaktadır. Detaylı bilgi için lütfen bizimle iletişime geçiniz.
+                    Çocuk indirimleri tura ve yaşa göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.
                   </p>
                 </div>
               </div>

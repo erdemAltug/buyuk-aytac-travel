@@ -34,9 +34,8 @@ export default function TermsPage() {
               <div className="bg-blue-50 border-l-4 border-blue-600 p-4 my-8">
                 <h2 className="text-2xl font-bold text-blue-800 mb-4">BÜYÜK AYTAÇ TRAVEL TUR SATIŞ BİLGİLENDİRME VE İPTAL İADE KOŞULLARI</h2>
                 <ol className="list-decimal pl-5 text-gray-700 space-y-2">
-                  <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin belirli bir kısmıdır. Günübirlik turlarda turun hareket tarihinden 7 gün önce, konaklamalı turlarda 15 gün önce kalan tur bedelinin tamamlanması gerekir.</li>
-                  <li>İptaller GÜNÜBİRLİK TURLARDA son 7 gün öncesine kadar yapılmaktadır.</li>
-                  <li>İptaller KONAKLAMALI TURLARDA son 15 gün öncesine kadar yapılmaktadır.</li>
+                  <li>Ön ödeme tutarı kayıt tarihinde rezervasyon bedelinin belirli bir kısmıdır. Kalan bakiye ve ödeme takvimi tura göre değişiklik gösterebilir; güncel bilgi için ofisimizle iletişime geçiniz.</li>
+                  <li>İptal ve iade koşulları tura ve rezervasyon tarihine göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.</li>
                   <li>Hava muhalefeti nedeni ile olabilecek değişikliklerden, acentemiz sorumlu değildir ve Acente programda değişiklik hakkına sahiptir.</li>
                   <li>Hava muhalefeti nedeni ile olabilecek değişikliklerden, acentemiz sorumlu değildir ve Acente programda değişiklik hakkına sahiptir.</li>
                   <li>Rezervasyon esnasında kesinlikle koltuk numarası sözü ve garantisi verilemez. Araçlarda bulunan 3 ve 4 numaralı koltuk rehber ve yardımcısına aittir.</li>

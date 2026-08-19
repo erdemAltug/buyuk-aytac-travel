@@ -41,9 +41,8 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
       // Baz fiyat (kişi başı)
       const basePrice = tour.price;
       
-      // Çocuklar için %30 indirim
       const adultTotalPrice = basePrice * adultCount;
-      const childTotalPrice = basePrice * childCount * 0.7;
+      const childTotalPrice = basePrice * childCount;
       
       // Ek hizmetlerin toplam fiyatı
       const additionalServicesTotal = tour.additionalServices 

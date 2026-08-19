@@ -31,11 +31,11 @@ export default function FAQPage() {
     },
     {
       question: "Çocuklar için indirim var mı?",
-      answer: "Evet, çoğu turumuzda 0-6 yaş ve 7-12 yaş çocuklar için indirimler bulunmaktadır. İndirim oranları tura göre değişiklik gösterebilir ve tur detay sayfasında belirtilir."
+      answer: "Çocuk indirimleri tura ve yaşa göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz."
     },
     {
       question: "Tur iptal koşulları nelerdir?",
-      answer: "Günübirlik turlarda, tur başlangıcından 7 gün öncesine kadar; konaklamalı turlarda ise 15 gün öncesine kadar iptal yapılabilmektedir. Bu sürelerden sonra yapılan iptallerde ücret iadesi yapılamamaktadır. Ayrıntılı bilgi için 'Kullanım Şartları' sayfamızdaki TUR SATIŞ BİLGİLENDİRME VE İPTAL İADE KOŞULLARI bölümünü inceleyebilirsiniz."
+      answer: "İptal ve iade koşulları tura ve rezervasyon tarihine göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz."
     },
     {
       question: "Koltuk numarası seçebilir miyim?",
