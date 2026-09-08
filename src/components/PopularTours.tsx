@@ -1,108 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour } from '@/types/tour';
-import ReservationModal from './ReservationModal';
-
-function TourCard({ tour }: { tour: ITour }) {
-  const [imageError, setImageError] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  return (
-    <>
-      <Link
-        href={`/tours/${tour.slug}`}
-        className="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative h-72 w-full overflow-hidden">
-          {/* Skeleton loader */}
-          <div className="bg-gray-200 animate-pulse h-full w-full absolute" />
-          
-          {/* Image */}
-          {!imageError ? (
-            <>
-              <Image
-                src={tour.image}
-                alt={tour.name}
-                fill
-                className={`object-fill transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                onError={() => setImageError(true)}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70"></div>
-            </>
-          ) : (
-            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Görsel yüklenemedi</span>
-            </div>
-          )}
-          
-          {/* Badge */}
-          <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-            {tour.duration} Gün
-          </div>
-          
-          {/* Price */}
-          <div className="absolute bottom-4 right-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-full shadow-lg">
-            {tour.price.toLocaleString('tr-TR')} ₺
-          </div>
-          
-          {/* Tour Name */}
-          <h3 className="absolute bottom-4 left-4 text-white text-xl font-bold max-w-[70%] line-clamp-1">
-            {tour.name}
-          </h3>
-        </div>
-        
-        <div className="p-5">
-          <p className="text-gray-600 mb-4 line-clamp-2 h-12">{tour.description}</p>
-          
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="mr-2 text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                </svg>
-              </div>
-              <span className="text-sm text-gray-500">İstanbul</span>
-            </div>
-          </div>
-
-          {/* Rezervasyon Butonu */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
-          >
-            Rezervasyon Yap
-          </button>
-
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-            <Link 
-              href={`/tours/${tour.slug}`}
-              className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors"
-            >
-              Tur Detayları →
-            </Link>
-          </div>
-        </div>
-      </Link>
-
-      {/* Reservation Modal */}
-      <ReservationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        tourName={tour.name}
-        tourSlug={tour.slug}
-      />
-    </>
-  );
-}
+import type { ITour } from '@/types/tour';
+import TourCard from '@/components/tours/TourCard';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
 
 export default function PopularTours() {
   const [tours, setTours] = useState<ITour[]>([]);
@@ -112,106 +15,70 @@ export default function PopularTours() {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        setLoading(true);
-        // Sadece aktif turları getir
         const data = await getTours({ isActive: true });
-        setTours(data.slice(0, 12)); // En fazla 12 tur göster
-        setLoading(false);
+        setTours(data.slice(0, 12));
       } catch (err) {
         console.error('Turları getirme hatası:', err);
         setError('Turlar yüklenirken bir hata oluştu.');
+      } finally {
         setLoading(false);
       }
     };
-
     fetchTours();
   }, []);
 
-  // Yükleme durumu
   if (loading) {
     return (
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Turlarımız</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Yükleniyor...
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden h-96 animate-pulse">
-                <div className="h-64 bg-gray-200"></div>
-                <div className="p-5">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              </div>
-            ))}
-          </div>
+      <section className="bg-gray-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900">Popüler Turlarımız</h2>
+          <p className="text-lg text-gray-600">Yükleniyor...</p>
         </div>
       </section>
     );
   }
 
-  // Hata durumu
   if (error) {
     return (
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-red-500">{error}</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Veri yoksa yedek içerik göster
-  if (tours.length === 0) {
-    return (
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Popüler Turlarımız</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Şu anda gösterilecek tur bulunmuyor.
-            </p>
-          </div>
+      <section className="bg-gray-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900">Popüler Turlarımız</h2>
+          <p className="text-red-500">{error}</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Popüler Turlarımız</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mb-6 rounded-full"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            En çok tercih edilen turlarımızla Türkiye'nin güzelliklerini keşfedin
+    <section className="bg-gray-50 py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900">Popüler Turlarımız</h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Çerkezköy çıkışlı en çok tercih edilen tur programları
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {tours.map((tour) => (
-            <TourCard key={tour._id?.toString()} tour={tour} />
-          ))}
-        </div>
-        
-        <div className="mt-16 text-center">
-          <Link 
-            href="/tours" 
-            className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-full transition-all duration-300 text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 hover:shadow-xl"
+
+        {tours.length === 0 ? (
+          <p className="text-center text-gray-600">Gösterilecek tur bulunmuyor.</p>
+        ) : (
+          <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {tours.map((tour, index) => (
+              <TourCard key={tour._id?.toString() ?? tour.slug} tour={tour} priority={index < 4} />
+            ))}
+          </div>
+        )}
+
+        <div className="mt-10 text-center">
+          <Link
+            href="/tours"
+            className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700"
           >
-            Tüm Turlarımız
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
+            Tüm Turları Gör
           </Link>
         </div>
+
+        <TourSeoLinks variant="all" />
       </div>
     </section>
   );

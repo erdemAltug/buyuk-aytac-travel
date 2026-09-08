@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import { ITour } from '@/models/Tour';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from './components/ToursContent';
+import TourSeoLinks, { type TourSeoVariant } from '@/components/tours/TourSeoLinks';
+import Link from 'next/link';
 
 // SEO için metadata
 export const metadata: Metadata = {
@@ -39,6 +41,7 @@ export default async function ToursPage({
   // Başlığı belirle
   let filterTitle = 'Tüm Turlarımız';
   let filterDescription = 'Türkiye\'nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız. Çerkezköy\'nin en güvenilir tur acentesi Büyük Aytaç Travel ile hayallerinizi gerçekleştirin.';
+  let seoVariant: TourSeoVariant = 'all';
   
   if (destination) {
     filterTitle = `${destination} Turları`;
@@ -46,15 +49,19 @@ export default async function ToursPage({
   } else if (tourType === 'domestic') {
     filterTitle = 'Yurtiçi Turlarımız';
     filterDescription = 'Türkiye\'nin eşsiz güzelliklerini keşfedeceğiniz özel olarak hazırlanmış yurtiçi turlarımız. Çerkezköy\'den kalkan turlarımızla ülkemizin dört bir yanını keşfedin.';
+    seoVariant = 'domestic';
   } else if (tourType === 'international') {
     filterTitle = 'Yurtdışı Turlarımız';
     filterDescription = 'Dünya\'nın en güzel destinasyonlarını keşfedeceğiniz yurtdışı turlarımız. Vizeli ve vizesiz tur seçenekleriyle hayallerinizi gerçekleştirin.';
+    seoVariant = 'international';
   } else if (accommodationType === 'with_accommodation') {
     filterTitle = 'Konaklamalı Turlarımız';
     filterDescription = 'Konforlu otel konaklamaları eşliğinde gerçekleştirdiğimiz konaklamalı turlarımız. Her detayı düşünülmüş programlarla unutulmaz tatiller.';
+    seoVariant = 'overnight';
   } else if (accommodationType === 'daily') {
     filterTitle = 'Günübirlik Turlarımız';
     filterDescription = 'Çerkezköy ve çevresinden kalkan günübirlik turlarımız. Hafta sonu kaçamakları için ideal tur programları.';
+    seoVariant = 'daily';
   }
 
   // Server-side'da turları getir
@@ -162,24 +169,37 @@ export default async function ToursPage({
       />
       <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{filterTitle}</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               {filterDescription}
             </p>
+            <nav className="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-1 text-sm text-blue-700" aria-label="Tur kategorileri">
+              <Link href="/tours?tourType=domestic" className="hover:underline">Yurtiçi</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/tours?tourType=international" className="hover:underline">Yurtdışı</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/tours?accommodationType=daily" className="hover:underline">Günübirlik</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/tours?accommodationType=with_accommodation" className="hover:underline">Konaklamalı</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/cerkezkoy-tur" className="hover:underline">Çerkezköy Turları</Link>
+              <span className="text-slate-300">·</span>
+              <Link href="/blog" className="hover:underline">Blog</Link>
+            </nav>
           </div>
 
           {/* Client component'e turları geçir */}
           <Suspense 
             fallback={
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden h-96">
-                    <div className="h-60 bg-gray-200 animate-pulse"></div>
-                    <div className="p-4">
-                      <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2 mb-4"></div>
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-1/4"></div>
+              <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="overflow-hidden rounded-2xl border border-slate-100 bg-white">
+                    <div className="aspect-square bg-gray-200 animate-pulse" />
+                    <div className="space-y-3 p-4">
+                      <div className="h-4 w-3/4 rounded bg-gray-200 animate-pulse" />
+                      <div className="h-4 w-1/2 rounded bg-gray-200 animate-pulse" />
+                      <div className="h-10 rounded bg-gray-200 animate-pulse" />
                     </div>
                   </div>
                 ))}
@@ -188,6 +208,8 @@ export default async function ToursPage({
           >
             <ToursContent tours={tours} />
           </Suspense>
+
+          <TourSeoLinks variant={seoVariant} />
         </div>
       </main>
     </>

@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from '@/app/tours/components/ToursContent';
-import type { ITour } from '@/types/tour';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
+import type { ITour } from '@/models/Tour';
 
 export const metadata: Metadata = {
   title: 'Balkan Turları 2026 | Vizesiz Balkan Turu | Çerkezköy Çıkışlı | Büyük Aytaç Travel',
@@ -219,7 +220,9 @@ export default async function BalkanTurlariPage() {
             </div>
           </div>
 
-          <div className="text-center">
+          <TourSeoLinks variant="international" />
+
+          <div className="mt-8 text-center">
             <Link href="/cerkezkoy-tur" className="text-blue-600 hover:underline mr-4">
               Çerkezköy Turları
             </Link>

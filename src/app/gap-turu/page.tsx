@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { ITour } from '@/models/Tour';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from '@/app/tours/components/ToursContent';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
 
 // SEO için metadata - GAP Turu - Çerkezköy Odaklı
 export const metadata: Metadata = {
@@ -267,6 +268,8 @@ export default async function GAPTuruPage() {
               </div>
             )}
           </div>
+
+          <TourSeoLinks variant="overnight" />
 
           {/* CTA */}
           <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl p-8 text-center text-white">

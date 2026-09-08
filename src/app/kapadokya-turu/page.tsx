@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { ITour } from '@/models/Tour';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from '@/app/tours/components/ToursContent';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
 import Link from 'next/link';
 
 // SEO için metadata - Kapadokya Turu - Çerkezköy Odaklı
@@ -270,8 +271,10 @@ export default async function KapadokyaTuruPage() {
             )}
           </div>
 
+          <TourSeoLinks variant="overnight" />
+
           {/* CTA */}
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-8 text-center text-white">
+          <div className="mt-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-8 text-center text-white">
             <h3 className="text-2xl font-bold mb-4">Kapadokya Turu Hakkında Sorularınız mı Var?</h3>
             <p className="mb-6">Büyük Aytaç Travel olarak Çerkezköy ve çevresinden kalkan Kapadokya turları hakkında bilgi almak için bizimle iletişime geçin.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

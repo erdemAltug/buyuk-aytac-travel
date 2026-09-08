@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from '@/app/tours/components/ToursContent';
-import type { ITour } from '@/types/tour';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
+import type { ITour } from '@/models/Tour';
 
 export const metadata: Metadata = {
   title: 'Ege Turları 2026 | Ayvalık, Gökçeada, Bozcaada, Assos | Çerkezköy | Büyük Aytaç Travel',
@@ -175,7 +176,9 @@ export default async function EgeTuruPage() {
             </div>
           </section>
 
-          <div className="text-center">
+          <TourSeoLinks variant="daily" />
+
+          <div className="mt-10 text-center">
             <Link href="/contact" className="inline-flex bg-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-700">
               Rezervasyon &amp; Bilgi
             </Link>

@@ -110,10 +110,15 @@ export default function TourCard({
             </div>
             <div className="shrink-0 text-right">
               {tour.duration && (
-                <p className="text-xs font-medium text-slate-600">{tour.duration}</p>
+                <p className="line-clamp-1 text-xs font-medium text-slate-600">{tour.duration}</p>
               )}
               {formattedDate && (
-                <p className="mt-0.5 text-xs text-slate-500">{formattedDate}</p>
+                <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">{formattedDate}</p>
+              )}
+              {!tour.duration && !formattedDate && (
+                <p className="text-xs text-transparent select-none" aria-hidden>
+                  —
+                </p>
               )}
             </div>
           </div>

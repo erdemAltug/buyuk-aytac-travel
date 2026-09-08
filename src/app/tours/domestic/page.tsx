@@ -1,150 +1,89 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getTours } from '@/services/tourService';
 import { ITour, TourType } from '@/types/tour';
-import Link from 'next/link';
-import Image from 'next/image';
-
-function TourCard({ tour }: { tour: ITour }) {
-  const [imageError, setImageError] = useState(false);
-  
-  return (
-    <Link
-      href={`/tours/${tour.slug}`}
-      className="block bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg hover:-translate-y-1"
-    >
-      <div className="relative h-56 w-full">
-        {!imageError ? (
-          <Image
-            src={tour.image}
-            alt={tour.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500">Görsel yüklenemedi</span>
-          </div>
-        )}
-      </div>
-      <div className="p-5">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">{tour.name}</h3>
-        <p className="text-sm text-gray-500 mb-1">
-          {tour.destinationRef && typeof tour.destinationRef === 'object' && 'name' in tour.destinationRef ?
-            (tour.destinationRef.name as string) : ''}
-        </p>
-        <p className="text-gray-600 mb-4 line-clamp-2">{tour.description}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-blue-600 font-bold">{tour.price.toLocaleString('tr-TR')} ₺</span>
-          <span className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md px-3 py-1.5 text-sm transition-colors">
-            Detaylar
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
+import TourCard from '@/components/tours/TourCard';
+import TourSeoLinks from '@/components/tours/TourSeoLinks';
 
 export default function DomesticToursPage() {
   const [tours, setTours] = useState<ITour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        // Sadece yurtiçi ve aktif turları getir
         const data = await getTours({ isActive: true });
-        // Client tarafında TourType.DOMESTIC türündeki turları filtrele
-        const domesticTours = data.filter(tour => tour.tourType === TourType.DOMESTIC);
-        setTours(domesticTours);
-        setLoading(false);
+        setTours(data.filter((tour) => tour.tourType === TourType.DOMESTIC));
       } catch (err) {
         console.error('Turları getirme hatası:', err);
         setError('Turları yüklerken bir hata oluştu');
+      } finally {
         setLoading(false);
       }
     };
-    
     fetchTours();
   }, []);
-  
-  // Loading durumunda göster
+
   if (loading) {
     return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-2 text-gray-600">Turlar yükleniyor...</p>
-          </div>
+      <main className="min-h-screen bg-gray-50 pb-16 pt-28">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-600" />
+          <p className="mt-2 text-gray-600">Turlar yükleniyor...</p>
         </div>
       </main>
     );
   }
-  
-  // Hata durumu
+
   if (error) {
     return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Yurtiçi Turlarımız</h1>
-            <p className="text-red-500">{error}</p>
-          </div>
+      <main className="min-h-screen bg-gray-50 pb-16 pt-28">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h1 className="mb-4 text-4xl font-bold text-gray-900">Yurtiçi Turlarımız</h1>
+          <p className="text-red-500">{error}</p>
         </div>
       </main>
     );
   }
-  
-  // Veri yoksa yedek içerik göster
-  if (tours.length === 0) {
-    return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Yurtiçi Turlarımız</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Şu anda gösterilecek yurtiçi tur bulunmuyor.
-            </p>
-          </div>
-        </div>
-      </main>
-    );
-  }
-  
+
   return (
-    <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Yurtiçi Turlarımız</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Türkiye&apos;nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış yurtiçi turlarımız
+    <main className="min-h-screen bg-gray-50 pb-16 pt-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <h1 className="mb-4 text-4xl font-bold text-gray-900">Yurtiçi Turlarımız</h1>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Türkiye&apos;nin güzelliklerini keşfedeceğiniz Çerkezköy çıkışlı yurtiçi turlarımız
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tours.map((tour) => (
-            <TourCard key={tour._id?.toString()} tour={tour} />
-          ))}
-        </div>
-        
-        <div className="mt-16 bg-white rounded-lg shadow-md p-8 text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Özel Turlar</h2>
-          <p className="text-gray-600 mb-6">
-            İstediğiniz tarihlerde ve lokasyonlarda, grubunuza özel tur programları da düzenleyebiliriz. Bilgi almak için iletişime geçin.
+
+        {tours.length === 0 ? (
+          <p className="py-12 text-center text-gray-600">Şu anda gösterilecek yurtiçi tur bulunmuyor.</p>
+        ) : (
+          <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {tours.map((tour, index) => (
+              <TourCard key={tour._id?.toString() ?? tour.slug} tour={tour} priority={index < 4} />
+            ))}
+          </div>
+        )}
+
+        <TourSeoLinks variant="domestic" />
+
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center">
+          <h2 className="mb-3 text-2xl font-semibold text-gray-900">Özel Turlar</h2>
+          <p className="mb-6 text-gray-600">
+            İstediğiniz tarihlerde ve lokasyonlarda grubunuza özel program düzenleyebiliriz.
           </p>
-          <Link 
-            href="/contact" 
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-5 py-2.5 transition-colors"
+          <Link
+            href="/group-tour"
+            className="inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-blue-700"
           >
-            Bize Ulaşın
+            Özel Grup Turu
           </Link>
         </div>
       </div>
     </main>
   );
-} 
+}
