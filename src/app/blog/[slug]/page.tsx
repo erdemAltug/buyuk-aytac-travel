@@ -121,12 +121,15 @@ export const revalidate = 3600; // Her saat başı yeniden doğrula
 // Server-side rendering için async fonksiyon olarak tanımla
 export default async function BlogDetail({ params }: { params: { slug: string } }) {
   let blog: IBlog | null = null;
+  let relatedBlogs: { title: string; slug: string }[] = [];
+  let relatedTours: { name: string; slug: string }[] = [];
   let error = '';
   
   try {
     // API yerine doğrudan veritabanından çeken yaklaşımı kullan
     await import('@/lib/dbConnect').then((module) => module.default());
     const Blog = (await import('@/models/Blog')).default;
+    const Tour = (await import('@/models/Tour')).default;
     
     blog = await Blog.findOne({ slug: params.slug }).lean();
     
@@ -138,6 +141,53 @@ export default async function BlogDetail({ params }: { params: { slug: string } 
       if (blog.createdAt) blog.createdAt = new Date(blog.createdAt);
       if (blog.updatedAt) blog.updatedAt = new Date(blog.updatedAt);
       if (blog.publishDate) blog.publishDate = new Date(blog.publishDate);
+
+      const categoryFilter =
+        blog.categories?.length > 0
+          ? { categories: { $in: blog.categories } }
+          : {};
+
+      relatedBlogs = await Blog.find({
+        isPublished: true,
+        slug: { $ne: blog.slug },
+        ...categoryFilter,
+      })
+        .sort({ publishDate: -1 })
+        .limit(3)
+        .select('title slug')
+        .lean();
+
+      if (relatedBlogs.length < 3) {
+        const extra = await Blog.find({
+          isPublished: true,
+          slug: {
+            $nin: [blog.slug, ...relatedBlogs.map((b) => b.slug)],
+          },
+        })
+          .sort({ publishDate: -1 })
+          .limit(3 - relatedBlogs.length)
+          .select('title slug')
+          .lean();
+        relatedBlogs = [...relatedBlogs, ...extra];
+      }
+
+      relatedTours = await Tour.find({ isActive: true, isFeatured: true })
+        .sort({ startDate: 1 })
+        .limit(3)
+        .select('name slug')
+        .lean();
+
+      if (relatedTours.length < 3) {
+        const extraTours = await Tour.find({
+          isActive: true,
+          slug: { $nin: relatedTours.map((t) => t.slug) },
+        })
+          .sort({ startDate: 1 })
+          .limit(3 - relatedTours.length)
+          .select('name slug')
+          .lean();
+        relatedTours = [...relatedTours, ...extraTours];
+      }
     }
   } catch (err) {
     console.error('Blog detayı getirme hatası:', err);
@@ -379,84 +429,54 @@ export default async function BlogDetail({ params }: { params: { slug: string } 
           </div>
           
           {/* İlgili İçerikler - SEO için internal linking */}
+          {(relatedBlogs.length > 0 || relatedTours.length > 0) && (
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">İlgili İçerikler</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* İlgili bloglar için server component yapılacak */}
+              {relatedBlogs.length > 0 && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3 border-l-4 border-blue-500 pl-3">Benzer Blog Yazıları</h3>
                 <div className="bg-white rounded-lg shadow-md p-4">
                   <ul className="space-y-3">
-                    {/* Bu kısım server component olarak ayrı implement edilecek */}
-                    <li>
-                      <Link 
-                        href="/blog/solo-seyahat-ipuclari" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>Yalnız Seyahat Etmenin İncelikleri: Başlangıç Rehberi</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link 
-                        href="/blog/seyahat-fotografciligi" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>Seyahat Fotoğrafçılığı: Anılarınızı Ölümsüzleştirin</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link 
-                        href="/blog/avrupa-seyahat-rehberi" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>Avrupa Seyahat Rehberi: Gezi Planlama İpuçları</span>
-                      </Link>
-                    </li>
+                    {relatedBlogs.map((related) => (
+                      <li key={related.slug}>
+                        <Link
+                          href={`/blog/${related.slug}`}
+                          className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
+                        >
+                          <span className="text-blue-500 mr-2">→</span>
+                          <span>{related.title}</span>
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
+              )}
               
-              {/* İlgili turlar için server component yapılacak */}
+              {relatedTours.length > 0 && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-3 border-l-4 border-blue-500 pl-3">Önerilen Turlar</h3>
                 <div className="bg-white rounded-lg shadow-md p-4">
                   <ul className="space-y-3">
-                    {/* Bu kısım server component olarak ayrı implement edilecek */}
-                    <li>
-                      <Link 
-                        href="/tours/kapadokya-turu" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>Kapadokya 3 Gün 2 Gece Konaklamalı Tur</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link 
-                        href="/tours/istanbul-sehir-turu" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>İstanbul Tarihi Yarımada Günübirlik Turu</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link 
-                        href="/tours/pamukkale-turu" 
-                        className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        <span className="text-blue-500 mr-2">→</span>
-                        <span>Pamukkale & Hierapolis 2 Gün 1 Gece Konaklamalı Tur</span>
-                      </Link>
-                    </li>
+                    {relatedTours.map((tour) => (
+                      <li key={tour.slug}>
+                        <Link
+                          href={`/tours/${tour.slug}`}
+                          className="flex items-start text-gray-800 hover:text-blue-600 transition-colors"
+                        >
+                          <span className="text-blue-500 mr-2">→</span>
+                          <span>{tour.name}</span>
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
+              )}
             </div>
           </div>
+          )}
         </div>
       </main>
     </>

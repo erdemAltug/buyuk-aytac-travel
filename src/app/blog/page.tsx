@@ -33,12 +33,15 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.buyukaytactravel.com/images/blog-og.jpg',
+        url: 'https://www.buyukaytactravel.com/images/hero-banner.jpg',
         width: 1200,
         height: 630,
         alt: 'Büyük Aytaç Travel Blog - Çerkezköy Tur Yazıları',
       },
     ],
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/blog',
   },
 };
 

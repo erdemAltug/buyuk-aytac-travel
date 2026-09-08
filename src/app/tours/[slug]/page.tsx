@@ -491,7 +491,7 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Bu tura nasıl kayıt olabilirim?</h3>
                   <p className="text-gray-600">
-                    Tura kayıt olmak için web sitemizdeki rezervasyon formunu doldurabilir, +90 212 123 45 67 numaralı telefondan bize ulaşabilir ya da ofisimizi ziyaret edebilirsiniz. Ödeme işlemini tamamladıktan sonra rezervasyonunuz onaylanmış olacaktır.
+                    Tura kayıt olmak için web sitemizdeki rezervasyon formunu doldurabilir, 0530 060 95 59 veya 0539 345 95 59 numaralı telefondan bize ulaşabilir ya da Çerkezköy ofisimizi ziyaret edebilirsiniz. Ödeme işlemini tamamladıktan sonra rezervasyonunuz onaylanmış olacaktır.
                   </p>
                 </div>
                 <div>

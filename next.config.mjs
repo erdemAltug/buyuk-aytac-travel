@@ -76,6 +76,20 @@ const nextConfig = {
   compress: true,
   // Power optimizasyon
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: '/destinations',
+        destination: '/destinasyonlar',
+        permanent: true,
+      },
+      {
+        source: '/destinations/:slug',
+        destination: '/destinasyonlar/:slug',
+        permanent: true,
+      },
+    ];
+  },
   // Security headers
   async headers() {
     return [

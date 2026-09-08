@@ -6,26 +6,15 @@ import Image from 'next/image';
 import { IBlog } from '@/models/Blog';
 import { useRouter } from 'next/navigation';
 
-// Blog kategorileri
+// Seed / CMS kategorileriyle birebir eşleşmeli
 const categories = [
   { id: 'all', name: 'Tümü' },
-  { id: 'yurtiçi-turlar', name: 'Yurtiçi Turlar' },
-  { id: 'yurtdışı-turlar', name: 'Yurtdışı Turlar' },
-  { id: 'günübirlik-turlar', name: 'Günübirlik Turlar' },
-  { id: 'konaklamalı-turlar', name: 'Konaklamalı Turlar' },
-  { id: 'son-dakika', name: 'Son Dakika Fırsatları' },
-  { id: 'çocuklu-aile', name: 'Çocuklu Aile Turları' },
-  { id: 'solo-travel', name: 'Tek Kişilik Seyahat' },
-  { id: 'kültür-turu', name: 'Kültür Turları' },
-  { id: 'doğa-yürüyüşü', name: 'Doğa Yürüyüşü' },
-  { id: 'gastronomi', name: 'Gastronomi Turları' },
-  { id: 'wellness', name: 'Wellness & Spa' },
-  { id: 'fotoğraf-turu', name: 'Fotoğraf Turları' },
-  { id: 'festival-etkinlik', name: 'Festival & Etkinlikler' },
-  { id: 'bütçe-dostu', name: 'Bütçe Dostu Turlar' },
-  { id: 'lüks-tatil', name: 'Lüks Tatil' },
-  { id: 'seyahat-tavsiyeleri', name: 'Seyahat Tavsiyeleri' },
-  { id: 'destinasyon-rehberi', name: 'Destinasyon Rehberleri' },
+  { id: 'Tur Rehberi', name: 'Tur Rehberi' },
+  { id: 'Çerkezköy', name: 'Çerkezköy' },
+  { id: '2026 Turlar', name: '2026 Turlar' },
+  { id: 'Sonbahar', name: 'Sonbahar' },
+  { id: 'Yaz Turları', name: 'Yaz Turları' },
+  { id: 'SEO', name: 'SEO' },
 ];
 
 // Tarihi formatla

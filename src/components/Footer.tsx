@@ -90,12 +90,12 @@ export default function Footer() {
   ];
 
   const blogLinks = [
-    { name: 'Temmuz 2026 Tur Takvimi', href: '/blog/temmuz-2026-cerkezkoy-tur-takvimi-guncel' },
-    { name: 'Gökçeada Tur Rehberi', href: '/blog/gokceada-turu-rehberi-2026-cerkezkoy' },
+    { name: 'Eylül 2026 Tur Takvimi', href: '/blog/eylul-2026-cerkezkoy-tur-takvimi' },
+    { name: 'İstanbul Günübirlik Rehberi', href: '/blog/istanbul-gunubirlik-turlari-cerkezkoy-2026' },
+    { name: 'Kapadokya Eylül 2026', href: '/blog/kapadokya-turu-eylul-2026-26-27-rehber' },
+    { name: 'Fener Balat Turu', href: '/blog/fener-balat-turu-rehberi-2026-cerkezkoy' },
+    { name: 'Sonbahar Konaklamalı', href: '/blog/sonbahar-2026-konaklamali-turlar-cerkezkoy' },
     { name: 'Ayvalık Cunda Rehberi', href: '/blog/ayvalik-cunda-turu-rehberi-2026' },
-    { name: 'Balkan Turları Rehberi', href: '/blog/balkan-turlari-2026-rehberi-vizesiz' },
-    { name: 'Kapadokya Tur Rehberi', href: '/blog/kapadokya-turu-2026-cerkezkoy-rehberi' },
-    { name: '2026 Tur Fiyatları', href: '/blog/cerkezkoy-tur-fiyatlari-2026-guncel-liste' },
     { name: 'Tüm Blog Yazıları', href: '/blog' },
   ];
 

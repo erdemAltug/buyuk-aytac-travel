@@ -189,13 +189,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'weekly' as const,
         priority: 0.7,
       },
-      // Destinations (English)
-      {
-        url: 'https://www.buyukaytactravel.com/destinations',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-      },
       // Tur kategorileri
       {
         url: 'https://www.buyukaytactravel.com/tours/daily',
@@ -339,13 +332,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: 0.9,
-      },
-      // Destinations (English)
-      {
-        url: 'https://www.buyukaytactravel.com/destinations',
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
       },
       // Popüler turlar
       {
