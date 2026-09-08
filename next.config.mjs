@@ -88,6 +88,20 @@ const nextConfig = {
         destination: '/destinasyonlar/:slug',
         permanent: true,
       },
+      {
+        source: '/tours',
+        has: [{ type: 'query', key: 'accommodationType', value: 'daily' }],
+        destination: '/tours/daily',
+        permanent: true,
+      },
+      {
+        source: '/tours',
+        has: [
+          { type: 'query', key: 'accommodationType', value: 'with_accommodation' },
+        ],
+        destination: '/tours/overnight',
+        permanent: true,
+      },
     ];
   },
   // Security headers

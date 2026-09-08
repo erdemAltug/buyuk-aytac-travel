@@ -179,9 +179,9 @@ export default async function ToursPage({
               <span className="text-slate-300">·</span>
               <Link href="/tours?tourType=international" className="hover:underline">Yurtdışı</Link>
               <span className="text-slate-300">·</span>
-              <Link href="/tours?accommodationType=daily" className="hover:underline">Günübirlik</Link>
+              <Link href="/tours/daily" className="hover:underline">Günübirlik</Link>
               <span className="text-slate-300">·</span>
-              <Link href="/tours?accommodationType=with_accommodation" className="hover:underline">Konaklamalı</Link>
+              <Link href="/tours/overnight" className="hover:underline">Konaklamalı</Link>
               <span className="text-slate-300">·</span>
               <Link href="/cerkezkoy-tur" className="hover:underline">Çerkezköy Turları</Link>
               <span className="text-slate-300">·</span>

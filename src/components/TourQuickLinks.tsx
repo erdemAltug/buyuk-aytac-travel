@@ -8,13 +8,13 @@ const tourLinks = [
     icon: '🏔️',
   },
   {
-    href: '/tours?accommodationType=daily',
+    href: '/tours/daily',
     label: 'Günübirlik Turlar',
     description: 'Tek günde keşif',
     icon: '🚌',
   },
   {
-    href: '/tours?accommodationType=with_accommodation',
+    href: '/tours/overnight',
     label: 'Konaklamalı Turlar',
     description: '2 gün ve üzeri',
     icon: '🏨',
@@ -88,11 +88,11 @@ export default function TourQuickLinks() {
               yurtiçi
             </Link>
             ,{' '}
-            <Link href="/tours?accommodationType=daily" className="text-blue-600 hover:underline font-medium">
+            <Link href="/tours/daily" className="text-blue-600 hover:underline font-medium">
               günübirlik
             </Link>{' '}
             ve{' '}
-            <Link href="/tours?accommodationType=with_accommodation" className="text-blue-600 hover:underline font-medium">
+            <Link href="/tours/overnight" className="text-blue-600 hover:underline font-medium">
               konaklamalı
             </Link>{' '}
             turlara tek tıkla ulaşın.

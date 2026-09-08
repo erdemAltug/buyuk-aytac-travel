@@ -158,7 +158,7 @@ export default async function Home() {
           <ToursByType
             title="Günübirlik Turlarımız"
             description="Kısa zaman dilimlerinde maksimum keyif alabileceğiniz özel günübirlik tur programlarımız"
-            viewAllLink="/tours?accommodationType=daily"
+            viewAllLink="/tours/daily"
             viewAllText="Tüm Günübirlik Turlar"
             filterParams={{
               isActive: true,
@@ -183,7 +183,7 @@ export default async function Home() {
           <ToursByType 
             title="Konaklamalı Turlarımız"
             description="Uzun soluklu, konforlu konaklamalı turlarımızla unutulmaz tatil deneyimleri"
-            viewAllLink="/tours?accommodationType=with_accommodation"
+            viewAllLink="/tours/overnight"
             viewAllText="Tüm Konaklamalı Turlar"
             filterParams={{
               isActive: true,

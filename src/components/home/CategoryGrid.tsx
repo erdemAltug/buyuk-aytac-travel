@@ -39,7 +39,7 @@ const categories = [
   },
   {
     title: 'Günübirlik Turlar',
-    href: '/tours?accommodationType=daily',
+    href: '/tours/daily',
     image: '/images/ormanya-23-agustos.jpeg',
   },
 ];

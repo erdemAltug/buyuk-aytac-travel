@@ -5,49 +5,75 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
+const desktopLinks = [
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/tours?tourType=domestic', label: 'Yurtiçi' },
+  { href: '/tours?tourType=international', label: 'Yurtdışı' },
+  { href: '/tours/daily', label: 'Günübirlik' },
+  { href: '/tours/overnight', label: 'Konaklamalı' },
+  { href: '/tours/last-minute', label: 'Son Dakika' },
+  { href: '/tour-calendar', label: 'Tur Takvimi' },
+  { href: '/group-tour', label: 'Özel Grup' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'İletişim' },
+];
+
+const mobileLinks = [
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/tours?tourType=domestic', label: 'Yurtiçi Turları' },
+  { href: '/tours?tourType=international', label: 'Yurtdışı Turları' },
+  { href: '/tours/daily', label: 'Günübirlik Turlar' },
+  { href: '/tours/overnight', label: 'Konaklamalı Turlar' },
+  { href: '/cerkezkoy-gunubirlik-turlar', label: 'Çerkezköy Günübirlik' },
+  { href: '/cerkezkoy-konakamali-turlar', label: 'Çerkezköy Konaklamalı' },
+  { href: '/tours/last-minute', label: 'Son Dakika Fırsatları' },
+  { href: '/tour-calendar', label: 'Tur Takvimi' },
+  { href: '/group-tour', label: 'Özel Grup Turu' },
+  { href: '/annual-program', label: 'Yıllık Program' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'İletişim' },
+];
+
+function linkIsActive(pathname: string, href: string) {
+  if (href === '/') return pathname === '/';
+  const pathOnly = href.split('?')[0];
+  return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
+}
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  
-  // Check if we are on the homepage
   const isHomepage = pathname === '/';
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Determine navbar background color
-  // Only homepage has transparent background when not scrolled
-  const navbarBg = (!isHomepage || scrolled) 
-    ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-    : 'bg-transparent';
+  const navbarBg =
+    !isHomepage || scrolled
+      ? 'bg-white/95 backdrop-blur-md shadow-lg'
+      : 'bg-transparent';
+
+  const linkIdle =
+    !isHomepage || scrolled
+      ? 'text-gray-900 hover:text-blue-600'
+      : 'text-white hover:text-blue-100';
+
+  const linkActive =
+    !isHomepage || scrolled ? 'text-blue-600' : 'text-blue-100';
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${navbarBg}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
+    <nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${navbarBg}`}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex flex-shrink-0 items-center">
               <div className="relative h-16 w-16">
                 <Image
                   src="/images/LOGO.png"
@@ -57,77 +83,46 @@ export default function Navbar() {
                   priority
                 />
               </div>
-              <span className={`hidden md:block font-bold text-xl ${(!isHomepage || scrolled) ? 'text-blue-600' : 'text-white'} transition-colors duration-300`}>
-                <span className={(!isHomepage || scrolled) ? 'text-gray-800' : 'text-white'}>Büyük Aytaç Travel</span>
+              <span
+                className={`ml-1 hidden font-bold text-lg xl:inline ${
+                  !isHomepage || scrolled ? 'text-gray-800' : 'text-white'
+                } transition-colors duration-300`}
+              >
+                Büyük Aytaç Travel
               </span>
             </Link>
           </div>
 
-          {/* Desktop navigation */}
-          <div className="hidden lg:ml-10 lg:flex lg:space-x-8">
-            <Link
-              href="/"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Ana Sayfa
-            </Link>
-            <Link
-              href="/tours?tourType=domestic"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Yurtiçi Turları
-            </Link>
-            <Link
-              href="/tours?tourType=international"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Yurtdışı Turları
-            </Link>
-            <Link
-              href="/tours/last-minute"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Son Dakika Fırsatları
-            </Link>
-            <Link
-              href="/tour-calendar"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Tur Takvimi
-            </Link>
-            <Link
-              href="/group-tour"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Özel Grup Turu
-            </Link>
-            <Link
-              href="/blog"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              Blog
-            </Link>
-            <Link
-              href="/contact"
-              className={`inline-flex items-center ${(!isHomepage || scrolled) ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-100'} px-1 pt-1 text-sm font-medium transition-colors duration-300`}
-            >
-              İletişim
-            </Link>
+          <div className="hidden items-center gap-x-3 lg:flex xl:gap-x-4">
+            {desktopLinks.map((link) => {
+              const active = linkIsActive(pathname, link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`inline-flex items-center whitespace-nowrap px-0.5 pt-1 text-sm font-medium transition-colors duration-300 ${
+                    active ? linkActive : linkIdle
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Mobile menu button */}
           <div className="flex items-center lg:hidden">
             <button
               type="button"
-              className={`inline-flex items-center justify-center p-2 rounded-md ${
-                (!isHomepage || scrolled) ? 'text-blue-600 bg-white/80' : 'text-white bg-blue-600/50'
-              } hover:bg-blue-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors`}
+              className={`inline-flex items-center justify-center rounded-md p-2 transition-colors ${
+                !isHomepage || scrolled
+                  ? 'bg-white/80 text-blue-600'
+                  : 'bg-blue-600/50 text-white'
+              } hover:bg-blue-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500`}
               aria-controls="mobile-menu"
-              aria-expanded="false"
+              aria-expanded={isMenuOpen}
               onClick={toggleMenu}
             >
               <span className="sr-only">Menüyü aç</span>
-              {/* Icon when menu is closed */}
               <svg
                 className={`${isMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +133,6 @@ export default function Navbar() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-              {/* Icon when menu is open */}
               <svg
                 className={`${isMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -154,38 +148,47 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu, show/hide based on menu state */}
-      <div className={`${isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'} lg:hidden bg-white shadow-lg transition-all duration-300 overflow-y-auto`} id="mobile-menu">
-        <div className="px-2 py-3 space-y-1">
-          <MobileNavLink href="/" label="Ana Sayfa" onClick={closeMenu} />
-          <MobileNavLink href="/tours?tourType=domestic" label="Yurtiçi Turları" onClick={closeMenu} />
-          <MobileNavLink href="/tours?tourType=international" label="Yurtdışı Turları" onClick={closeMenu} />
-          <MobileNavLink href="/tours?accommodationType=with_accommodation" label="Konaklamalı Turlar" onClick={closeMenu} />
-          <MobileNavLink href="/tours?accommodationType=daily" label="Günübirlik Turlar" onClick={closeMenu} />
-          <MobileNavLink href="/tours/last-minute" label="Son Dakika Fırsatları" onClick={closeMenu} />
-          <MobileNavLink href="/tour-calendar" label="Tur Takvimi" onClick={closeMenu} />
-          <MobileNavLink href="/group-tour" label="Özel Grup Turu" onClick={closeMenu} />
-          <MobileNavLink href="/annual-program" label="Yıllık Program" onClick={closeMenu} />
-          <MobileNavLink href="/blog" label="Blog" onClick={closeMenu} />
-          <MobileNavLink href="/contact" label="İletişim" onClick={closeMenu} />
+      <div
+        className={`${
+          isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'
+        } overflow-y-auto bg-white shadow-lg transition-all duration-300 lg:hidden`}
+        id="mobile-menu"
+      >
+        <div className="space-y-1 px-2 py-3">
+          {mobileLinks.map((link) => (
+            <MobileNavLink
+              key={link.href}
+              href={link.href}
+              label={link.label}
+              onClick={closeMenu}
+            />
+          ))}
         </div>
       </div>
     </nav>
   );
 }
 
-function MobileNavLink({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
+function MobileNavLink({
+  href,
+  label,
+  onClick,
+}: {
+  href: string;
+  label: string;
+  onClick?: () => void;
+}) {
   const pathname = usePathname();
-  const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
-  
+  const isActive = linkIsActive(pathname, href);
+
   return (
-    <Link 
-      href={href} 
-      className={`block px-3 py-2 rounded-md text-base font-medium ${
+    <Link
+      href={href}
+      className={`block rounded-md px-3 py-2 text-base font-medium transition-colors duration-200 ${
         isActive
           ? 'bg-blue-50 text-blue-600'
           : 'text-gray-900 hover:bg-blue-50 hover:text-blue-600'
-      } transition-colors duration-200`}
+      }`}
       onClick={onClick}
     >
       {label}

@@ -82,8 +82,8 @@ export default function Footer() {
     { name: 'Karadeniz Turları', href: '/karadeniz-turu' },
     { name: 'GAP Turları', href: '/gap-turu' },
     { name: 'Yurtiçi Turlar', href: '/tours?tourType=domestic' },
-    { name: 'Yurtiçi Günübirlik Turlar', href: '/tours?accommodationType=daily' },
-    { name: 'Yurtiçi Konaklamalı Turlar', href: '/tours?accommodationType=with_accommodation' },
+    { name: 'Yurtiçi Günübirlik Turlar', href: '/tours/daily' },
+    { name: 'Yurtiçi Konaklamalı Turlar', href: '/tours/overnight' },
     { name: 'Yurtdışı Turlar', href: '/tours?tourType=international' },
     { name: 'Çerkezköy Günübirlik', href: '/cerkezkoy-gunubirlik-turlar' },
     { name: 'Çerkezköy Konaklamalı', href: '/cerkezkoy-konakamali-turlar' },
@@ -176,12 +176,12 @@ export default function Footer() {
                   {
                     '@type': 'Offer',
                     name: 'Yurtiçi Konaklamalı Turlar',
-                    url: 'https://www.buyukaytactravel.com/tours?accommodationType=with_accommodation'
+                    url: 'https://www.buyukaytactravel.com/tours/overnight'
                   },
                   {
                     '@type': 'Offer',
                     name: 'Yurtiçi Günübirlik Turlar',
-                    url: 'https://www.buyukaytactravel.com/tours?accommodationType=daily'
+                    url: 'https://www.buyukaytactravel.com/tours/daily'
                   },
                   {
                     '@type': 'Offer',

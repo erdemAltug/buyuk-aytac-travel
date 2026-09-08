@@ -103,7 +103,7 @@ const popularTourCategories = [
   {
     id: 'gunubirlik',
     name: 'Günübirlik Turlar',
-    slug: 'tours?accommodationType=daily',
+    slug: 'tours/daily',
     emoji: '🌅',
     description: 'Kısa süreli turlar, hafta sonu kaçamakları',
     color: 'purple',
@@ -247,7 +247,7 @@ export default function PopulerTurlarPage() {
                 İstanbul
               </Link>
               <Link 
-                href="/tours?accommodationType=daily" 
+                href="/tours/daily" 
                 className="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm hover:bg-indigo-200 transition-colors"
               >
                 Günübirlik

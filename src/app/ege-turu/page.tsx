@@ -139,7 +139,7 @@ export default async function EgeTuruPage() {
             ) : (
               <p className="text-gray-600">
                 Turlar yüklenemedi.{' '}
-                <Link href="/tours?accommodationType=daily" className="text-blue-600 hover:underline">
+                <Link href="/tours/daily" className="text-blue-600 hover:underline">
                   Günübirlik turlara göz atın
                 </Link>
                 .
