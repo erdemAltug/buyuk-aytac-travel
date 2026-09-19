@@ -52,6 +52,24 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [entered, setEntered] = useState(false);
 
+  const returnPath = () => {
+    const path = `${window.location.pathname}${window.location.search}`;
+    if (
+      path === '/giris' ||
+      path === '/kayit' ||
+      path.startsWith('/giris?') ||
+      path.startsWith('/kayit?')
+    ) {
+      return '/';
+    }
+    return path || '/';
+  };
+
+  const stayOnPage = () => {
+    onClose();
+    window.location.assign(returnPath());
+  };
+
   useEffect(() => {
     if (!open) {
       setEntered(false);
@@ -95,7 +113,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     setError('');
     try {
       await signIn('google', {
-        callbackUrl: `${window.location.origin}/hesabim`,
+        callbackUrl: returnPath(),
       });
     } catch {
       setError('Google ile giriş şu an kullanılamıyor');
@@ -151,8 +169,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
       setError('Şifre hatalı');
       return;
     }
-    onClose();
-    window.location.assign('/hesabim');
+    stayOnPage();
   };
 
   const onRegister = async (e: FormEvent) => {
@@ -182,8 +199,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         setLoading(false);
         return;
       }
-      onClose();
-      window.location.assign('/hesabim');
+      stayOnPage();
     } catch {
       setError('Kayıt sırasında hata oluştu');
       setLoading(false);

@@ -8,7 +8,7 @@ import { safeCallbackPath } from '@/lib/safeCallbackPath';
 
 export default function GirisClient() {
   const searchParams = useSearchParams();
-  const callbackUrl = safeCallbackPath(searchParams.get('callbackUrl'), '/hesabim');
+  const callbackUrl = safeCallbackPath(searchParams.get('callbackUrl'), '/');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

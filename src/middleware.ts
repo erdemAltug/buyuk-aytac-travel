@@ -106,7 +106,10 @@ export default auth((req) => {
   }
 
   if ((pathname === '/giris' || pathname === '/kayit') && isLoggedIn) {
-    return redirectTo(req, '/hesabim');
+    const raw = req.nextUrl.searchParams.get('callbackUrl');
+    const target =
+      raw && raw.startsWith('/') && !raw.startsWith('//') ? raw : '/';
+    return redirectTo(req, target);
   }
 
   return NextResponse.next();

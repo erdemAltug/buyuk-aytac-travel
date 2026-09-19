@@ -44,7 +44,7 @@ export default function KayitClient() {
         return;
       }
 
-      window.location.assign('/hesabim');
+      window.location.assign('/');
     } catch {
       setErrors(['Beklenmeyen bir hata oluştu']);
       setLoading(false);
