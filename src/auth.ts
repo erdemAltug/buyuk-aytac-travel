@@ -71,18 +71,52 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
     async redirect({ url, baseUrl }) {
-      const base = new URL(baseUrl);
-      // Prod domain + :3000 kombinasyonunu temizle
-      if (base.port === '3000' && !base.hostname.includes('localhost')) {
-        base.port = '';
-      }
-      const origin = base.origin;
+      const resolveOrigin = () => {
+        try {
+          const base = new URL(baseUrl);
+          const local =
+            base.hostname === 'localhost' ||
+            base.hostname === '127.0.0.1' ||
+            base.hostname === '::1';
+          if (!local) {
+            if (base.port === '3000') base.port = '';
+            return base.origin;
+          }
+        } catch {
+          /* ignore */
+        }
+        for (const raw of [
+          process.env.AUTH_URL,
+          process.env.NEXTAUTH_URL,
+          process.env.NEXT_PUBLIC_SITE_URL,
+        ]) {
+          if (!raw) continue;
+          try {
+            const u = new URL(raw);
+            if (
+              u.hostname !== 'localhost' &&
+              u.hostname !== '127.0.0.1'
+            ) {
+              return u.origin;
+            }
+          } catch {
+            /* ignore */
+          }
+        }
+        if (process.env.NODE_ENV === 'production' || process.env.VERCEL === '1') {
+          return 'https://www.buyukaytactravel.com';
+        }
+        return baseUrl;
+      };
+
+      const origin = resolveOrigin();
+
       if (url.startsWith('/')) {
         return `${origin}${url}`;
       }
+
       try {
         const target = new URL(url);
-        if (target.origin === origin) return url;
         return `${origin}${target.pathname}${target.search}`;
       } catch {
         return origin;
