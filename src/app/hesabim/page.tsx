@@ -44,12 +44,12 @@ export default async function HesabimPage() {
         </div>
 
         {session.user.role === 'admin' && (
-          <Link
+          <a
             href="/admin"
             className="mt-6 inline-flex rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
           >
             Admin Paneline Git
-          </Link>
+          </a>
         )}
       </div>
     </main>

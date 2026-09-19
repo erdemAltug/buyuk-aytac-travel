@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 
@@ -12,12 +11,10 @@ interface AdminHeaderProps {
 export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const { data: session } = useSession();
-  const router = useRouter();
 
   const handleLogout = async () => {
     await signOut({ redirect: false });
-    router.push('/admin/login');
-    router.refresh();
+    window.location.assign('/admin/login');
   };
 
   const initials =

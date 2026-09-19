@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import {
   EnvelopeIcon,
   LockClosedIcon,
@@ -41,7 +40,6 @@ function GoogleIcon({ className }: { className?: string }) {
 }
 
 export default function AuthModal({ open, onClose }: AuthModalProps) {
-  const router = useRouter();
   const [step, setStep] = useState<Step>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -96,7 +94,9 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     setGoogleLoading(true);
     setError('');
     try {
-      await signIn('google', { callbackUrl: '/hesabim' });
+      await signIn('google', {
+        callbackUrl: `${window.location.origin}/hesabim`,
+      });
     } catch {
       setError('Google ile giriş şu an kullanılamıyor');
       setGoogleLoading(false);
@@ -152,8 +152,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
       return;
     }
     onClose();
-    router.push('/hesabim');
-    router.refresh();
+    window.location.assign('/hesabim');
   };
 
   const onRegister = async (e: FormEvent) => {
@@ -184,8 +183,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         return;
       }
       onClose();
-      router.push('/hesabim');
-      router.refresh();
+      window.location.assign('/hesabim');
     } catch {
       setError('Kayıt sırasında hata oluştu');
       setLoading(false);

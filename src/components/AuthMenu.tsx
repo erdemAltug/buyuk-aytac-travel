@@ -168,7 +168,11 @@ export default function AuthMenu({ light = false }: AuthMenuProps) {
               <Link
                 href="/admin"
                 className="block px-4 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-50"
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  window.location.assign('/admin');
+                }}
               >
                 Admin Paneli
               </Link>

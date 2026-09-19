@@ -1,14 +1,13 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { safeCallbackPath } from '@/lib/safeCallbackPath';
 
 function AdminLoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const callbackUrl = safeCallbackPath(searchParams.get('callbackUrl'), '/admin');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,9 +31,7 @@ function AdminLoginForm() {
       return;
     }
 
-    // Role kontrolü session üzerinden sayfa yenilemesiyle middleware'de yapılır
-    router.push(callbackUrl);
-    router.refresh();
+    window.location.assign(callbackUrl);
   };
 
   return (

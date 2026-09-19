@@ -10,17 +10,9 @@ export const authConfig = {
     strategy: 'jwt',
   },
   callbacks: {
-    authorized({ auth, request }) {
-      const { pathname } = request.nextUrl;
-      const isLoggedIn = !!auth?.user;
-      const role = auth?.user?.role;
-
-      if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-        return isLoggedIn && role === 'admin';
-      }
-      if (pathname.startsWith('/hesabim')) {
-        return isLoggedIn;
-      }
+    // Redirect'leri middleware.ts yönetsin — authorized:false Auth.js'in
+    // yanlış host (localhost) ile redirect üretmesine yol açıyordu.
+    authorized() {
       return true;
     },
   },

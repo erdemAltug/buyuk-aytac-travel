@@ -3,10 +3,8 @@
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 export default function KayitClient() {
-  const router = useRouter();
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -42,12 +40,11 @@ export default function KayitClient() {
       });
 
       if (login?.error) {
-        router.push('/giris');
+        window.location.assign('/giris');
         return;
       }
 
-      router.push('/hesabim');
-      router.refresh();
+      window.location.assign('/hesabim');
     } catch {
       setErrors(['Beklenmeyen bir hata oluştu']);
       setLoading(false);

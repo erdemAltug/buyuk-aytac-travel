@@ -1,8 +1,37 @@
+import { NextRequest, NextResponse } from 'next/server';
 import NextAuth from 'next-auth';
 import { authConfig } from '@/auth.config';
-import { NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
+
+/** Aynı host üzerinde redirect — localhost kaçışını engeller */
+function redirectSameHost(
+  req: NextRequest,
+  pathname: string,
+  search?: Record<string, string>
+) {
+  const url = req.nextUrl.clone();
+  const host =
+    req.headers.get('x-forwarded-host')?.split(',')[0]?.trim() ||
+    req.headers.get('host') ||
+    url.host;
+  const protoHeader = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  const proto = protoHeader || url.protocol.replace(':', '') || 'https';
+
+  url.protocol = `${proto}:`;
+  url.host = host;
+  url.pathname = pathname;
+  url.search = '';
+  url.hash = '';
+
+  if (search) {
+    for (const [key, value] of Object.entries(search)) {
+      url.searchParams.set(key, value);
+    }
+  }
+
+  return NextResponse.redirect(url);
+}
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
@@ -12,27 +41,23 @@ export default auth((req) => {
 
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     if (!isLoggedIn) {
-      const url = new URL('/admin/login', req.url);
-      url.searchParams.set('callbackUrl', pathname);
-      return NextResponse.redirect(url);
+      return redirectSameHost(req, '/admin/login', { callbackUrl: pathname });
     }
     if (role !== 'admin') {
-      return NextResponse.redirect(new URL('/', req.url));
+      return redirectSameHost(req, '/');
     }
   }
 
   if (pathname === '/admin/login' && isLoggedIn && role === 'admin') {
-    return NextResponse.redirect(new URL('/admin', req.url));
+    return redirectSameHost(req, '/admin');
   }
 
   if (pathname.startsWith('/hesabim') && !isLoggedIn) {
-    const url = new URL('/giris', req.url);
-    url.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(url);
+    return redirectSameHost(req, '/giris', { callbackUrl: pathname });
   }
 
   if ((pathname === '/giris' || pathname === '/kayit') && isLoggedIn) {
-    return NextResponse.redirect(new URL('/hesabim', req.url));
+    return redirectSameHost(req, '/hesabim');
   }
 
   return NextResponse.next();

@@ -3,12 +3,12 @@
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { safeCallbackPath } from '@/lib/safeCallbackPath';
 
 export default function GirisClient() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/hesabim';
+  const callbackUrl = safeCallbackPath(searchParams.get('callbackUrl'), '/hesabim');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,8 +33,7 @@ export default function GirisClient() {
       return;
     }
 
-    router.push(callbackUrl);
-    router.refresh();
+    window.location.assign(callbackUrl);
   };
 
   return (

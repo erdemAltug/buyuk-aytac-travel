@@ -70,6 +70,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     ...authConfig.callbacks,
+    async redirect({ url, baseUrl }) {
+      const base = new URL(baseUrl);
+      if (url.startsWith('/')) {
+        return `${base.origin}${url}`;
+      }
+      try {
+        const target = new URL(url);
+        if (target.origin === base.origin) return url;
+        // Yanlış host (örn. localhost) → path'i gerçek base'e taşı
+        return `${base.origin}${target.pathname}${target.search}`;
+      } catch {
+        return base.origin;
+      }
+    },
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
         const email = user.email?.toLowerCase();
