@@ -6,6 +6,7 @@ import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import { formatDateShort } from '@/lib/formatDate';
 import ReservationModal from '@/components/ReservationModal';
+import FavoriteButton from '@/components/FavoriteButton';
 
 type TourCardProps = {
   tour: ITour;
@@ -36,7 +37,10 @@ export default function TourCard({
 
   return (
     <>
-      <article className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl">
+      <article className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl">
+        <div className="absolute right-3 top-3 z-20">
+          <FavoriteButton tourId={tour._id} tourSlug={tour.slug} size="sm" />
+        </div>
         <Link
           href={`/tours/${tour.slug}`}
           className="group flex min-h-0 flex-1 flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

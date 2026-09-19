@@ -47,17 +47,8 @@ export default function EditTourPage({ params }: { params: { id: string } }) {
   const { id } = params;
   
   useEffect(() => {
-    const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem('adminLoggedIn');
-      if (!isLoggedIn) {
-        router.push('/admin/login');
-      } else {
-        fetchTour();
-      }
-    };
-    
-    checkAuth();
-  }, [router, id]);
+    fetchTour();
+  }, [id]);
   
   const fetchTour = async () => {
     try {

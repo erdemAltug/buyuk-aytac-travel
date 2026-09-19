@@ -1,111 +1,90 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
+import { FormEvent, useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function AdminLogin() {
-  const [username, setUsername] = useState('');
+function AdminLoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const router = useRouter();
 
-  // Demo credentials for now - in production, these would be authenticated properly
-  const handleLogin = (e: React.FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Basic validation
-    if (!username || !password) {
-      setError('Lütfen kullanıcı adı ve şifre giriniz');
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
       setLoading(false);
+      setError('E-posta veya şifre hatalı');
       return;
     }
 
-    // Simple demo login for now
-    if (username === 'admin' && password === 'admin123') {
-      // In a real app, we would set a cookie or localStorage token here
-      localStorage.setItem('adminLoggedIn', 'true');
-      
-      // Redirect to admin dashboard
-      setTimeout(() => {
-        router.push('/admin');
-      }, 1000);
-    } else {
-      setError('Kullanıcı adı veya şifre hatalı');
-      setLoading(false);
-    }
+    // Role kontrolü session üzerinden sayfa yenilemesiyle middleware'de yapılır
+    router.push(callbackUrl);
+    router.refresh();
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <div className="text-center mb-8">
-          <Image src="/images/LOGO.png" alt="Logo" width={100} height={100} className="mx-auto" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Büyük Aytaç Travel</h1>
-          <p className="text-gray-600">Yönetici Girişi</p>
-        </div>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-6">
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
+        <h1 className="text-2xl font-bold text-slate-900">Admin Girişi</h1>
+        <p className="mt-1 text-sm text-slate-600">
+          Yönetim paneli — Auth.js oturumu
+        </p>
+        <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          {error && (
+            <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
+          )}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Kullanıcı Adı
-            </label>
+            <label className="mb-1 block text-sm font-medium">E-posta</label>
             <input
-              id="username"
-              name="username"
-              type="text"
+              type="email"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2"
             />
           </div>
-
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Şifre
-            </label>
+            <label className="mb-1 block text-sm font-medium">Şifre</label>
             <input
-              id="password"
-              name="password"
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2"
             />
           </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-2.5 font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+          >
+            {loading ? 'Giriş…' : 'Giriş Yap'}
+          </button>
         </form>
-
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-blue-600 hover:text-blue-800">
-            Ana Sayfaya Dön
-          </Link>
-        </div>
       </div>
     </div>
   );
-} 
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Yükleniyor…</div>}>
+      <AdminLoginForm />
+    </Suspense>
+  );
+}

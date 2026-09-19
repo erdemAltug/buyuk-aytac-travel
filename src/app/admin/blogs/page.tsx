@@ -16,13 +16,8 @@ export default function AdminBlogs() {
   const router = useRouter();
   
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('adminLoggedIn');
-    if (!isLoggedIn) {
-      router.push('/admin/login');
-    } else {
-      fetchBlogs();
-    }
-  }, [router]);
+    fetchBlogs();
+  }, []);
   
   const fetchBlogs = async () => {
     try {

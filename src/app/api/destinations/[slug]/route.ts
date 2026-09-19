@@ -1,32 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Destination from '@/models/Destination';
+import { requireAdmin } from '@/lib/requireAdmin';
 
 type RouteSegmentProps = {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 };
 
-// Belirli bir destinasyonu getir
 export async function GET(
-  request: NextRequest,
-  props: RouteSegmentProps
+  _request: NextRequest,
+  { params }: RouteSegmentProps
 ) {
   try {
     await dbConnect();
-    
-    const slug = props.params.slug;
-    
+
+    const { slug } = await params;
+
     const destination = await Destination.findOne({ slug });
-    
+
     if (!destination) {
       return NextResponse.json(
         { error: 'Destinasyon bulunamadı' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(destination);
   } catch (error) {
     console.error('Destination GET Error:', error);
@@ -37,36 +35,35 @@ export async function GET(
   }
 }
 
-// Destinasyonu güncelle
 export async function PUT(
   request: NextRequest,
-  props: RouteSegmentProps
+  { params }: RouteSegmentProps
 ) {
   try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return gate.response;
+
     await dbConnect();
-    
-    const slug = props.params.slug;
+
+    const { slug } = await params;
     const body = await request.json();
-    
-    // Gerekli alanları kontrol et
+
     if (!body.name || !body.description || !body.image) {
       return NextResponse.json(
         { error: 'İsim, açıklama ve görsel zorunludur' },
         { status: 400 }
       );
     }
-    
-    // Destinasyonu bul
+
     const destination = await Destination.findOne({ slug });
-    
+
     if (!destination) {
       return NextResponse.json(
         { error: 'Destinasyon bulunamadı' },
         { status: 404 }
       );
     }
-    
-    // İsim değiştiyse ve bu isimle başka bir kayıt varsa hata ver
+
     if (body.name !== destination.name) {
       const newSlug = body.name
         .toLowerCase()
@@ -75,25 +72,28 @@ export async function PUT(
         .replace(/\-\-+/g, '-')
         .replace(/^-+/, '')
         .replace(/-+$/, '');
-      
+
       const existingDestination = await Destination.findOne({ slug: newSlug });
-      
-      if (existingDestination && (existingDestination as any)._id.toString() !== (destination as any)._id.toString()) {
+
+      if (
+        existingDestination &&
+        String(existingDestination._id) !== String(destination._id)
+      ) {
         return NextResponse.json(
           { error: 'Bu isimle bir destinasyon zaten mevcut' },
           { status: 400 }
         );
       }
     }
-    
-    // Güncelle
+
     destination.name = body.name;
     destination.description = body.description;
     destination.image = body.image;
-    destination.isActive = body.isActive !== undefined ? body.isActive : destination.isActive;
-    
+    destination.isActive =
+      body.isActive !== undefined ? body.isActive : destination.isActive;
+
     await destination.save();
-    
+
     return NextResponse.json(destination);
   } catch (error) {
     console.error('Destination PUT Error:', error);
@@ -104,33 +104,35 @@ export async function PUT(
   }
 }
 
-// Destinasyonu sil
 export async function DELETE(
-  request: NextRequest,
-  props: RouteSegmentProps
+  _request: NextRequest,
+  { params }: RouteSegmentProps
 ) {
   try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return gate.response;
+
     await dbConnect();
-    
-    const slug = props.params.slug;
-    
+
+    const { slug } = await params;
+
     const destination = await Destination.findOneAndDelete({ slug });
-    
+
     if (!destination) {
       return NextResponse.json(
         { error: 'Destinasyon bulunamadı' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json(
-      { message: 'Destinasyon başarıyla silindi' }
-    );
+
+    return NextResponse.json({
+      message: 'Destinasyon başarıyla silindi',
+    });
   } catch (error) {
     console.error('Destination DELETE Error:', error);
     return NextResponse.json(
-      { error: 'Destinasyonu silerken bir hata oluştu' },
+      { error: 'Destinasyonu silirken bir hata oluştu' },
       { status: 500 }
     );
   }
-} 
+}

@@ -50,6 +50,16 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.buyukaytactravel.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.r2.dev',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },

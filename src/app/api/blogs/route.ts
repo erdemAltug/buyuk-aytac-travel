@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Blog from '@/models/Blog';
+import { requireAdmin } from '@/lib/requireAdmin';
 
 // GET /api/blogs - Tüm blogları getir
 export async function GET(req: NextRequest) {
@@ -57,6 +58,9 @@ export async function GET(req: NextRequest) {
 // POST /api/blogs - Yeni blog ekle
 export async function POST(req: NextRequest) {
   try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return gate.response;
+
     await dbConnect();
     
     const body = await req.json();

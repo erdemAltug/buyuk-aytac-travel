@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Tour from '@/models/Tour';
+import { requireAdmin } from '@/lib/requireAdmin';
 
 // Tüm turları getir
 export async function GET(req: NextRequest) {
@@ -102,6 +103,9 @@ export async function GET(req: NextRequest) {
 // Yeni tur ekle
 export async function POST(req: NextRequest) {
   try {
+    const gate = await requireAdmin();
+    if (!gate.ok) return gate.response;
+
     await dbConnect();
     
     const body = await req.json();

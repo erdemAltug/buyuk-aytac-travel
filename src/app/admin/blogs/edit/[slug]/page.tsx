@@ -30,14 +30,8 @@ export default function EditBlogPage({ params }: { params: { slug: string } }) {
   });
   
   useEffect(() => {
-    // Admin girişini kontrol et ve blog bilgilerini getir
-    const isLoggedIn = localStorage.getItem('adminLoggedIn');
-    if (!isLoggedIn) {
-      router.push('/admin/login');
-    } else {
-      fetchBlog();
-    }
-  }, [router, params.slug]);
+    fetchBlog();
+  }, [params.slug]);
   
   const fetchBlog = async () => {
     try {

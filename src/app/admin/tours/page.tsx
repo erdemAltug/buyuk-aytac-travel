@@ -16,17 +16,8 @@ export default function AdminTours() {
   const router = useRouter();
   
   useEffect(() => {
-    const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem('adminLoggedIn');
-      if (!isLoggedIn) {
-        router.push('/admin/login');
-      } else {
-        fetchTours();
-      }
-    };
-    
-    checkAuth();
-  }, [router]);
+    fetchTours();
+  }, []);
   
   const fetchTours = async () => {
     try {

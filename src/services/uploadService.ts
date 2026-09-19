@@ -45,19 +45,18 @@ export const uploadFile = async (file: File, folder: string = 'uploads'): Promis
 };
 
 /**
- * Görsel URL'sini kontrol etme
- * Eğer URL `/` ile başlıyorsa yerel bir dosya, aksi takdirde tam URL
+ * Görsel URL'sini normalize et
+ * R2 (http) veya yerel /public yolu
  */
 export const getImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
-  
-  if (imagePath.startsWith('/')) {
-    return imagePath; // Zaten yerel bir yol
-  } else if (imagePath.startsWith('http')) {
-    return imagePath; // Zaten tam URL
-  } else {
-    return `/${imagePath}`; // Başına / ekle
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
   }
+  if (imagePath.startsWith('/')) {
+    return imagePath;
+  }
+  return `/${imagePath}`;
 };
 
 export default {

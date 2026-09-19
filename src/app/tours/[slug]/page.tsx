@@ -4,7 +4,8 @@ import { ITour } from '@/models/Tour';
 import PriceCalculator from '@/components/PriceCalculator';
 import Breadcrumb from '@/components/Breadcrumb';
 import ReservationButton from '@/components/ReservationButton';
-
+import FavoriteButton from '@/components/FavoriteButton';
+import TourReviews from '@/components/tours/TourReviews';
 
 // Tur sayfaları için Server Component kullanımı
 export async function generateStaticParams() {
@@ -477,12 +478,19 @@ export default async function TourDetail({ params }: { params: { slug: string } 
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında Bilgi Alın</h2>
                   
-                  <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
+                  <div className="flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
+                    </div>
+                    <FavoriteButton tourId={String(tour._id)} tourSlug={tour.slug} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           
+          <TourReviews tourId={String(tour._id)} tourSlug={tour.slug} />
+
           {/* Sık Sorulan Sorular - SEO için önemli */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-12">
             <div className="p-6">

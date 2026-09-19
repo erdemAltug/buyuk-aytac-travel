@@ -117,10 +117,10 @@ export default function WeekendAssistant() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:from-violet-700 hover:to-indigo-700 hover:shadow-xl"
         aria-label="Hafta sonu ne yapsam asistanı"
       >
-        <SparklesIcon className="w-7 h-7" aria-hidden />
+        <SparklesIcon className="h-6 w-6" aria-hidden />
       </button>
 
       {open && (
