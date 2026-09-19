@@ -4,7 +4,6 @@ import Google from 'next-auth/providers/google';
 import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import type { UserRole } from '@/models/User';
 import { authConfig } from '@/auth.config';
 
 const googleConfigured =
@@ -58,10 +57,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         return {
-          id: user._id.toString(),
+          id: String(user._id),
           email: user.email,
           name: `${user.firstName} ${user.lastName}`.trim(),
-          role: user.role as UserRole,
+          role: user.role,
           firstName: user.firstName,
           lastName: user.lastName,
         };
@@ -173,8 +172,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return token;
         }
 
-        token.id = dbUser._id.toString();
-        token.role = dbUser.role as UserRole;
+        token.id = String(dbUser._id);
+        token.role = dbUser.role;
         token.firstName = dbUser.firstName;
         token.lastName = dbUser.lastName;
         token.email = dbUser.email;
@@ -183,18 +182,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (user) {
         token.id = user.id ?? '';
-        token.role = user.role;
-        token.firstName = user.firstName;
-        token.lastName = user.lastName;
+        if (user.role === 'admin' || user.role === 'user') {
+          token.role = user.role;
+        }
+        if (typeof user.firstName === 'string') {
+          token.firstName = user.firstName;
+        }
+        if (typeof user.lastName === 'string') {
+          token.lastName = user.lastName;
+        }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-        session.user.firstName = token.firstName;
-        session.user.lastName = token.lastName;
+        session.user.id = typeof token.id === 'string' ? token.id : '';
+        session.user.role =
+          token.role === 'admin' || token.role === 'user' ? token.role : 'user';
+        session.user.firstName =
+          typeof token.firstName === 'string' ? token.firstName : '';
+        session.user.lastName =
+          typeof token.lastName === 'string' ? token.lastName : '';
       }
       return session;
     },

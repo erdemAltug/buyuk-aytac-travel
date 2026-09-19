@@ -4,6 +4,7 @@ export type UserRole = 'user' | 'admin';
 export type UserGender = 'female' | 'male' | 'unspecified';
 
 export interface IUser extends Document {
+  _id: Types.ObjectId;
   email: string;
   passwordHash?: string;
   firstName: string;
@@ -18,7 +19,7 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
-const UserSchema: Schema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     email: {
       type: String,
