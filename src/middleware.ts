@@ -4,25 +4,24 @@ import { authConfig } from '@/auth.config';
 
 const { auth } = NextAuth(authConfig);
 
-/** Aynı host üzerinde redirect — localhost kaçışını engeller */
-function redirectSameHost(
+/**
+ * Sadece path değiştir. Host/protocol/port'a dokunma —
+ * manuel host yazımı prod domain + :3000 üretiyordu.
+ */
+function redirectTo(
   req: NextRequest,
   pathname: string,
   search?: Record<string, string>
 ) {
   const url = req.nextUrl.clone();
-  const host =
-    req.headers.get('x-forwarded-host')?.split(',')[0]?.trim() ||
-    req.headers.get('host') ||
-    url.host;
-  const protoHeader = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
-  const proto = protoHeader || url.protocol.replace(':', '') || 'https';
-
-  url.protocol = `${proto}:`;
-  url.host = host;
   url.pathname = pathname;
   url.search = '';
   url.hash = '';
+
+  // https üzerinde yanlışlıkla kalan dev portunu temizle
+  if (url.port === '3000') {
+    url.port = '';
+  }
 
   if (search) {
     for (const [key, value] of Object.entries(search)) {
@@ -41,23 +40,23 @@ export default auth((req) => {
 
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     if (!isLoggedIn) {
-      return redirectSameHost(req, '/admin/login', { callbackUrl: pathname });
+      return redirectTo(req, '/admin/login', { callbackUrl: pathname });
     }
     if (role !== 'admin') {
-      return redirectSameHost(req, '/');
+      return redirectTo(req, '/');
     }
   }
 
   if (pathname === '/admin/login' && isLoggedIn && role === 'admin') {
-    return redirectSameHost(req, '/admin');
+    return redirectTo(req, '/admin');
   }
 
   if (pathname.startsWith('/hesabim') && !isLoggedIn) {
-    return redirectSameHost(req, '/giris', { callbackUrl: pathname });
+    return redirectTo(req, '/giris', { callbackUrl: pathname });
   }
 
   if ((pathname === '/giris' || pathname === '/kayit') && isLoggedIn) {
-    return redirectSameHost(req, '/hesabim');
+    return redirectTo(req, '/hesabim');
   }
 
   return NextResponse.next();

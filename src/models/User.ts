@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export type UserRole = 'user' | 'admin';
+export type UserGender = 'female' | 'male' | 'unspecified';
 
 export interface IUser extends Document {
   email: string;
@@ -8,6 +9,7 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   phone?: string;
+  gender?: UserGender;
   role: UserRole;
   isActive: boolean;
   emailVerified: boolean;
@@ -42,6 +44,11 @@ const UserSchema: Schema = new Schema(
     phone: {
       type: String,
       trim: true,
+    },
+    gender: {
+      type: String,
+      enum: ['female', 'male', 'unspecified'],
+      required: false,
     },
     role: {
       type: String,

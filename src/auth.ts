@@ -72,16 +72,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig.callbacks,
     async redirect({ url, baseUrl }) {
       const base = new URL(baseUrl);
+      // Prod domain + :3000 kombinasyonunu temizle
+      if (base.port === '3000' && !base.hostname.includes('localhost')) {
+        base.port = '';
+      }
+      const origin = base.origin;
       if (url.startsWith('/')) {
-        return `${base.origin}${url}`;
+        return `${origin}${url}`;
       }
       try {
         const target = new URL(url);
-        if (target.origin === base.origin) return url;
-        // Yanlış host (örn. localhost) → path'i gerçek base'e taşı
-        return `${base.origin}${target.pathname}${target.search}`;
+        if (target.origin === origin) return url;
+        return `${origin}${target.pathname}${target.search}`;
       } catch {
-        return base.origin;
+        return origin;
       }
     },
     async signIn({ user, account }) {
@@ -96,7 +100,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return true;
     },
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account, profile, trigger, session }) {
+      if (trigger === 'update' && session) {
+        if (typeof session.firstName === 'string') {
+          token.firstName = session.firstName;
+        }
+        if (typeof session.lastName === 'string') {
+          token.lastName = session.lastName;
+        }
+        return token;
+      }
+
       if (account?.provider === 'google' && (user?.email || profile?.email)) {
         const email = (user?.email || profile?.email || '').toLowerCase();
         await dbConnect();
