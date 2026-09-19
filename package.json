@@ -13,6 +13,7 @@
     "seed:blogs:summer": "tsx scripts/seed-summer-2026-blogs.ts",
     "seed:blogs:august": "tsx scripts/seed-august-seo-blogs.ts",
     "seed:blogs:september": "tsx scripts/seed-september-seo-blogs.ts",
+    "seed:blogs:october": "tsx scripts/seed-october-seo-blogs.ts",
     "seed:admin": "tsx scripts/seed-admin-user.ts"
   },
   "dependencies": {
