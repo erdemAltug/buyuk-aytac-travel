@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const valueItems = [
   {
-    label: 'Binlerce Seçkin Tur',
+    label: 'Yüzlerce Seçkin Tur',
     hint: 'Yurtiçi ve günübirlik programlar',
     icon: (
       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -21,8 +21,8 @@ const valueItems = [
     ),
   },
   {
-    label: 'Anında Hızlı Konfirme',
-    hint: 'Rezervasyonunuz hızlı onaylanır',
+    label: 'Kaliteli Hizmet ve Araçlar',
+    hint: 'Rezervasyonunuz hızlı onaylanır ve yolculuğunuz için en iyi araçları seçeriz.',
     icon: (
       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />

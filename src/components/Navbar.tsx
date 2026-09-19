@@ -56,17 +56,34 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isSolidNav = !isHomepage || scrolled;
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMenuOpen]);
+
+  const isSolidNav = !isHomepage || scrolled || isMenuOpen;
 
   const navbarBg = isSolidNav
-    ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200'
+    ? 'bg-white shadow-lg border-b border-slate-200'
     : 'bg-transparent';
 
   return (
-    <nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${navbarBg}`}>
-      <div className="relative flex h-20 w-full items-center pl-3 pr-3 sm:pl-5 sm:pr-4 lg:pl-6 lg:pr-5">
+    <nav
+      className={`fixed top-0 w-full transition-all duration-300 ${
+        isMenuOpen ? 'z-[100] h-dvh bg-white' : 'z-50'
+      } ${navbarBg}`}
+    >
+      <div className="relative flex h-20 w-full shrink-0 items-center pl-3 pr-3 sm:pl-5 sm:pr-4 lg:pl-6 lg:pr-5">
         {/* Logo — sol */}
-        <Link href="/" className="relative z-10 flex shrink-0 items-center">
+        <Link href="/" className="relative z-10 flex shrink-0 items-center" onClick={closeMenu}>
           <div className="relative h-14 w-14">
             <Image
               src="/images/LOGO.png"
@@ -131,7 +148,7 @@ export default function Navbar() {
             aria-expanded={isMenuOpen}
             onClick={toggleMenu}
           >
-            <span className="sr-only">Menüyü aç</span>
+            <span className="sr-only">{isMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}</span>
             <svg
               className={`${isMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
               xmlns="http://www.w3.org/2000/svg"
@@ -158,11 +175,11 @@ export default function Navbar() {
 
       <div
         className={`${
-          isMenuOpen ? 'block max-h-[80vh] opacity-100' : 'hidden max-h-0 opacity-0'
-        } overflow-y-auto bg-white shadow-lg transition-all duration-300 lg:hidden`}
+          isMenuOpen ? 'flex' : 'hidden'
+        } h-[calc(100dvh-5rem)] flex-col overflow-y-auto overscroll-contain bg-white lg:hidden`}
         id="mobile-menu"
       >
-        <div className="space-y-1 px-2 py-3">
+        <div className="space-y-1 px-2 py-3 pb-28">
           {mobileLinks.map((link) => (
             <MobileNavLink
               key={link.href}
