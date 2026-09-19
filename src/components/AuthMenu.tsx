@@ -178,7 +178,11 @@ export default function AuthMenu({ light = false }: AuthMenuProps) {
           <button
             type="button"
             className="block w-full border-t border-slate-100 px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50"
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={async () => {
+              setOpen(false);
+              await signOut({ redirect: false });
+              window.location.assign('/');
+            }}
           >
             Çıkış Yap
           </button>
