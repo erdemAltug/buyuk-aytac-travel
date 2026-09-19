@@ -208,12 +208,12 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         : 'Üye ol';
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6">
+    <div className="fixed inset-0 z-[200] flex items-stretch justify-center sm:items-center sm:px-4 sm:py-6">
       <button
         type="button"
         aria-label="Kapat"
         onClick={onClose}
-        className={`absolute inset-0 bg-[#0b1220]/70 backdrop-blur-[6px] transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-[#0b1220]/70 backdrop-blur-[6px] transition-opacity duration-300 max-sm:hidden ${
           entered ? 'opacity-100' : 'opacity-0'
         }`}
       />
@@ -222,14 +222,14 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
-        className={`relative z-10 w-[340px] overflow-hidden rounded-[28px] bg-[#f7f8fb] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.55)] ring-1 ring-white/40 transition-all duration-300 ease-out ${
+        className={`relative z-10 flex h-full w-full max-w-none flex-col overflow-y-auto bg-[#f7f8fb] transition-all duration-300 ease-out sm:h-auto sm:max-h-[90vh] sm:w-[340px] sm:overflow-hidden sm:rounded-[28px] sm:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.55)] sm:ring-1 sm:ring-white/40 ${
           entered
             ? 'translate-y-0 opacity-100'
             : 'translate-y-5 opacity-0'
         }`}
       >
         {/* Top brand band */}
-        <div className="relative bg-gradient-to-b from-blue-700 to-blue-600 px-5 pb-8 pt-5 text-center text-white">
+        <div className="relative bg-gradient-to-b from-blue-700 to-blue-600 px-5 pb-8 pt-[max(1.25rem,env(safe-area-inset-top))] text-center text-white sm:pt-5">
           <button
             type="button"
             onClick={onClose}
@@ -270,7 +270,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         </div>
 
         {/* Body card overlapping header */}
-        <div className="-mt-4 rounded-t-[24px] bg-[#f7f8fb] px-5 pb-6 pt-8">
+        <div className="-mt-4 flex flex-1 flex-col rounded-t-[24px] bg-[#f7f8fb] px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-8 sm:pb-6">
           {error && (
             <div className="mb-4 rounded-2xl border border-red-100 bg-red-50 px-3 py-2.5 text-[13px] text-red-700">
               {error}
@@ -436,7 +436,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             </form>
           )}
 
-          <p className="mt-5 text-center text-[11px] leading-relaxed text-slate-400">
+          <p className="mt-auto pt-8 text-center text-[11px] leading-relaxed text-slate-400 sm:mt-5 sm:pt-0">
             Devam ederek tur hesabını oluşturmuş olursun.
           </p>
         </div>
