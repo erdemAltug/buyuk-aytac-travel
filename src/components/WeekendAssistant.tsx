@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -53,6 +53,8 @@ export default function WeekendAssistant() {
   const [tours, setTours] = useState<ITour[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [reservationTour, setReservationTour] = useState<ITour | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const scrollYRef = useRef(0);
 
   const reset = useCallback(() => {
     setStep('companion');
@@ -65,6 +67,50 @@ export default function WeekendAssistant() {
     setOpen(false);
     reset();
   };
+
+  const openAssistant = () => {
+    scrollYRef.current = window.scrollY;
+    setOpen(true);
+  };
+
+  // Panel açılınca sayfa scroll'unu kilitle — focus scrollIntoView'ı engeller
+  useEffect(() => {
+    if (!open) return;
+
+    const y = scrollYRef.current;
+    const { style } = document.body;
+    const prev = {
+      overflow: style.overflow,
+      position: style.position,
+      top: style.top,
+      left: style.left,
+      right: style.right,
+      width: style.width,
+    };
+
+    style.overflow = 'hidden';
+    style.position = 'fixed';
+    style.top = `-${y}px`;
+    style.left = '0';
+    style.right = '0';
+    style.width = '100%';
+
+    const id = window.requestAnimationFrame(() => {
+      panelRef.current?.focus({ preventScroll: true });
+      window.scrollTo(0, y);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(id);
+      style.overflow = prev.overflow;
+      style.position = prev.position;
+      style.top = prev.top;
+      style.left = prev.left;
+      style.right = prev.right;
+      style.width = prev.width;
+      window.scrollTo(0, y);
+    };
+  }, [open]);
 
   const fetchRecommendations = async (fullPrefs: WeekendPreferences) => {
     setStep('loading');
@@ -116,7 +162,7 @@ export default function WeekendAssistant() {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openAssistant}
         className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:from-violet-700 hover:to-indigo-700 hover:shadow-xl"
         aria-label="Hafta sonu ne yapsam asistanı"
       >
@@ -125,17 +171,19 @@ export default function WeekendAssistant() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[60] flex items-end justify-end p-4 sm:items-end sm:justify-end pointer-events-none"
+          className="fixed inset-0 z-[60] flex items-end justify-end p-4 pointer-events-none sm:items-end sm:justify-end"
           aria-modal
           role="dialog"
           aria-labelledby="weekend-assistant-title"
         >
           <div
-            className="pointer-events-auto w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[min(85vh,640px)] animate-in fade-in slide-in-from-bottom-4 duration-200 sm:mb-20 sm:mr-0"
+            ref={panelRef}
+            tabIndex={-1}
+            className="pointer-events-auto flex w-full max-w-sm max-h-[min(85vh,640px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none animate-in fade-in slide-in-from-bottom-4 duration-200 sm:mb-20 sm:mr-0"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2 min-w-0">
+            <div className="flex shrink-0 items-center justify-between bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3 text-white">
+              <div className="flex min-w-0 items-center gap-2">
                 {step !== 'companion' && step !== 'loading' && (
                   <button
                     type="button"
@@ -144,30 +192,33 @@ export default function WeekendAssistant() {
                       else if (step === 'stay') setStep('concept');
                       else if (step === 'concept') setStep('companion');
                     }}
-                    className="p-1 rounded-lg hover:bg-white/20 shrink-0"
+                    className="shrink-0 rounded-lg p-1 hover:bg-white/20"
                     aria-label="Geri"
                   >
-                    <ArrowLeftIcon className="w-5 h-5" />
+                    <ArrowLeftIcon className="h-5 w-5" />
                   </button>
                 )}
                 <div className="min-w-0">
-                  <h2 id="weekend-assistant-title" className="font-semibold text-sm truncate">
+                  <h2
+                    id="weekend-assistant-title"
+                    className="truncate text-sm font-semibold"
+                  >
                     Hafta Sonu Ne Yapsam?
                   </h2>
-                  <p className="text-xs text-violet-100 truncate">{stepTitle}</p>
+                  <p className="truncate text-xs text-violet-100">{stepTitle}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={close}
-                className="p-1.5 rounded-lg hover:bg-white/20 shrink-0"
+                className="shrink-0 rounded-lg p-1.5 hover:bg-white/20"
                 aria-label="Kapat"
               >
-                <XMarkIcon className="w-5 h-5" />
+                <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4">
               {step === 'companion' && (
                 <div className="grid grid-cols-2 gap-3">
                   {COMPANION_OPTIONS.map((opt) => (
@@ -175,7 +226,7 @@ export default function WeekendAssistant() {
                       key={opt.value}
                       type="button"
                       onClick={() => selectCompanion(opt.value)}
-                      className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-slate-100 hover:border-violet-400 hover:bg-violet-50 transition-colors"
+                      className="flex flex-col items-center gap-2 rounded-xl border-2 border-slate-100 p-4 transition-colors hover:border-violet-400 hover:bg-violet-50"
                     >
                       <span className="text-3xl">{opt.emoji}</span>
                       <span className="font-semibold text-slate-800">{opt.label}</span>
@@ -191,7 +242,7 @@ export default function WeekendAssistant() {
                       key={opt.value}
                       type="button"
                       onClick={() => selectConcept(opt.value)}
-                      className="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-100 hover:border-violet-400 hover:bg-violet-50 transition-colors text-left"
+                      className="flex items-center gap-3 rounded-xl border-2 border-slate-100 p-3 text-left transition-colors hover:border-violet-400 hover:bg-violet-50"
                     >
                       <span className="text-2xl">{opt.emoji}</span>
                       <span className="font-semibold text-slate-800">{opt.label}</span>
@@ -208,9 +259,11 @@ export default function WeekendAssistant() {
                         key={opt.value}
                         type="button"
                         onClick={() => selectStay(opt.value)}
-                        className="p-4 rounded-xl border-2 border-slate-100 hover:border-violet-400 hover:bg-violet-50 transition-colors text-left"
+                        className="rounded-xl border-2 border-slate-100 p-4 text-left transition-colors hover:border-violet-400 hover:bg-violet-50"
                       >
-                        <span className="font-semibold text-slate-800 block">{opt.label}</span>
+                        <span className="block font-semibold text-slate-800">
+                          {opt.label}
+                        </span>
                         <span className="text-sm text-slate-500">{opt.desc}</span>
                       </button>
                     ))}
@@ -224,9 +277,9 @@ export default function WeekendAssistant() {
               )}
 
               {step === 'loading' && (
-                <div className="flex flex-col items-center justify-center py-12 gap-4">
-                  <ArrowPathIcon className="w-10 h-10 text-violet-600 animate-spin" />
-                  <p className="text-sm text-slate-600 text-center">
+                <div className="flex flex-col items-center justify-center gap-4 py-12">
+                  <ArrowPathIcon className="h-10 w-10 animate-spin text-violet-600" />
+                  <p className="text-center text-sm text-slate-600">
                     Veritabanındaki turlar arasından en uygun 2 seçeneği buluyorum…
                   </p>
                 </div>
@@ -235,9 +288,12 @@ export default function WeekendAssistant() {
               {step === 'results' && (
                 <div className="space-y-4">
                   {tours.length === 0 ? (
-                    <p className="text-sm text-slate-600 text-center py-6">
+                    <p className="py-6 text-center text-sm text-slate-600">
                       Bu kriterlere uygun aktif tur bulunamadı.{' '}
-                      <Link href="/tours" className="text-violet-600 font-medium hover:underline">
+                      <Link
+                        href="/tours"
+                        className="font-medium text-violet-600 hover:underline"
+                      >
                         Tüm turlara göz atın
                       </Link>
                     </p>
@@ -245,7 +301,7 @@ export default function WeekendAssistant() {
                     tours.map((tour) => (
                       <article
                         key={tour.slug}
-                        className="rounded-xl border border-slate-200 overflow-hidden"
+                        className="overflow-hidden rounded-xl border border-slate-200"
                       >
                         <div className="relative h-28 bg-slate-100">
                           <Image
@@ -257,27 +313,29 @@ export default function WeekendAssistant() {
                           />
                         </div>
                         <div className="p-3">
-                          <h3 className="font-semibold text-slate-900 text-sm line-clamp-2">
+                          <h3 className="line-clamp-2 text-sm font-semibold text-slate-900">
                             {tour.name}
                           </h3>
-                          <p className="text-xs text-slate-500 mt-0.5">{tour.destination}</p>
-                          <p className="text-base font-bold text-violet-700 mt-2">
+                          <p className="mt-0.5 text-xs text-slate-500">
+                            {tour.destination}
+                          </p>
+                          <p className="mt-2 text-base font-bold text-violet-700">
                             {formatPrice(tour.price, tour.discountRate)}
-                            <span className="text-xs font-normal text-slate-400 ml-1">
+                            <span className="ml-1 text-xs font-normal text-slate-400">
                               kişi başı
                             </span>
                           </p>
-                          <div className="flex gap-2 mt-3">
+                          <div className="mt-3 flex gap-2">
                             <button
                               type="button"
                               onClick={() => setReservationTour(tour)}
-                              className="flex-1 py-2 text-xs font-semibold bg-violet-600 hover:bg-violet-700 text-white rounded-lg"
+                              className="flex-1 rounded-lg bg-violet-600 py-2 text-xs font-semibold text-white hover:bg-violet-700"
                             >
                               Rezervasyon
                             </button>
                             <Link
                               href={`/tours/${tour.slug}`}
-                              className="flex-1 py-2 text-xs font-semibold text-center border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700"
+                              className="flex-1 rounded-lg border border-slate-200 py-2 text-center text-xs font-semibold text-slate-700 hover:bg-slate-50"
                             >
                               Detay
                             </Link>
@@ -289,7 +347,7 @@ export default function WeekendAssistant() {
                   <button
                     type="button"
                     onClick={reset}
-                    className="w-full py-2 text-sm text-violet-600 font-medium hover:bg-violet-50 rounded-lg"
+                    className="w-full rounded-lg py-2 text-sm font-medium text-violet-600 hover:bg-violet-50"
                   >
                     Baştan başla
                   </button>
@@ -298,7 +356,7 @@ export default function WeekendAssistant() {
             </div>
 
             {step === 'companion' && (
-              <p className="px-4 pb-3 text-[10px] text-slate-400 text-center shrink-0">
+              <p className="shrink-0 px-4 pb-3 text-center text-[10px] text-slate-400">
                 3 kısa soru · size özel 2 tur önerisi
               </p>
             )}

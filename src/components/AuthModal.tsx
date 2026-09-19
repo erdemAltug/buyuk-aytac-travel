@@ -75,16 +75,39 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
       setEntered(false);
       return;
     }
+    const scrollY = window.scrollY;
     const id = window.setTimeout(() => setEntered(true), 10);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
+
+    const { style } = document.body;
+    const prev = {
+      overflow: style.overflow,
+      position: style.position,
+      top: style.top,
+      left: style.left,
+      right: style.right,
+      width: style.width,
+    };
+    style.overflow = 'hidden';
+    style.position = 'fixed';
+    style.top = `-${scrollY}px`;
+    style.left = '0';
+    style.right = '0';
+    style.width = '100%';
+
     return () => {
       window.clearTimeout(id);
       document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
+      style.overflow = prev.overflow;
+      style.position = prev.position;
+      style.top = prev.top;
+      style.left = prev.left;
+      style.right = prev.right;
+      style.width = prev.width;
+      window.scrollTo(0, scrollY);
     };
   }, [open, onClose]);
 
@@ -321,7 +344,6 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                     <input
                       type="email"
                       required
-                      autoFocus
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="ornek@email.com"
@@ -351,7 +373,6 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                   <input
                     type="password"
                     required
-                    autoFocus
                     minLength={8}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -386,7 +407,6 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                   </label>
                   <input
                     required
-                    autoFocus
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     className={field}
