@@ -91,8 +91,9 @@ export default auth((req) => {
     if (!isLoggedIn) {
       return redirectTo(req, '/admin/login', { callbackUrl: pathname });
     }
+    // role JWT'de yoksa (eski oturum) ana sayfaya değil login'e
     if (role !== 'admin') {
-      return redirectTo(req, '/');
+      return redirectTo(req, '/admin/login', { callbackUrl: pathname });
     }
   }
 
