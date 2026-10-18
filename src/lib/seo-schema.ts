@@ -56,7 +56,8 @@ export const localBusinessSchema = {
   "memberOf": {
     "@type": "ProgramMembership",
     "name": "TÜRSAB",
-    "alternateName": "Türkiye Seyahat Acentaları Birliği"
+    "alternateName": "Türkiye Seyahat Acentaları Birliği",
+    "memberNumber": "17674"
   },
   "sameAs": [
     "https://www.instagram.com/buyukaytactravel",
@@ -121,12 +122,7 @@ export function createTourProductSchema(tour: TourProduct) {
       "price": tour.price,
       "priceCurrency": tour.priceCurrency || "TRY",
       "availability": "https://schema.org/InStock"
-    } : undefined,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "156"
-    }
+    } : undefined
   };
 }
 
@@ -275,23 +271,6 @@ export function createTourPreparationGuide() {
         "text": "Belirtilen saat ve buluşma noktasında tura katılın."
       }
     ]
-  };
-}
-
-// Reviews/Testimonials Schema
-export function createReviewSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "AggregateRating",
-    "itemReviewed": {
-      "@type": "TravelAgency",
-      "name": "Büyük Aytaç Travel"
-    },
-    "ratingValue": "4.8",
-    "bestRating": "5",
-    "worstRating": "1",
-    "ratingCount": "156",
-    "reviewCount": "142"
   };
 }
 

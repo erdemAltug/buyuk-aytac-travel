@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Günübirlik Turlar 2026 | Çerkezköyden Günübirlik Geziler | Büyük Aytaç Travel',
+  title: 'Günübirlik Turlar 2026 | Çerkezköyden Günübirlik Geziler',
   description:
     'Çerkezköy günübirlik turlar 2026. Gökçeada, Bozcaada, Ayvalık, Bursa, İstanbul, Assos ve Kaz Dağları günübirlik geziler. Erken rezervasyon.',
   keywords:

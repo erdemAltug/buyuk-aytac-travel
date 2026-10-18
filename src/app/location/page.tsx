@@ -4,9 +4,12 @@ import { getToursByDB } from '@/lib/tours';
 import { ITour } from '@/models/Tour';
 
 export const metadata = {
-  title: 'Bölgesel Tur Hizmetleri | Büyük Aytaç Travel',
+  title: 'Bölgesel Tur Hizmetleri',
   description: 'Tekirdağ, Çerkezköy, Çorlu ve çevre ilçelerden kalkan tur hizmetleri. Trakya bölgesinin her noktasından turlarımıza katılabilirsiniz.',
-  keywords: 'tekirdağ turları, çerkezköy turları, çorlu turları, bölgesel tur hizmetleri, trakya turları'
+  keywords: 'tekirdağ turları, çerkezköy turları, çorlu turları, bölgesel tur hizmetleri, trakya turları',
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/location',
+  },
 };
 
 export default async function LocationPage() {

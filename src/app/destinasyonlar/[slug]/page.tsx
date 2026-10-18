@@ -7,25 +7,26 @@ import Destination from '@/models/Destination';
 import Tour from '@/models/Tour';
 
 // Dinamik metadata oluşturma
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   await dbConnect();
-  const destination = await Destination.findOne({ slug: params.slug }).lean();
-  
+  const destination = await Destination.findOne({ slug, isActive: true }).lean();
+
   if (!destination) {
-    return {
-      title: 'Destinasyon Bulunamadı | Büyük Aytaç Travel',
-      description: 'Aradığınız destinasyon bulunamadı.',
-    };
+    notFound();
   }
-  
+
+  const canonical = `https://www.buyukaytactravel.com/destinasyonlar/${destination.slug}`;
+
   return {
-    title: `${destination.name} Gezi Rehberi | ${destination.name} Turları | Büyük Aytaç Travel`,
+    title: `${destination.name} Gezi Rehberi | ${destination.name} Turları`,
     description: destination.description,
     keywords: destination.seoKeywords?.join(', ') || `${destination.name} turları, ${destination.name} gezi rehberi, ${destination.name} gezilecek yerler`,
+    alternates: { canonical },
     openGraph: {
       title: `${destination.name} Gezi Rehberi | Büyük Aytaç Travel`,
       description: destination.description,
-      url: `https://www.buyukaytactravel.com/destinasyonlar/${destination.slug}`,
+      url: canonical,
       type: 'article',
       images: [
         {
@@ -52,10 +53,11 @@ export async function generateStaticParams() {
 // Revalidate every hour
 export const revalidate = 3600;
 
-export default async function DestinationDetailPage({ params }: { params: { slug: string } }) {
+export default async function DestinationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   await dbConnect();
-  
-  const destination = await Destination.findOne({ slug: params.slug, isActive: true }).lean();
+
+  const destination = await Destination.findOne({ slug, isActive: true }).lean();
   
   if (!destination) {
     notFound();

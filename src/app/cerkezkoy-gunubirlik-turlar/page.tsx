@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO metadata
 export const metadata: Metadata = {
-  title: 'Çerkezköy Günübirlik Turlar | Hafta Sonu Turları 2026 | Büyük Aytaç Travel',
+  title: 'Çerkezköy Günübirlik Turlar | Hafta Sonu Turları 2026',
   description: 'Çerkezköy günübirlik turlar. İstanbul, Bursa, Safranbolu, Eskişehir ve daha birçok destinasyona günübirlik tur paketleri. Hafta sonu kaçamakları için en uygun fiyatlar.',
   keywords: 'çerkezköy günübirlik tur, çerkezköy hafta sonu turu, günübirlik tur, hafta sonu turları, çerkezköy istanbul tur, çerkezköy bursa tur, çerkezköy safranbolu tur, günübirlik tur fiyatları',
   openGraph: {

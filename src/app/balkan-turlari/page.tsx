@@ -6,7 +6,7 @@ import TourSeoLinks from '@/components/tours/TourSeoLinks';
 import type { ITour } from '@/models/Tour';
 
 export const metadata: Metadata = {
-  title: 'Balkan Turları 2026 | Vizesiz Balkan Turu | Çerkezköy Çıkışlı | Büyük Aytaç Travel',
+  title: 'Balkan Turları 2026 | Vizesiz Balkan Turu | Çerkezköy Çıkışlı',
   description:
     'Balkan turları 2026: Belgrad, Saraybosna, Mostar, Budva, Kotor, Ohrid. Vizesiz yurtdışı turlar. Çerkezköy, Tekirdağ ve Trakya çıkışlı Balkan tur paketleri. Ön kayıt ve bilgi.',
   keywords:

@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Sayfa Bulunamadı',
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (

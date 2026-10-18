@@ -54,9 +54,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
-    languages: {
-      'tr': '/',
-    },
   },
   openGraph: {
     title: "Büyük Aytaç Travel | Çerkezköy Tur ve Seyahat",
@@ -178,7 +175,12 @@ export default function RootLayout({
     ],
     "telephone": "+905393459559",
     "email": "info@buyukaytactravel.com",
-    "priceRange": "$$"
+    "priceRange": "$$",
+    "memberOf": {
+      "@type": "ProgramMembership",
+      "name": "TÜRSAB",
+      "memberNumber": "17674"
+    }
   };
 
   return (

@@ -169,6 +169,11 @@ export default function Footer() {
                 'https://www.facebook.com/people/B%C3%9CY%C3%9CK-AYTA%C3%87-Travel/61581407056598/',
                 'https://www.instagram.com/buyukaytactravel/'
               ],
+              memberOf: {
+                '@type': 'ProgramMembership',
+                name: 'TÜRSAB',
+                memberNumber: '17674',
+              },
               hasOfferCatalog: {
                 '@type': 'OfferCatalog',
                 name: 'Büyük Aytaç Travel Turları',

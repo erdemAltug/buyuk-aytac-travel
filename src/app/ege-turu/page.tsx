@@ -6,7 +6,7 @@ import TourSeoLinks from '@/components/tours/TourSeoLinks';
 import type { ITour } from '@/models/Tour';
 
 export const metadata: Metadata = {
-  title: 'Ege Turları 2026 | Ayvalık, Gökçeada, Bozcaada, Assos | Çerkezköy | Büyük Aytaç Travel',
+  title: 'Ege Turları 2026 | Ayvalık, Gökçeada, Bozcaada, Assos | Çerkezköy',
   description:
     'Ege turları 2026: Ayvalık Cunda, Gökçeada, Bozcaada, Assos, Kaz Dağları günübirlik geziler. Çerkezköy, Çorlu ve Tekirdağ çıkışlı Ege ada turları.',
   keywords:

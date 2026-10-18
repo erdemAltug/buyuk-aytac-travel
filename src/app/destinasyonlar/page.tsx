@@ -7,7 +7,7 @@ import Tour from '@/models/Tour';
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Destinasyonlar | Gezi Rehberleri | Büyük Aytaç Travel',
+  title: 'Destinasyonlar | Gezi Rehberleri',
   description: 'Türkiye ve dünya destinasyonları hakkında detaylı gezi rehberleri. Çerkezköy\'den çıkan turlarla keşfedebileceğiniz harika yerler.',
   keywords: 'destinasyonlar, gezi rehberi, seyahat rehberi, tatil yerleri, gidilecek yerler, çerkezköy turları',
   openGraph: {
@@ -23,6 +23,9 @@ export const metadata: Metadata = {
         alt: 'Destinasyonlar - Büyük Aytaç Travel',
       },
     ],
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/destinasyonlar',
   },
 };
 

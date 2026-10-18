@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Kullanım Şartları | Büyük Aytaç Travel",
+  title: "Kullanım Şartları",
   description: "Büyük Aytaç Travel web sitesi kullanım şartları ve koşulları. Rezervasyon, ödeme ve iptal politikalarımızla ilgili bilgiler.",
   keywords: "kullanım şartları, kullanım koşulları, rezervasyon, iptal politikası, Büyük Aytaç Travel",
   openGraph: {
@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/terms',
   },
 };
 

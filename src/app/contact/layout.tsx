@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "İletişim | Büyük Aytaç Travel - Çerkezköy, Tekirdağ ve Çorlu'dan Tur Rezervasyonu",
+  title: "İletişim | Çerkezköy, Tekirdağ ve Çorlu'dan Tur Rezervasyonu",
   description:
     "Büyük Aytaç Travel iletişim bilgileri ve rezervasyon formu. Çerkezköy ofisimize gelerek veya telefonla arayarak Tekirdağ ve çevre ilçelerden tur rezervasyonu yapabilirsiniz.",
   keywords:

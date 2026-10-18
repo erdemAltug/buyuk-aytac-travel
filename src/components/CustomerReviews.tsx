@@ -168,35 +168,6 @@ export default function CustomerReviews() {
           </div>
         </div>
       </div>
-
-      {/* Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Büyük Aytaç Travel",
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "5",
-              "reviewCount": "500"
-            },
-            "review": reviews.map(review => ({
-              "@type": "Review",
-              "reviewRating": {
-                "@type": "Rating",
-                "ratingValue": review.rating
-              },
-              "author": {
-                "@type": "Person",
-                "name": review.name
-              },
-              "reviewBody": review.comment
-            }))
-          })
-        }}
-      />
     </section>
   );
 } 
