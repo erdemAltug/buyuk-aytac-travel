@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Çerkezköy Turları 2026 | Günübirlik, Konaklamalı, Yurtiçi ve Yurtdışı Turlar | Büyük Aytaç Travel',
+  title: 'Çerkezköy Turları 2026 | Günübirlik, Konaklamalı, Yurtiçi ve Yurtdışı Turlar',
   description: 'Çerkezköy tur fırsatları burada! Günübirlik turlar, konaklamalı tatil paketleri, yurtiçi ve yurtdışı turlar. Çerkezköy, Çorlu ve Tekirdağdan kalkan turlar. Kapadokya, Karadeniz, İstanbul, Bursa turları. En uygun fiyatlar ve profesyonel rehberlik.',
   keywords: 'çerkezköy tur, çerkezköy turlar, günübirlik tur, konaklamalı tur, yurtiçi turlar, yurtdışı turlar, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çorlu tur, tekirdag tur, trakya tur, 2026 tur paketleri, kapadokya tur, karadeniz tur, istanbul tur, bursa tur',
   openGraph: {
@@ -24,6 +24,9 @@ export const metadata: Metadata = {
         alt: 'Çerkezköy Turları - Büyük Aytaç Travel',
       },
     ],
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/tours',
   },
 };
 

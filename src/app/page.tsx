@@ -92,7 +92,7 @@ export default async function Home() {
     "memberOf": {
       "@type": "ProgramMembership",
       "name": "TÜRSAB",
-      "memberNumber": "12345"
+      "memberNumber": "17674"
     }
   };
 

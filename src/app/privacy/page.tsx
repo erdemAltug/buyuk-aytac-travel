@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | Büyük Aytaç Travel",
+  title: "Gizlilik Politikası",
   description: "Büyük Aytaç Travel gizlilik politikası. Kişisel verilerinizin nasıl işlendiği, depolandığı ve korunduğu hakkında bilgi.",
   keywords: "gizlilik politikası, kişisel veri koruma, kvkk, Büyük Aytaç Travel",
   openGraph: {
@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/privacy',
   },
 };
 

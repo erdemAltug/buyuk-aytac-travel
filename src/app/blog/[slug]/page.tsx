@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { IBlog } from '@/models/Blog';
 import Blog from '@/models/Blog';
 import dbConnect from '@/lib/dbConnect';
@@ -17,16 +18,14 @@ const formatDate = (dateString: string | Date) => {
 };
 
 // Blog sayfaları için metadata oluşturma
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   try {
     await dbConnect();
-    const blog = await Blog.findOne({ slug: params.slug, isPublished: true }).lean();
+    const blog = await Blog.findOne({ slug, isPublished: true }).lean();
 
     if (!blog) {
-      return {
-        title: 'Blog Yazısı Bulunamadı | Büyük Aytaç Travel',
-        description: 'Aradığınız blog yazısı bulunamadı.',
-      };
+      notFound();
     }
 
     // SEO anahtar kelimeleri oluştur
@@ -41,7 +40,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     ].join(', ');
 
     return {
-      title: `${blog.title} | Büyük Aytaç Travel Blog`,
+      title: blog.title,
       description: blog.metaDescription || blog.summary || blog.title,
       keywords: seoKeywords,
       authors: [{ name: blog.author }],
@@ -86,9 +85,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       },
     };
   } catch (error) {
+    unstable_rethrow(error);
     console.error('Blog metadata oluşturma hatası:', error);
     return {
-      title: 'Blog | Büyük Aytaç Travel',
+      title: 'Blog',
       description: 'Seyahat rehberleri ve tur deneyimleri',
     };
   }
@@ -119,7 +119,8 @@ export async function generateStaticParams() {
 export const revalidate = 3600; // Her saat başı yeniden doğrula
 
 // Server-side rendering için async fonksiyon olarak tanımla
-export default async function BlogDetail({ params }: { params: { slug: string } }) {
+export default async function BlogDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   let blog: IBlog | null = null;
   let relatedBlogs: { title: string; slug: string }[] = [];
   let relatedTours: { name: string; slug: string }[] = [];
@@ -131,7 +132,7 @@ export default async function BlogDetail({ params }: { params: { slug: string } 
     const Blog = (await import('@/models/Blog')).default;
     const Tour = (await import('@/models/Tour')).default;
     
-    blog = await Blog.findOne({ slug: params.slug }).lean();
+    blog = await Blog.findOne({ slug, isPublished: true }).lean();
     
     // blog içindeki _id'yi string'e çevir
     if (blog) {
@@ -208,23 +209,8 @@ export default async function BlogDetail({ params }: { params: { slug: string } 
     );
   }
 
-  // Blog bulunamadı
   if (!blog) {
-    return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Yazı Bulunamadı</h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Aradığınız blog yazısı bulunamadı veya kaldırılmış olabilir.
-            </p>
-            <Link href="/blog" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">
-              Tüm Yazıları Görüntüle
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   // Blog detay sayfası için yapılandırılmış veri (schema.org)

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export const metadata: Metadata = {
-  title: "Çerkezköy'ün En Güvenilir Tur Şirketi | Büyük Aytaç Travel Hakkında",
+  title: "Çerkezköy'ün En Güvenilir Tur Şirketi Hakkında",
   description: "Çerkezköy'ün en güvenilir tur şirketi Büyük Aytaç Travel, 20 yılı aşkın tecrübesiyle Çerkezköy'den günübirlik turlar, yurtiçi ve yurtdışı tur seçenekleri sunuyor. TÜRSAB üyesi, güvenilir ve profesyonel hizmet.",
   keywords: "çerkezköy tur şirketi, çerkezköy seyahat acentesi, çerkezköy güvenilir tur, çerkezköy tur operatörü, çerkezköy tur firması, çerkezköy tur acentesi, Büyük Aytaç Travel, TÜRSAB üyesi, çerkezköy tur deneyimi",
   openGraph: {
@@ -20,6 +20,9 @@ export const metadata: Metadata = {
         alt: 'Çerkezköy Tur Şirketi - Büyük Aytaç Travel',
       },
     ],
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/about',
   },
 };
 

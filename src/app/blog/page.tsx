@@ -23,7 +23,7 @@ interface BlogData {
 
 // SEO için metadata
 export const metadata: Metadata = {
-  title: 'Blog | Çerkezköy Tur Yazıları ve Seyahat Rehberleri | Büyük Aytaç Travel',
+  title: 'Blog | Çerkezköy Tur Yazıları ve Seyahat Rehberleri',
   description: 'Büyük Aytaç Travel blog sayfası. Çerkezköy tur yazıları, seyahat ipuçları, gezi rehberleri, günübirlik tur önerileri ve destinasyon rehberleri.',
   keywords: 'çerkezköy tur blog, seyahat blog, gezi yazıları, tur deneyimleri, seyahat rehberi, çerkezköy gezi, günübirlik tur, konaklamalı tur, tatil önerileri, destinasyon rehberi',
   openGraph: {

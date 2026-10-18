@@ -4,7 +4,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO için metadata - Popüler Turlar
 export const metadata: Metadata = {
-  title: 'Popüler Turlar 2026 | Çerkezköy Tur Rotaları - En Çok Tercih Edilen Turlar | Büyük Aytaç Travel',
+  title: 'Popüler Turlar 2026 | Çerkezköy Tur Rotaları - En Çok Tercih Edilen Turlar',
   description: 'Çerkezköy\'den en popüler turlar. Kapadokya, Karadeniz, GAP, Pamukkale, İstanbul ve daha birçok destinasyon. Günübirlik ve konaklamalı tur seçenekleri.',
   keywords: 'çerkezköy tur, popüler turlar, en çok tercih edilen turlar, kapadokya turu, karadeniz turu, gap turu, pamukkale turu, istanbul turu, günübirlik tur, konaklamalı tur, çerkezköy günübirlik tur, 2026 popüler turlar',
   openGraph: {

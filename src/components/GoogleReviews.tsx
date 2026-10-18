@@ -99,26 +99,6 @@ function initials(name: string) {
 }
 
 export default function GoogleReviews() {
-  const reviewSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'TravelAgency',
-    name: 'Büyük Aytaç Travel',
-    url: 'https://www.buyukaytactravel.com',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: String(AGGREGATE_RATING),
-      bestRating: '5',
-      reviewCount: REVIEW_COUNT_LABEL.replace(/\D/g, '') || '300',
-    },
-    review: reviews.map((r) => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.name },
-      datePublished: r.date,
-      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
-      reviewBody: r.text,
-    })),
-  };
-
   return (
     <section className="py-16 bg-white border-y border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -210,11 +190,6 @@ export default function GoogleReviews() {
           </Link>
         </p>
       </div>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
-      />
     </section>
   );
 }

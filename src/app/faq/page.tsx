@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Sık Sorulan Sorular | Tur Rezervasyonu, İptal Koşulları | Büyük Aytaç Travel",
+  title: "Sık Sorulan Sorular | Tur Rezervasyonu, İptal Koşulları",
   description: "Çerkezköy'den turlar hakkında sık sorulan sorular. Tur rezervasyonu, ödemeler, iptal koşulları, çocuk indirimleri ve daha fazlası.",
   keywords: "sık sorulan sorular, faq, tur rezervasyonu, tur iptali, tur koşulları, çocuk indirimi, tek kişi tur, erken rezervasyon, çerkezköy tur sorular, büyük aytaç travel sss",
   openGraph: {
@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     siteName: 'Büyük Aytaç Travel',
     locale: 'tr_TR',
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/faq',
   },
 };
 

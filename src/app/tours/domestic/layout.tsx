@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Yurtiçi Turlar 2026 | Çerkezköyden Yurtiçi Tur Paketleri | Büyük Aytaç Travel',
+  title: 'Yurtiçi Turlar 2026 | Çerkezköyden Yurtiçi Tur Paketleri',
   description:
     'Çerkezköy yurtiçi turlar: Kapadokya, Safranbolu, Ege adaları, Karadeniz, GAP ve Marmara rotaları. Günübirlik ve konaklamalı paketler.',
   keywords:

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound, unstable_rethrow } from 'next/navigation';
 import { ITour } from '@/models/Tour';
 import PriceCalculator from '@/components/PriceCalculator';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -13,7 +14,7 @@ export async function generateStaticParams() {
     // API yerine doğrudan veritabanından çeken fonksiyonu kullan
     // lib içindeki fonksiyonları import edip kullanabiliriz
     const { getToursByDB } = await import('@/lib/tours');
-    const tours = await getToursByDB();
+    const tours = await getToursByDB({ isActive: true });
     
     // Her tur için slug parametresi oluştur
     return tours.map((tour: ITour) => ({
@@ -29,7 +30,8 @@ export async function generateStaticParams() {
 export const revalidate = 3600; // Her saat başı yeniden doğrula
 
 // Server-side rendering için async fonksiyon olarak tanımla
-export default async function TourDetail({ params }: { params: { slug: string } }) {
+export default async function TourDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   let tour: ITour | null = null;
   let error = '';
   
@@ -37,10 +39,8 @@ export default async function TourDetail({ params }: { params: { slug: string } 
     // API yerine doğrudan veritabanından çeken yaklaşımı kullan
     await import('@/lib/dbConnect').then((module) => module.default());
     const Tour = (await import('@/models/Tour')).default;
-    
-    // params değerini doğrudan kullanmak yerine önce bir değişkene atayalım
-    const slug = params.slug;
-    tour = await Tour.findOne({ slug }).lean();
+
+    tour = await Tour.findOne({ slug, isActive: true }).lean();
     
     // tour içindeki _id'yi string'e çevir
     if (tour) {
@@ -71,23 +71,8 @@ export default async function TourDetail({ params }: { params: { slug: string } 
     );
   }
 
-  // Tur bulunamadı
   if (!tour) {
-    return (
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Tur Bulunamadı</h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Aradığınız tur bulunamadı veya kaldırılmış olabilir.
-            </p>
-            <Link href="/tours" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">
-              Tüm Turları Görüntüle
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   // Tur sayfası için schema.org yapılandırılmış veri
@@ -598,25 +583,21 @@ export default async function TourDetail({ params }: { params: { slug: string } 
 }
 
 // Tur sayfaları için metadata oluşturma
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   try {
     // API yerine doğrudan veritabanından çeken yaklaşımı kullan
     await import('@/lib/dbConnect').then((module) => module.default());
     const Tour = (await import('@/models/Tour')).default;
-    
-    // params değerini doğrudan kullanmak yerine önce bir değişkene atayalım
-    const slug = params.slug;
-    const tour = await Tour.findOne({ slug }).lean();
-    
+
+    const tour = await Tour.findOne({ slug, isActive: true }).lean();
+
     if (!tour) {
-      return {
-        title: 'Tur Bulunamadı | Büyük Aytaç Travel',
-        description: 'Aradığınız tur bulunamadı veya kaldırılmış olabilir.',
-      };
+      notFound();
     }
-    
-    // Tur başlığına göre SEO meta verilerini oluştur
-    const title = `${tour.name} | ${tour.destination} | Çerkezköy Tur | Büyük Aytaç Travel`;
+
+    const title = `${tour.name} | ${tour.destination} | Çerkezköy Tur`;
+    const socialTitle = `${title} | Büyük Aytaç Travel`;
     
     // Açıklama tur açıklamasından oluşturulur (kısa tutmak için)
     const description = tour.description.length > 160 
@@ -636,7 +617,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       keywords: keywordString,
       alternates: { canonical },
       openGraph: {
-        title,
+        title: socialTitle,
         description,
         type: 'article',
         publishedTime: tour.createdAt?.toString(),
@@ -646,15 +627,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       },
       twitter: {
         card: 'summary_large_image',
-        title,
+        title: socialTitle,
         description,
         images: [ogImage],
       },
     };
   } catch (error) {
+    unstable_rethrow(error);
     console.error('Metadata generation error:', error);
     return {
-      title: 'Tur Detayı | Büyük Aytaç Travel',
+      title: 'Tur Detayı',
       description: 'Büyük Aytaç Travel ile unutulmaz tur deneyimleri yaşayın',
     };
   }

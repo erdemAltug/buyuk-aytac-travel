@@ -2,9 +2,12 @@ import { Metadata } from 'next';
 import TourCalendar from '@/components/TourCalendar';
 
 export const metadata: Metadata = {
-  title: "Tur Takvimi | Büyük Aytaç Travel",
+  title: "Tur Takvimi",
   description: "Büyük Aytaç Travel'in aylık tur takvimi. Hangi tarihlerde hangi turların düzenlendiğini interaktif takvimde görebilirsiniz.",
   keywords: "tur takvimi, tur programı, tur tarihleri, Büyük Aytaç Travel, Çerkezköy tur takvimi",
+  alternates: {
+    canonical: 'https://www.buyukaytactravel.com/tour-calendar',
+  },
 };
 
 export default function TourCalendarPage() {

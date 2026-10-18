@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO metadata - Optimized for "çerkezköy tur" keyword
 export const metadata: Metadata = {
-  title: 'Çerkezköy Tur | En Uygun Fiyatlarla Günübirlik ve Konaklamalı Turlar 2026 | Büyük Aytaç Travel',
+  title: 'Çerkezköy Tur | En Uygun Fiyatlarla Günübirlik ve Konaklamalı Turlar 2026',
   description: 'Çerkezköy tur fırsatları! Günübirlik turlar, konaklamalı tatil paketleri, hafta sonu kaçamakları. İstanbul, Bursa, Kapadokya, Karadeniz ve daha birçok destinasyon. Çerkezköy, Çorlu ve Tekirdağdan kalkan turlar. Hemen rezervasyon yapın!',
   keywords: 'çerkezköy tur, çerkezköy tur fiyatları, çerkezköy turlar, çerkezköy tur şirketi, çerkezköy tur operatörü, çerkezköy günübirlik tur, çerkezköy konaklamalı tur, çerkezköy hafta sonu turu, çerkezköy tatil, çorlu tur, tekirdag tur, trakya tur, 2026 çerkezköy turları',
   openGraph: {

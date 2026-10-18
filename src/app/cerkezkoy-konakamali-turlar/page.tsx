@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 
 // SEO metadata
 export const metadata: Metadata = {
-  title: 'Çerkezköy Konaklamalı Turlar | Tatil Paketleri 2026 | Büyük Aytaç Travel',
+  title: 'Çerkezköy Konaklamalı Turlar | Tatil Paketleri 2026',
   description: 'Çerkezköy konaklamalı turlar. Kapadokya, Karadeniz, Ege, GAP ve daha birçok destinasyona 2-7 günlük konaklamalı tur paketleri. Her şey dahil tatil seçenekleri.',
   keywords: 'çerkezköy konaklamalı tur, çerkezköy tatil paketleri, konaklamalı tur, tatil paketleri, kapadokya tur, karadeniz tur, ege tur, 2026 tatil, çerkezköy tur paketleri',
   openGraph: {

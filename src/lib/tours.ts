@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/mongodb';
 import Tour from '@/models/Tour';
 import { ITour } from '@/models/Tour';
+import type { ITour as ClientTour } from '@/types/tour';
 
 /**
  * Doğrudan veritabanından turları getirir (API kullanmadan)
@@ -53,4 +54,11 @@ export async function getToursByDB(params?: {
     console.error('Veritabanından turları getirme hatası:', error);
     return []; // Hata durumunda boş dizi döndür
   }
+}
+
+export async function getClientTours(
+  params?: Parameters<typeof getToursByDB>[0]
+): Promise<ClientTour[]> {
+  const tours = await getToursByDB(params);
+  return JSON.parse(JSON.stringify(tours)) as ClientTour[];
 } 

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Yurtdışı Turlar 2026 | Balkan ve Vizesiz Turlar | Büyük Aytaç Travel',
+  title: 'Yurtdışı Turlar 2026 | Balkan ve Vizesiz Turlar',
   description:
     'Çerkezköy çıkışlı yurtdışı turlar. Balkan turları, vizesiz rotalar, Belgrad, Saraybosna, Budva. Trakya çıkışlı avantajı.',
   keywords:

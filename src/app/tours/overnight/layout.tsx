@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Konaklamalı Turlar 2026 | 2 Gün 1 Gece Tur Paketleri | Büyük Aytaç Travel',
+  title: 'Konaklamalı Turlar 2026 | 2 Gün 1 Gece Tur Paketleri',
   description:
     'Çerkezköy konaklamalı turlar: Kapadokya, Safranbolu, Isparta-Salda-Pamukkale ve hafta sonu kaçamak paketleri. Otel dahil turlar.',
   keywords:
