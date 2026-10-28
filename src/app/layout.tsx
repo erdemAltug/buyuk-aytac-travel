@@ -5,21 +5,22 @@ import LayoutWrapper from '@/components/LayoutWrapper';
 import PostHogProvider from '@/components/PostHogProvider';
 import AuthSessionProvider from '@/components/AuthSessionProvider';
 
-// latin-ext: Türkçe karakterler (ğ, ş, ı, İ) fontun kendisinden gelsin, yedek fonta düşmesin
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
 });
 
+// Başlık fontu. Değişken font (tek dosya, tüm kalınlıklar); latin-ext Türkçe ğ, ş, ı, İ için.
+// Not: Geist'e latin-ext eklemek Vercel derlemesinde next/font hatası verdi, o yüzden yalnızca burada.
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin", "latin-ext"],
-  weight: ["500", "600", "700", "800"],
+  display: "swap",
 });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
