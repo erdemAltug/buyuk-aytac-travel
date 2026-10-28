@@ -46,7 +46,14 @@ function formatPrice(price: number, discountRate?: number) {
   }).format(final);
 }
 
-export default function WeekendAssistant() {
+const OPEN_EVENT = 'bat:open-weekend-assistant';
+
+/** Sayfanın herhangi bir yerinden asistanı açmak için (ör. hero'daki "Hafta sonu ne yapsam?" butonu) */
+export function openWeekendAssistant() {
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event(OPEN_EVENT));
+}
+
+export default function WeekendAssistant({ hideTrigger = false }: { hideTrigger?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>('companion');
   const [prefs, setPrefs] = useState<Partial<WeekendPreferences>>({});
@@ -72,6 +79,15 @@ export default function WeekendAssistant() {
     scrollYRef.current = window.scrollY;
     setOpen(true);
   };
+
+  useEffect(() => {
+    const handler = () => {
+      scrollYRef.current = window.scrollY;
+      setOpen(true);
+    };
+    window.addEventListener(OPEN_EVENT, handler);
+    return () => window.removeEventListener(OPEN_EVENT, handler);
+  }, []);
 
   // Panel açılınca sayfa scroll'unu kilitle — focus scrollIntoView'ı engeller
   useEffect(() => {
@@ -160,6 +176,7 @@ export default function WeekendAssistant() {
 
   return (
     <>
+      {!hideTrigger && (
       <button
         type="button"
         onClick={openAssistant}
@@ -168,6 +185,7 @@ export default function WeekendAssistant() {
       >
         <SparklesIcon className="h-6 w-6" aria-hidden />
       </button>
+      )}
 
       {open && (
         <div

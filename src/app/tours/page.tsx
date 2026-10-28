@@ -5,6 +5,16 @@ import { getToursByDB } from '@/lib/tours';
 import ToursContent from './components/ToursContent';
 import TourSeoLinks, { type TourSeoVariant } from '@/components/tours/TourSeoLinks';
 import Link from 'next/link';
+import { sortForDisplay } from '@/lib/tourUi';
+
+/** Türkçe karakterleri sadeleştirip küçük harfe çevir: "Kapadokya" ~ "KAPADOKYA" ~ "kapadokya" */
+function norm(text: string): string {
+  return text
+    .toLocaleLowerCase('tr-TR')
+    .replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u')
+    .replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
 // SEO için metadata
 export const metadata: Metadata = {
@@ -34,19 +44,33 @@ export const metadata: Metadata = {
 export default async function ToursPage({
   searchParams,
 }: {
-  searchParams: { tourType?: string; accommodationType?: string; destination?: string };
+  searchParams: Promise<{
+    tourType?: string;
+    accommodationType?: string;
+    destination?: string;
+    search?: string;
+    minPrice?: string;
+    maxPrice?: string;
+  }>;
 }) {
-  // URL parametrelerini al
-  const tourType = searchParams.tourType;
-  const accommodationType = searchParams.accommodationType;
-  const destination = searchParams.destination;
+  // URL parametrelerini al (Next 15: searchParams bir Promise)
+  const sp = await searchParams;
+  const tourType = sp.tourType;
+  const accommodationType = sp.accommodationType;
+  const destination = sp.destination;
+  const search = sp.search?.trim();
+  const minPrice = sp.minPrice ? Number(sp.minPrice) : undefined;
+  const maxPrice = sp.maxPrice ? Number(sp.maxPrice) : undefined;
 
   // Başlığı belirle
   let filterTitle = 'Tüm Turlarımız';
   let filterDescription = 'Türkiye\'nin güzelliklerini keşfedeceğiniz özel olarak hazırlanmış turlarımız. Çerkezköy\'nin en güvenilir tur acentesi Büyük Aytaç Travel ile hayallerinizi gerçekleştirin.';
   let seoVariant: TourSeoVariant = 'all';
   
-  if (destination) {
+  if (search) {
+    filterTitle = `"${search}" için turlar`;
+    filterDescription = `Çerkezköy kalkışlı ${search} turları ve benzer rotalar.`;
+  } else if (destination) {
     filterTitle = `${destination} Turları`;
     filterDescription = `${destination} ve çevresini keşfedebileceğiniz özel turlarımız. Çerkezköy'den kalkan güvenli ve konforlu turlar.`;
   } else if (tourType === 'domestic') {
@@ -76,15 +100,24 @@ export default async function ToursPage({
     const allTours = await getToursByDB();
     
     // Filtreleme
+    // Not: önceden destination tam eşleşme isteniyordu; kayıtlardaki destination alanı
+    // "Konya, Mevlana Müzesi, Sille…" gibi uzun olduğu için aramalar hep boş dönüyordu.
+    const terms = [search, destination].filter(Boolean).map((t) => norm(t as string));
     tours = allTours.filter((tour: ITour) => {
       if (!tour.isActive) return false;
-      
-      if (destination && tour.destination !== destination) return false;
+
+      if (terms.length) {
+        const haystack = norm(`${tour.name} ${tour.destination} ${tour.departureCity ?? ''}`);
+        if (!terms.every((t) => t.split(/\s+/).every((w) => haystack.includes(w)))) return false;
+      }
       if (tourType && tour.tourType !== tourType) return false;
       if (accommodationType && tour.accommodationType !== accommodationType) return false;
-      
+      if (minPrice !== undefined && !Number.isNaN(minPrice) && tour.price < minPrice) return false;
+      if (maxPrice !== undefined && !Number.isNaN(maxPrice) && tour.price > maxPrice) return false;
+
       return true;
     });
+    tours = sortForDisplay(tours);
   } catch (err) {
     console.error('Turları getirme hatası:', err);
     error = 'Turlar yüklenirken bir hata oluştu.';

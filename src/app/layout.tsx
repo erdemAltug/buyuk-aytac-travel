@@ -1,19 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from '@/components/LayoutWrapper';
 import PostHogProvider from '@/components/PostHogProvider';
 import AuthSessionProvider from '@/components/AuthSessionProvider';
 
+// latin-ext: Türkçe karakterler (ğ, ş, ı, İ) fontun kendisinden gelsin, yedek fonta düşmesin
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin", "latin-ext"],
+  weight: ["500", "600", "700", "800"],
+});
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   title: {
@@ -191,24 +200,28 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/images/LOGO.png" />
         <link rel="shortcut icon" href="/images/LOGO.png" />
         
-        {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'GA_MEASUREMENT_ID');
-          `
-        }} />
-        
+        {/* Google Analytics — yalnızca NEXT_PUBLIC_GA_ID tanımlıysa (önceden "GA_MEASUREMENT_ID" yer tutucusu vardı, hiç veri toplanmıyordu) */}
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+            <script dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `
+            }} />
+          </>
+        )}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} antialiased`}
       >
         <PostHogProvider>
           <AuthSessionProvider>
