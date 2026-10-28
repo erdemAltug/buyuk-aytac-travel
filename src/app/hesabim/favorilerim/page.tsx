@@ -17,7 +17,7 @@ export default async function FavorilerimPage() {
 
   await dbConnect();
   const user = await User.findById(session.user.id).populate('wishlist').lean();
-  const tours = (user?.wishlist || []) as Array<{
+  const tours = (user?.wishlist || []) as unknown as Array<{
     _id: string;
     name: string;
     slug: string;

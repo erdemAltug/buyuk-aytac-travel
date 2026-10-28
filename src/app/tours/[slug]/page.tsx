@@ -46,11 +46,12 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
     await import('@/lib/dbConnect').then((module) => module.default());
     const Tour = (await import('@/models/Tour')).default;
 
-    tour = await Tour.findOne({ slug, isActive: true }).lean();
-    
-    // tour içindeki _id'yi string'e çevir
+    const doc = await Tour.findOne({ slug, isActive: true }).lean();
+
+    // İstemci bileşenlerine (PriceCalculator vb.) yalnızca düz veri geçebilir:
+    // program/additionalServices içindeki alt belge _id'leri (ObjectId) JSON ile string'e çevrilir.
+    tour = doc ? (JSON.parse(JSON.stringify(doc)) as ITour) : null;
     if (tour) {
-      tour._id = (tour._id as unknown as { toString(): string }).toString();
       
       // Date nesnelerini formatlı şekilde çevir
       if (tour.createdAt) tour.createdAt = new Date(tour.createdAt);

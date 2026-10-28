@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     let tourId = tourIdParam;
     if (!tourId && tourSlug) {
       const tour = await Tour.findOne({ slug: tourSlug }).select('_id');
-      tourId = tour?._id?.toString();
+      tourId = tour?._id?.toString() ?? null;
     }
     if (!tourId) {
       return NextResponse.json({ success: false, message: 'Tur gerekli' }, { status: 400 });

@@ -3,6 +3,7 @@
  * Kullanım: npx tsx scripts/test-r2-upload-image.ts
  */
 import dotenv from 'dotenv';
+import { HeadObjectCommand } from '@aws-sdk/client-s3';
 import { createR2Client, getR2PublicBase, isR2Configured, uploadBufferToR2 } from '../src/lib/r2';
 
 dotenv.config({ path: '.env.local' });
@@ -31,12 +32,12 @@ async function main() {
   console.log('Public base:', getR2PublicBase());
 
   const s3 = createR2Client();
-  const head = await s3
-    .headObject({
+  const head = await s3.send(
+    new HeadObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME!.replace(/^["']|["']$/g, ''),
       Key: key,
     })
-    .promise();
+  );
   console.log('HEAD ContentType:', head.ContentType, 'Size:', head.ContentLength);
   console.log('OK — admin upload bu URL kalıbını kullanacak');
 }

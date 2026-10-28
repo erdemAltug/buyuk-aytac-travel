@@ -124,7 +124,7 @@ const augustBlogs = [
 
 async function seedAugustBlogs() {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI as string);
     console.log('✅ MongoDB bağlantısı başarılı\n');
 
     let created = 0;

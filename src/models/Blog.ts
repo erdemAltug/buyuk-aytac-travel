@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import type { IBlog as IBlogBase } from '@/types/blog';
 
-export interface IBlog extends IBlogBase, Document {
+export interface IBlog extends Omit<IBlogBase, '_id' | 'publishDate' | 'createdAt' | 'updatedAt'>, Document {
   publishDate: Date;
   createdAt: Date;
   updatedAt: Date;

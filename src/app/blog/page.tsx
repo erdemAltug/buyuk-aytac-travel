@@ -48,10 +48,11 @@ export const metadata: Metadata = {
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: Promise<{ category?: string }>;
 }) {
-  // URL parametresinden kategoriyi al
-  const activeCategory = searchParams.category || 'all';
+  // URL parametresinden kategoriyi al (Next 15: searchParams bir Promise)
+  const { category } = await searchParams;
+  const activeCategory = category || 'all';
 
   // Server-side'da blog yazılarını getir
   let blogs: BlogData[] = [];

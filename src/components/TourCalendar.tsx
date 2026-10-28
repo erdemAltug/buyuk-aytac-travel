@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getTours } from '@/services/tourService';
-import { ITour } from '@/models/Tour';
+import type { ITour } from '@/types/tour';
 
 interface CalendarDay {
   day: number;
