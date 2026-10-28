@@ -7,7 +7,7 @@ export { TourType, AccommodationType } from '@/types/tour';
 
 export interface ITour
   extends Omit<ITourBase, '_id' | 'destinationRef' | 'startDate' | 'endDate' | 'createdAt' | 'updatedAt'>,
-    Document {
+    Document<string> {
   destinationRef?: Types.ObjectId;
   startDate?: Date;
   endDate?: Date;
