@@ -8,7 +8,9 @@
 - **React** 19 · **TypeScript** 5
 - **MongoDB** (Mongoose)
 - **TailwindCSS** 4
-- **AWS S3** (görsel yüklemeleri)
+- **Cloudflare R2** (görsel yüklemeleri, `@aws-sdk/client-s3` ile)
+- **NextAuth v5** (kullanıcı ve admin girişi)
+- **Sentry** (hata takibi) · **PostHog** (analitik)
 
 ## Kurulum
 
@@ -16,6 +18,7 @@
 npm install
 cp .env.example .env.local   # MONGODB_URI ve diğer değişkenleri doldurun
 npm run dev
+npm run typecheck   # push etmeden önce tip kontrolü (build de bu hatalarda durur)
 ```
 
 ## İçerik yönetimi
@@ -28,8 +31,9 @@ npm run dev
 ### Hızlı komutlar
 
 ```bash
-# Tur ekle/güncelle (örnek)
-npx tsx scripts/add-assos-tour.ts
+# Tur ekle/güncelle (veriler scripts/tours/ içinde)
+npm run add:tours -- assos-tour
+npm run add:tours -- --all
 
 # Öne çıkan turları senkronize et (geçmiş turları kaldır)
 npx tsx scripts/sync-featured-tours.ts
@@ -41,6 +45,12 @@ npx tsx scripts/seed-tour-seo-blogs.ts
 
 Admin panel: `/admin/login`
 
+## Ortam değişkenleri
+
+`.env.example` dosyasına bakın. Ek olarak:
+
+- `CRON_SECRET` — `/api/cron/expired-tours` yalnızca `Authorization: Bearer <CRON_SECRET>` başlığıyla çalışır (Vercel Cron bunu otomatik gönderir).
+
 ## Proje yapısı
 
 ```
@@ -50,7 +60,8 @@ src/
   lib/           # Yardımcı fonksiyonlar (mongodb, homeData, tourUpcoming)
   models/        # Mongoose modelleri (Tour, Blog, ...)
   types/         # TypeScript tipleri
-scripts/         # Tur ve blog seed scriptleri
+scripts/         # Blog seed scriptleri ve add-tours.ts
+scripts/tours/   # Tur verileri (her dosya bir tur dizisi)
 public/images/   # Tur ve blog görselleri
 docs/            # İçerik ekleme rehberleri
 ```

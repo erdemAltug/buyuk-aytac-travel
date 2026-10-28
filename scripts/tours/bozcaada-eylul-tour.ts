@@ -1,19 +1,9 @@
 /**
  * Bozcaada Turu — 12 Eylül 2026 Seed Script
- * Kullanım: npx tsx scripts/add-bozcaada-eylul-tour.ts
+ * Kullanım: npm run add:tours -- bozcaada-eylul-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const bozcaadaEylulTour = {
   name: 'Bozcaada Turu - 12 Eylül 2026',
@@ -67,38 +57,4 @@ Rehberimizin belirleyeceği saatte toplanarak feribot ile adadan ayrılıp Geyik
   viewCount: 0,
 };
 
-async function addBozcaadaEylulTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: bozcaadaEylulTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, bozcaadaEylulTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(bozcaadaEylulTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 12 Eylül 2026 Cumartesi');
-    console.log('- Fiyat:', bozcaadaEylulTour.price, 'TL');
-    console.log('- Tür: Günübirlik / Yurtiçi / Öne çıkan');
-    console.log('- URL: /tours/' + bozcaadaEylulTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addBozcaadaEylulTour();
+export default [bozcaadaEylulTour];

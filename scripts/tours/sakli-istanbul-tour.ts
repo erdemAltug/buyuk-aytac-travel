@@ -1,19 +1,9 @@
 /**
  * Saklı İstanbul Turu Seed Script
- * Kullanım: npx tsx scripts/add-sakli-istanbul-tour.ts
+ * Kullanım: npm run add:tours -- sakli-istanbul-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const sakliIstanbulTour = {
   name: 'SAKLI İSTANBUL TURU',
@@ -73,38 +63,4 @@ Araç içi ikramlar ve rehberlik hizmeti ile Büyük Aytaç Travel ayrıcalığ�
   viewCount: 0,
 };
 
-async function addSakliIstanbulTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: sakliIstanbulTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, sakliIstanbulTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(sakliIstanbulTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 14 Haziran 2026 Pazar');
-    console.log('- Fiyat:', sakliIstanbulTour.price, 'TL');
-    console.log('- Öne çıkan: evet');
-    console.log('- URL: /tours/' + sakliIstanbulTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addSakliIstanbulTour();
+export default [sakliIstanbulTour];

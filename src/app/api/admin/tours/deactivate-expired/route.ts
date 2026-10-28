@@ -1,8 +1,12 @@
+import { requireAdmin } from '@/lib/requireAdmin';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Tour from '@/models/Tour';
 
 export async function POST() {
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
+
   try {
     await dbConnect();
     

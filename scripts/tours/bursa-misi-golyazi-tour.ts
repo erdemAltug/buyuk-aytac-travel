@@ -1,19 +1,9 @@
 /**
  * Bursa - Misi Köyü - Gölyazı - Mudanya Turu Seed Script
- * Kullanım: npx tsx scripts/add-bursa-misi-golyazi-tour.ts
+ * Kullanım: npm run add:tours -- bursa-misi-golyazi-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const bursaTour = {
   name: 'BURSA- MİSİ KÖYÜ - GÖLYAZI - MUDANYA TURU',
@@ -67,38 +57,4 @@ Bölge yoğunluğuna göre programda sıralama değişikliği yapılabilir.`,
   viewCount: 0,
 };
 
-async function addBursaTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: bursaTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, bursaTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(bursaTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 13 Haziran 2026 Cumartesi');
-    console.log('- Fiyat:', bursaTour.price, 'TL (kahvaltı dahil)');
-    console.log('- Öne çıkan: evet');
-    console.log('- URL: /tours/' + bursaTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addBursaTour();
+export default [bursaTour];

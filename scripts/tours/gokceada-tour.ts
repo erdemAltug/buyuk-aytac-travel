@@ -1,19 +1,9 @@
 /**
  * Gökçeada Turu Seed Script
- * Kullanım: npx tsx scripts/add-gokceada-tour.ts
+ * Kullanım: npm run add:tours -- gokceada-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const gokceadaTour = {
   name: 'Gökçeada Turu - 12 Temmuz 2026',
@@ -71,39 +61,4 @@ NOT: Kabatepe-Gökçeada feribot seferleri değişiklik gösterebilir. Feribot v
   viewCount: 0,
 };
 
-async function addGokceadaTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: gokceadaTour.slug });
-    await Tour.deleteOne({ slug: 'gokceada-turu' });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, gokceadaTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(gokceadaTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 12 Temmuz 2026 Pazar');
-    console.log('- Fiyat:', gokceadaTour.price, 'TL');
-    console.log('- Tür: Günübirlik / Yurtiçi / Öne çıkan');
-    console.log('- URL: /tours/' + gokceadaTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addGokceadaTour();
+export default [gokceadaTour];

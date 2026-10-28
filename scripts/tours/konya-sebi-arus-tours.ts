@@ -1,19 +1,9 @@
 /**
  * Şeb-i Arus Konya Turu — 9-11 ve 11-13 Aralık 2026
- * Kullanım: npx tsx scripts/add-konya-sebi-arus-tours.ts
+ * Kullanım: npm run add:tours -- konya-sebi-arus-tours
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const description = `Hoşgörünün ve maneviyatın izinde...
 
@@ -92,51 +82,4 @@ const tourDates = [
   },
 ];
 
-async function addKonyaTours() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı\n');
-
-    let added = 0;
-    let updated = 0;
-
-    for (const { name, slug, price, startDate, endDate, label } of tourDates) {
-      const tourData = {
-        ...baseTour,
-        name,
-        slug,
-        price,
-        startDate,
-        endDate,
-      };
-
-      const existingTour = await Tour.findOne({ slug });
-
-      if (existingTour) {
-        Object.assign(existingTour, tourData);
-        await existingTour.save();
-        updated++;
-        console.log(`🔄 Güncellendi: ${label} → /tours/${slug} (${price} TL)`);
-      } else {
-        const newTour = new Tour(tourData);
-        await newTour.save();
-        added++;
-        console.log(`✅ Eklendi: ${label} → /tours/${slug} (${price} TL)`);
-      }
-    }
-
-    console.log('\n📊 Özet:');
-    console.log(`- Yeni: ${added} | Güncellenen: ${updated}`);
-    console.log('- Tür: Konaklamalı / Yurtiçi / Öne çıkan');
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('\n🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addKonyaTours();
+export default tourDates.map(({ label: _label, ...rest }) => ({ ...baseTour, ...rest }));

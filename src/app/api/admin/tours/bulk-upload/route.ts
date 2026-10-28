@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/lib/requireAdmin';
 import { NextRequest, NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 import dbConnect from '@/lib/dbConnect';
@@ -92,6 +93,9 @@ function validateTourData(row: any, rowIndex: number): string[] {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
+
   try {
     await dbConnect();
     

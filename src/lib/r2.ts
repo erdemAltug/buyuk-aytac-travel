@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 function stripQuotes(value: string | undefined): string {
   return (value || '').trim().replace(/^["']|["']$/g, '');
@@ -25,20 +25,21 @@ export function isR2Configured(): boolean {
   );
 }
 
-export function createR2Client(): AWS.S3 {
+export function createR2Client(): S3Client {
   if (!isR2Configured()) {
     throw new Error(
       'R2 yapılandırılmamış. S3_BUCKET_NAME, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_ENDPOINT, S3_PUBLIC_URL gerekli.'
     );
   }
 
-  return new AWS.S3({
+  return new S3Client({
     endpoint: getR2Endpoint(),
-    accessKeyId: stripQuotes(process.env.S3_ACCESS_KEY_ID),
-    secretAccessKey: stripQuotes(process.env.S3_SECRET_ACCESS_KEY),
-    signatureVersion: 'v4',
     region: stripQuotes(process.env.S3_REGION) || 'auto',
-    s3ForcePathStyle: true,
+    forcePathStyle: true,
+    credentials: {
+      accessKeyId: stripQuotes(process.env.S3_ACCESS_KEY_ID),
+      secretAccessKey: stripQuotes(process.env.S3_SECRET_ACCESS_KEY),
+    },
   });
 }
 
@@ -62,15 +63,15 @@ export async function uploadBufferToR2({
   const s3 = createR2Client();
   const bucket = stripQuotes(process.env.S3_BUCKET_NAME);
 
-  await s3
-    .putObject({
+  await s3.send(
+    new PutObjectCommand({
       Bucket: bucket,
       Key: key,
       Body: buffer,
       ContentType: contentType,
       CacheControl: 'public, max-age=31536000, immutable',
     })
-    .promise();
+  );
 
   return {
     key,

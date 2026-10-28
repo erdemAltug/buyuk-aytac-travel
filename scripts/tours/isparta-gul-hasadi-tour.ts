@@ -1,19 +1,9 @@
 /**
  * Isparta Gül Hasadı - Salda Gölü - Pamukkale Turu Seed Script
- * Kullanım: npx tsx scripts/add-isparta-gul-hasadi-tour.ts
+ * Kullanım: npm run add:tours -- isparta-gul-hasadi-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const ispartaGulTour = {
   name: 'ISPARTA GÜL HASADI SALDA GÖLÜ PAMUKKALE TURU',
@@ -81,39 +71,4 @@ Bölge yoğunluğuna göre tur programında sıralama değişiklik gösterebilir
   viewCount: 0,
 };
 
-async function addIspartaGulTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: ispartaGulTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, ispartaGulTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(ispartaGulTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 5-7 Haziran 2026');
-    console.log('- Fiyat:', ispartaGulTour.price, 'TL');
-    console.log('- Konaklama: 2 Gün 1 Gece (yarım pansiyon)');
-    console.log('- Öne çıkan: evet');
-    console.log('- URL: /tours/' + ispartaGulTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addIspartaGulTour();
+export default [ispartaGulTour];

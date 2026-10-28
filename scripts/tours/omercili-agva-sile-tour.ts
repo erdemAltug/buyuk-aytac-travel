@@ -1,19 +1,9 @@
 /**
  * Ömerli - Saklı Göl - Ağva - Şile Turu Seed Script
- * Kullanım: npx tsx scripts/add-omercili-agva-sile-tour.ts
+ * Kullanım: npm run add:tours -- omercili-agva-sile-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const omerciliAgvaSileTour = {
   name: 'ÖMERLİ – SAKLI GÖL- AĞVA-DENİZ FENERİ-GÖKSU NEHRİ-TEKNE TURU-ŞİLE',
@@ -57,38 +47,4 @@ Panoramik turumuz ardından vereceğimiz serbest zamanda doyumsuz Karadeniz manz
   viewCount: 0,
 };
 
-async function addOmerciliAgvaSileTour() {
-  try {
-    console.log('MongoDB\'ye bağlanılıyor...');
-    await mongoose.connect(MONGODB_URI);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: omerciliAgvaSileTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, omerciliAgvaSileTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(omerciliAgvaSileTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 7 Haziran 2026 Pazar');
-    console.log('- Fiyat:', omerciliAgvaSileTour.price, 'TL');
-    console.log('- Öne çıkan: evet');
-    console.log('- URL: /tours/' + omerciliAgvaSileTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addOmerciliAgvaSileTour();
+export default [omerciliAgvaSileTour];

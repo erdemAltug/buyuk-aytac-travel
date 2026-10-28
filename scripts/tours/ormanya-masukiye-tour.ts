@@ -1,19 +1,9 @@
 /**
  * Ormanya Maşukiye Turu — 23 Ağustos 2026 Seed Script
- * Kullanım: npx tsx scripts/add-ormanya-masukiye-tour.ts
+ * Kullanım: npm run add:tours -- ormanya-masukiye-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const ormanyaTour = {
   name: 'Ormanya Maşukiye Turu - 23 Ağustos 2026',
@@ -64,38 +54,4 @@ Tur programında bölge yoğunluğu, trafik ve hava koşulları sebebiyle sıral
   viewCount: 0,
 };
 
-async function addOrmanyaTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: ormanyaTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, ormanyaTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(ormanyaTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 23 Ağustos 2026 Pazar');
-    console.log('- Fiyat:', ormanyaTour.price, 'TL');
-    console.log('- Tür: Günübirlik / Yurtiçi / Öne çıkan');
-    console.log('- URL: /tours/' + ormanyaTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addOrmanyaTour();
+export default [ormanyaTour];

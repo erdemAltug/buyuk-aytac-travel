@@ -16,6 +16,20 @@ const sentryWebpackPluginOptions = {
   tunnelRoute: '/monitoring',
 };
 
+
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.posthog.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https://*.posthog.com https://*.google-analytics.com https://www.googletagmanager.com https://*.sentry.io",
+  "frame-src 'self' https://www.google.com https://www.youtube.com https://www.instagram.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ');
+
 const nextConfig = {
   // Googlebot tam HTML alsın - önceki ayar tüm botları engelliyordu
   // htmlLimitedBots: /.*/,
@@ -29,14 +43,12 @@ const nextConfig = {
 
     return config;
   },
+  // Build sırasında tip ve lint hataları yakalansın (canlıya hatalı kod gitmesin)
   eslint: {
-    // Build sırasında ESLint kontrolünü devre dışı bırak
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    // GEÇİCİ: Next.js 15.2.4'teki API Route Handler sorununu çözmek için TypeScript kontrolünü devre dışı bırak
-    // Daha sonra API Route Handler'larını next.js dokümanına uygun olarak güncellemek gerekecek
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     // Hydration uyumsuzluğunu önlemek: tüm Image src'leri göreli URL (sunucu/istemci aynı)
@@ -131,6 +143,20 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            // Önce rapor modunda: hiçbir şeyi engellemez, sadece tarayıcı konsoluna ihlalleri yazar.
+            // Birkaç gün sorunsuz görününce anahtarı 'Content-Security-Policy' yapın.
+            key: 'Content-Security-Policy-Report-Only',
+            value: contentSecurityPolicy,
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },

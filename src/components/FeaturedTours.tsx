@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import { formatDateLong } from '@/lib/formatDate';
 import { filterUpcomingTours } from '@/lib/tourUpcoming';
-import TourCard from './TourCard';
+import TourCard from '@/components/tours/TourCard';
 
 const TOUR_GRID_CLASS =
   'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr';

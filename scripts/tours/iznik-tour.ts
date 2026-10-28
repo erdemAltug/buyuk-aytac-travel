@@ -1,19 +1,9 @@
 /**
  * İznik Kültür Turu — 29 Ağustos 2026 Seed Script
- * Kullanım: npx tsx scripts/add-iznik-tour.ts
+ * Kullanım: npm run add:tours -- iznik-tour
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const iznikTour = {
   name: 'İznik Kültür Turu - 29 Ağustos 2026',
@@ -65,38 +55,4 @@ Turumuzun son bölümünde ise İznik Gölü'nün eşsiz manzarası eşliğinde 
   viewCount: 0,
 };
 
-async function addIznikTour() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı');
-
-    const existingTour = await Tour.findOne({ slug: iznikTour.slug });
-
-    if (existingTour) {
-      console.log('⚠️ Bu tur zaten mevcut, güncelleniyor:', existingTour.name);
-      Object.assign(existingTour, iznikTour);
-      await existingTour.save();
-      console.log('✅ Tur başarıyla güncellendi');
-    } else {
-      const newTour = new Tour(iznikTour);
-      await newTour.save();
-      console.log('✅ Tur başarıyla eklendi:', newTour.name);
-    }
-
-    console.log('\n📊 Tur Detayları:');
-    console.log('- Tarih: 29 Ağustos 2026 Cumartesi');
-    console.log('- Fiyat:', iznikTour.price, 'TL');
-    console.log('- Tür: Günübirlik / Yurtiçi / Öne çıkan');
-    console.log('- URL: /tours/' + iznikTour.slug);
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addIznikTour();
+export default [iznikTour];

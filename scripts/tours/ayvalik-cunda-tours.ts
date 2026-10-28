@@ -1,19 +1,9 @@
 /**
  * Ayvalık Cunda Turu — çoklu tarih seed script
- * Kullanım: npx tsx scripts/add-ayvalik-cunda-tours.ts
+ * Kullanım: npm run add:tours -- ayvalik-cunda-tours
  */
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import Tour, { TourType, AccommodationType } from '../src/models/Tour';
-
-dotenv.config({ path: '.env.local' });
-
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI bulunamadı (.env.local)');
-  process.exit(1);
-}
+import { TourType, AccommodationType } from '../../src/models/Tour';
 
 const tourDates = [
   { date: '2026-06-28', label: '28 Haziran 2026 Pazar', slugSuffix: '28-haziran-2026' },
@@ -65,58 +55,10 @@ NOT: TEKNE TURUNA KATILMAYAN MİSAFİRLERİMİZ İÇİN; AYVALIK PROGRAMI SONRAS
   viewCount: 0,
 };
 
-async function addAyvalikCundaTours() {
-  try {
-    console.log("MongoDB'ye bağlanılıyor...");
-    await mongoose.connect(MONGODB_URI as string);
-    console.log('✅ MongoDB bağlantısı başarılı\n');
-
-    // Önceki hatalı kayıt (slug: ayvalik-cunda-turu)
-    await Tour.deleteOne({ slug: 'ayvalik-cunda-turu' });
-
-    let added = 0;
-    let updated = 0;
-
-    for (const { date, label, slugSuffix } of tourDates) {
-      const slug = `ayvalik-cunda-turu-${slugSuffix}`;
-      const dateLabel = label.replace(/ (Pazar|Cumartesi)$/, '');
-      const tourData = {
-        ...baseTour,
-        name: `Ayvalık Cunda Turu - ${dateLabel}`,
-        slug,
-        startDate: new Date(date),
-        endDate: new Date(date),
-      };
-
-      const existingTour = await Tour.findOne({ slug });
-
-      if (existingTour) {
-        Object.assign(existingTour, tourData);
-        await existingTour.save();
-        updated++;
-        console.log(`🔄 Güncellendi: ${label} → /tours/${slug}`);
-      } else {
-        const newTour = new Tour(tourData);
-        await newTour.save();
-        added++;
-        console.log(`✅ Eklendi: ${label} → /tours/${slug}`);
-      }
-    }
-
-    console.log('\n📊 Özet:');
-    console.log(`- Yeni eklenen: ${added}`);
-    console.log(`- Güncellenen: ${updated}`);
-    console.log(`- Toplam tarih: ${tourDates.length}`);
-    console.log('- Fiyat: 1.750 TL');
-    console.log('- Tür: Günübirlik / Yurtiçi / Öne çıkan');
-  } catch (error) {
-    console.error('❌ Hata:', error);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-    console.log('\n🔌 MongoDB bağlantısı kapatıldı');
-    process.exit(0);
-  }
-}
-
-addAyvalikCundaTours();
+export default tourDates.map(({ date, label, slugSuffix }) => ({
+  ...baseTour,
+  name: `Ayvalık Cunda Turu - ${label.replace(/ (Pazar|Cumartesi)$/, '')}`,
+  slug: `ayvalik-cunda-turu-${slugSuffix}`,
+  startDate: new Date(date),
+  endDate: new Date(date),
+}));
