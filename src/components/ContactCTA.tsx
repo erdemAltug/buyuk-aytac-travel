@@ -4,7 +4,7 @@ import { PHONE_DISPLAY, PHONE_TEL, whatsappLink } from '@/lib/tourUi';
 export default function ContactCTA() {
   return (
     <section className="bg-white px-4 py-16 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-sunset-500 via-sunset-600 to-rose-600 px-6 py-12 text-white sm:px-12 sm:py-16">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-sunset-600 via-sunset-700 to-rose-800 px-6 py-12 text-white sm:px-12 sm:py-16">
         <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/15 blur-2xl" />
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
           <div>

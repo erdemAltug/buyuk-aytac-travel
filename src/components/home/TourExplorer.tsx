@@ -103,7 +103,7 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
                 type="button"
                 onClick={() => setMonth(null)}
                 className={`h-16 w-20 shrink-0 rounded-2xl text-sm font-semibold transition ${
-                  month === null ? 'bg-sunset-500 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200'
+                  month === null ? 'bg-sunset-600 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200'
                 }`}
               >
                 Tüm
@@ -118,7 +118,7 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
                     onClick={() => setMonth(active ? null : key)}
                     aria-pressed={active}
                     className={`h-16 w-24 shrink-0 rounded-2xl text-sm font-semibold capitalize transition ${
-                      active ? 'bg-sunset-500 text-white' : 'bg-white text-slate-800 ring-1 ring-slate-200 hover:ring-slate-300'
+                      active ? 'bg-sunset-600 text-white' : 'bg-white text-slate-800 ring-1 ring-slate-200 hover:ring-slate-300'
                     }`}
                   >
                     {monthLabel(key)}

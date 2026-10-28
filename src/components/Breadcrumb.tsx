@@ -7,9 +7,12 @@ interface BreadcrumbProps {
   customItems?: { name: string; href: string }[];
   homeName?: string;
   className?: string;
+  /** "dark": koyu zemin üzerinde (ör. tur detay başlık bandı) */
+  tone?: 'light' | 'dark';
 }
 
-export default function Breadcrumb({ customItems, homeName = 'Ana Sayfa', className = '' }: BreadcrumbProps) {
+export default function Breadcrumb({ customItems, homeName = 'Ana Sayfa', className = '', tone = 'light' }: BreadcrumbProps) {
+  const dark = tone === 'dark';
   const pathname = usePathname();
   
   // Özel ekmek kırıntısı öğeleri belirtilmediyse, yol adından otomatik oluştur
@@ -36,20 +39,20 @@ export default function Breadcrumb({ customItems, homeName = 'Ana Sayfa', classN
       />
       
       {/* Breadcrumb UI */}
-      <nav aria-label="Ekmek Kırıntısı" className={`flex items-center space-x-2 text-sm ${className}`}>
+      <nav aria-label="Ekmek Kırıntısı" className={`flex flex-wrap items-center gap-y-1 text-sm ${className}`}>
         {items.map((item, index) => (
-          <div key={item.href} className="flex items-center">
+          <div key={item.href} className={`flex items-center ${dark && index === items.length - 1 ? 'max-sm:hidden' : ''}`}>
             {index > 0 && (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className={`mx-2 h-4 w-4 ${dark ? 'text-white/50' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             )}
             {index === items.length - 1 ? (
-              <span className="text-gray-700 font-medium" aria-current="page">{item.name}</span>
+              <span className={`font-medium ${dark ? 'line-clamp-1 text-white' : 'text-gray-700'}`} aria-current="page">{item.name}</span>
             ) : (
               <Link 
                 href={item.href} 
-                className="text-blue-600 hover:text-blue-800 hover:underline"
+                className={dark ? 'text-white/80 hover:text-white hover:underline' : 'text-blue-600 hover:text-blue-800 hover:underline'}
               >
                 {item.name}
               </Link>

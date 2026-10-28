@@ -67,7 +67,7 @@ export default function WhyUs() {
               <li key={s.name} className="relative flex items-start gap-4 pl-0">
                 <span
                   className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                    i === 0 ? 'bg-sunset-500 text-white' : 'bg-white text-brand-900'
+                    i === 0 ? 'bg-sunset-600 text-white' : 'bg-white text-brand-900'
                   }`}
                 >
                   {i + 1}

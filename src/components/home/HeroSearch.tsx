@@ -46,7 +46,7 @@ export default function HeroSearch() {
         />
         <button
           type="submit"
-          className="h-12 shrink-0 rounded-xl bg-sunset-500 px-5 text-sm font-bold text-white transition-colors hover:bg-sunset-600 sm:px-7 sm:text-base"
+          className="h-12 shrink-0 rounded-xl bg-sunset-600 px-5 text-sm font-bold text-white transition-colors hover:bg-sunset-700 sm:px-7 sm:text-base"
         >
           Tur Bul
         </button>

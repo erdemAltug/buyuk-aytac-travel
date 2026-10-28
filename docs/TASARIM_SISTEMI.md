@@ -29,12 +29,14 @@ Tanım yeri: `src/app/globals.css` → `@theme` bloğu (Tailwind v4). Bu tokenla
 | `brand-600` | `#1d56f0` | Birincil buton (Rezervasyon), linkler |
 | `brand-700/800` | `#1642d0` / `#1838a8` | Hover, vurgulu metin |
 | `brand-900/950` | `#0f1f4d` / `#0a1430` | Koyu bölümler (hero, Neden Biz), aktif sekme |
-| `sunset-500/600` | `#ff7a1a` / `#f05f06` | Sıcak vurgu: "Tur Bul", ay seçimi, "X gün kaldı" rozeti, üst başlık etiketleri |
+| `sunset-400` | `#ff9a4d` | **Yalnızca koyu zeminde** turuncu metin (hero başlığı) |
+| `sunset-600` | `#c2410c` | Üzerinde beyaz yazı olan turuncu buton/rozet ("Tur Bul", ay seçimi, "X gün kaldı"); açık zeminde turuncu etiket metni |
+| `sunset-700` | `#9a3412` | Turuncu hover |
 | `sand-50/100` | `#fbf8f3` / `#f4eee3` | Bölüm zeminleri (vitrin, tur detay) |
 | `emerald-500` | Tailwind | Yalnızca WhatsApp |
 | `rose-500` | Tailwind | İndirim rozeti |
 
-Kural: **Bir ekranda tek bir turuncu CTA olsun.** Turuncu dikkat çeker, her yerde kullanılırsa etkisini kaybeder.
+Kural: **Beyaz yazının altına `sunset-500` veya daha açık turuncu koymayın** (kontrast 3:1'in altına düşer, okunmaz). **Bir ekranda tek bir turuncu CTA olsun.** Turuncu dikkat çeker, her yerde kullanılırsa etkisini kaybeder.
 
 ### Tipografi
 
@@ -103,6 +105,10 @@ Masaüstü: sağda yapışkan rezervasyon kartı. Mobil: alta sabit rezervasyon 
 5. **Font hatası:** Geist yükleniyor ama `body { font-family: Arial }` ile eziliyordu; Türkçe alt küme (`latin-ext`) yüklenmiyordu.
 6. **Yüzen butonlar** mobilde kart butonlarını ve paylaş ikonlarını örtüyordu.
 7. **Tur listesi sayfası** Next 15'te `searchParams`'ı Promise olarak beklemiyordu.
+8. **CSS/JS'e 1 yıllık `immutable` önbellek başlığı veriliyordu** (`next.config.mjs`). Geliştirmede yeni CSS hiç yüklenmiyordu; canlıda da `public/` altında aynı adla değiştirilen görseller bir yıl eski haliyle görünüyordu. → JS/CSS kuralı kaldırıldı (Next zaten doğru başlığı veriyor), görseller 1 hafta.
+9. **Kategori görselleri yanlış yerlerdi:** `public/images/categories/*-manzara.jpg` dosyalarında "Kapadokya" diye Paris, "Ege" diye İtalya, "Balkan" diye Marakeş fotoğrafı vardı. Rota mozaiği artık o rotadaki gerçek turun görselini kullanıyor. Bu dosyalar başka bir yerde kullanılmıyorsa silinebilir.
+10. **Breadcrumb koyu zeminde okunmuyordu** → `tone="dark"` seçeneği. Tur sayfasında BreadcrumbList şeması iki kez basılıyordu → tekilleştirildi.
+11. **PostHog hydration hatası:** PostHog script'leri React sayfayı bağlamadan eklendiği için konsolda hata veriyordu → PostHog sayfa yüklendikten sonra başlatılıyor.
 
 ---
 

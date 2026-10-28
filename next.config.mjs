@@ -170,23 +170,16 @@ const nextConfig = {
           },
         ],
       },
-      // Static files caching
+      // Görseller: 1 hafta önbellek. "immutable" kullanılmıyor — public/ altındaki bir görsel aynı adla
+      // değiştirilirse ziyaretçiler bir yıl boyunca eskisini görüyordu.
+      // JS/CSS için kural yok: Next.js /_next/static dosyalarını zaten içerik hash'iyle ve doğru başlıkla sunuyor;
+      // önceki "/:path*.(js|css) immutable" kuralı geliştirmede yeni CSS'in hiç yüklenmemesine yol açıyordu.
       {
         source: '/:path*.(jpg|jpeg|png|webp|avif|svg|ico)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Static pages caching
-      {
-        source: '/:path*.(js|css)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: 'public, max-age=604800, stale-while-revalidate=86400',
           },
         ],
       },

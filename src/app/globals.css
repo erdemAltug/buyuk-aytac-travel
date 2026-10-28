@@ -18,12 +18,16 @@
   --color-brand-900: #0f1f4d;
   --color-brand-950: #0a1430;
 
-  /* Vurgu: gün batımı turuncusu (fiyat, rozet, sıcak CTA) */
+  /* Vurgu: gün batımı turuncusu
+     400 → yalnızca KOYU zeminde metin (hero başlığı)
+     600 → üzerinde beyaz yazı olan butonlar/rozetler (beyazla kontrast 5.2:1)
+     600/700 → açık zeminde turuncu metin */
   --color-sunset-50: #fff6ed;
   --color-sunset-100: #ffead4;
   --color-sunset-400: #ff9a4d;
-  --color-sunset-500: #ff7a1a;
-  --color-sunset-600: #f05f06;
+  --color-sunset-500: #f26a10;
+  --color-sunset-600: #c2410c;
+  --color-sunset-700: #9a3412;
 
   /* Nötr kum tonu (bölüm zeminleri) */
   --color-sand-50: #fbf8f3;

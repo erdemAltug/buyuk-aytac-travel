@@ -122,38 +122,6 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
     }
   };
 
-  // BreadcrumbList schema for SEO
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Ana Sayfa',
-        'item': 'https://www.buyukaytactravel.com'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'Turlar',
-        'item': 'https://www.buyukaytactravel.com/tours'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 3,
-        'name': tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları',
-        'item': `https://www.buyukaytactravel.com/tours?tourType=${tour.tourType}`
-      },
-      {
-        '@type': 'ListItem',
-        'position': 4,
-        'name': tour.name,
-        'item': `https://www.buyukaytactravel.com/tours/${tour.slug}`
-      }
-    ]
-  };
-
   const price = finalPrice(tour);
   const hasDiscount = !!tour.discountRate && tour.discountRate > 0;
   const dateLabel = formatDateRange(tour.startDate, tour.endDate);
@@ -211,7 +179,6 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <TrackTourView
         tour={{
@@ -240,11 +207,11 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
                   href: tour.tourType === 'domestic' ? '/tours?tourType=domestic' : '/tours?tourType=international' },
                 { name: tour.name, href: `/tours/${tour.slug}` },
               ]}
-              className="text-white/70 [&_a]:text-white/70 [&_a:hover]:text-white"
+              tone="dark"
             />
             <div className="mt-6 flex flex-wrap gap-2">
               {days !== null && (
-                <span className="rounded-full bg-sunset-500 px-3 py-1 text-xs font-bold">
+                <span className="rounded-full bg-sunset-600 px-3 py-1 text-xs font-bold">
                   {days === 0 ? 'Bugün yola çıkıyor' : `Kalkışa ${days} gün`}
                 </span>
               )}

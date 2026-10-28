@@ -88,7 +88,7 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true }
               >
                 <span
                   className={`w-full py-0.5 text-[10px] font-bold uppercase tracking-wider text-white ${
-                    upcoming ? 'bg-sunset-500' : 'bg-slate-400'
+                    upcoming ? 'bg-sunset-600' : 'bg-slate-500'
                   }`}
                 >
                   {parts.month}
@@ -100,7 +100,7 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true }
 
             <div className="absolute inset-x-3 bottom-3 z-10 flex flex-wrap gap-1.5">
               {days !== null && days <= 21 && (
-                <span className="rounded-full bg-sunset-500 px-2.5 py-1 text-[11px] font-bold text-white shadow">
+                <span className="rounded-full bg-sunset-600 px-2.5 py-1 text-[11px] font-bold text-white shadow">
                   {days === 0 ? 'Bugün' : `${days} gün kaldı`}
                 </span>
               )}
