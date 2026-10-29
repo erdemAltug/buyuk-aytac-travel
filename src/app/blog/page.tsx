@@ -61,7 +61,7 @@ export default async function BlogPage({
   try {
     await dbConnect();
     
-    let query: any = { isPublished: true };
+    const query: any = { isPublished: true };
     
     // Kategori filtrelemesi
     if (activeCategory !== 'all') {

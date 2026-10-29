@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const tourLinks = [
   {
-    href: '/tours?tourType=domestic',
+    href: '/tours/domestic',
     label: 'Yurtiçi Turlar',
     description: 'Türkiye genelinde turlar',
     icon: '🏔️',
@@ -20,7 +20,7 @@ const tourLinks = [
     icon: '🏨',
   },
   {
-    href: '/tours?tourType=international',
+    href: '/tours/international',
     label: 'Yurtdışı Turlar',
     description: 'Yurt dışı rotalar',
     icon: '✈️',
@@ -84,7 +84,7 @@ export default function TourQuickLinks() {
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Çerkezköy, Tekirdağ ve Çorlu&apos;dan kalkan{' '}
-            <Link href="/tours?tourType=domestic" className="text-blue-600 hover:underline font-medium">
+            <Link href="/tours/domestic" className="text-blue-600 hover:underline font-medium">
               yurtiçi
             </Link>
             ,{' '}

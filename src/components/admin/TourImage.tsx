@@ -12,8 +12,6 @@ export default function TourImage({ src, alt, className = '' }: TourImageProps) 
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const placeholderSrc = '/images/placeholder-tour.svg';
-
   if (error || !src) {
     return (
       <div className={`bg-gray-200 flex items-center justify-center ${className}`}>

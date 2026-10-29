@@ -12,9 +12,8 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
   // Hesaplama için state tanımları
   const [adultCount, setAdultCount] = useState<number>(2);
   const [childCount, setChildCount] = useState<number>(0);
-  const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<string[]>([]);
+  const [selectedAdditionalServices] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [pricePerPerson, setPricePerPerson] = useState<number>(tour.price);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [reservationForm, setReservationForm] = useState({
     name: '',
@@ -23,17 +22,6 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
     date: '',
     notes: ''
   });
-
-  // Ek hizmet seçiminin değişmesi
-  const handleAdditionalServiceChange = (serviceId: string) => {
-    setSelectedAdditionalServices(prev => {
-      if (prev.includes(serviceId)) {
-        return prev.filter(id => id !== serviceId);
-      } else {
-        return [...prev, serviceId];
-      }
-    });
-  };
 
   // Fiyat hesaplama fonksiyonu
   useEffect(() => {
@@ -63,11 +51,7 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
       const discountAmount = subtotal * groupDiscount;
       const finalTotal = subtotal - discountAmount + additionalServicesTotal;
       
-      // Kişi başı fiyat hesaplanması (ek hizmetler hariç)
-      const newPricePerPerson = (adultCount + childCount) > 0 ? (subtotal - discountAmount) / (adultCount + childCount) : tour.price;
-      
       setTotalPrice(finalTotal);
-      setPricePerPerson(newPricePerPerson);
     };
     
     calculatePrice();

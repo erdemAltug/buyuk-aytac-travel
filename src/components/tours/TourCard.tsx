@@ -23,6 +23,8 @@ type TourCardProps = {
   showWhatsApp?: boolean;
   /** Eski API ile uyum için tutuluyor; tarih artık her zaman görsel üzerinde rozet olarak gösteriliyor */
   dateOnImage?: boolean;
+  /** Aynı programın başka tarihli kalkışları (yalnızca yaklaşanlar sayılır) */
+  moreDates?: number;
 };
 
 /**
@@ -30,7 +32,7 @@ type TourCardProps = {
  * Tur görselleri çoğunlukla içinde yazı olan broşür afişleri. Kırpılınca yazılar kesiliyordu;
  * artık afiş bütün olarak gösteriliyor, arkasında aynı görselin bulanık hali zemin oluyor.
  */
-export default function TourCard({ tour, priority = false, showWhatsApp = true }: TourCardProps) {
+export default function TourCard({ tour, priority = false, showWhatsApp = true, moreDates = 0 }: TourCardProps) {
   const [imageError, setImageError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -80,17 +82,10 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true }
               </div>
             )}
 
-            {parts && (
-              <div
-                className={`absolute left-3 top-3 z-10 flex w-14 flex-col items-center overflow-hidden rounded-2xl text-center shadow-lg ${
-                  upcoming ? 'bg-white' : 'bg-white/80'
-                }`}
-              >
-                <span
-                  className={`w-full py-0.5 text-[10px] font-bold uppercase tracking-wider text-white ${
-                    upcoming ? 'bg-sunset-600' : 'bg-slate-500'
-                  }`}
-                >
+            {/* Geçmiş tarihli turda takvim rozeti yanıltıcıydı (Eylül turu "yaklaşan" gibi duruyordu) */}
+            {parts && upcoming && (
+              <div className="absolute left-3 top-3 z-10 flex w-14 flex-col items-center overflow-hidden rounded-2xl bg-white text-center shadow-lg">
+                <span className="w-full bg-sunset-600 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
                   {parts.month}
                 </span>
                 <span className="pt-0.5 font-display text-xl font-bold leading-none text-slate-900">{parts.day}</span>
@@ -102,6 +97,16 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true }
               {days !== null && days <= 21 && (
                 <span className="rounded-full bg-sunset-600 px-2.5 py-1 text-[11px] font-bold text-white shadow">
                   {days === 0 ? 'Bugün' : `${days} gün kaldı`}
+                </span>
+              )}
+              {moreDates > 0 && (
+                <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-brand-900 shadow">
+                  +{moreDates} tarih daha
+                </span>
+              )}
+              {!upcoming && parts && (
+                <span className="rounded-full bg-amber-400 px-2.5 py-1 text-[11px] font-bold text-amber-950 shadow">
+                  Yeni tarih için sorun
                 </span>
               )}
               {hasDiscount && (

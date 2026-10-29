@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import TourCard from '@/components/tours/TourCard';
-import { isUpcoming, monthKey, monthLabel, sortForDisplay } from '@/lib/tourUi';
+import { groupDepartures, isUpcoming, monthKey, monthLabel, sortForDisplay } from '@/lib/tourUi';
 
 type TabKey = 'all' | 'daily' | 'overnight' | 'domestic' | 'international';
 
@@ -12,8 +12,8 @@ const TABS: { key: TabKey; label: string; href: string; test: (t: ITour) => bool
   { key: 'all', label: 'Tümü', href: '/tours', test: () => true },
   { key: 'daily', label: 'Günübirlik', href: '/tours/daily', test: (t) => t.accommodationType === 'daily' },
   { key: 'overnight', label: 'Konaklamalı', href: '/tours/overnight', test: (t) => t.accommodationType === 'with_accommodation' },
-  { key: 'domestic', label: 'Yurtiçi', href: '/tours?tourType=domestic', test: (t) => t.tourType === 'domestic' },
-  { key: 'international', label: 'Yurtdışı', href: '/tours?tourType=international', test: (t) => t.tourType === 'international' },
+  { key: 'domestic', label: 'Yurtiçi', href: '/tours/domestic', test: (t) => t.tourType === 'domestic' },
+  { key: 'international', label: 'Yurtdışı', href: '/tours/international', test: (t) => t.tourType === 'international' },
 ];
 
 /**
@@ -43,7 +43,8 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
   const visible = useMemo(() => {
     let list = sorted.filter(activeTab.test);
     if (month) list = list.filter((t) => monthKey(t.startDate) === month);
-    return list.slice(0, 16);
+    // Aynı programın ikinci tarihi ayrı kart olarak yan yana çıkıyordu
+    return groupDepartures(list).slice(0, 16);
   }, [sorted, activeTab, month]);
 
   const scrollBy = (dir: 1 | -1) => {
@@ -60,7 +61,7 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
   return (
     <section id="turlar" className="scroll-mt-24 bg-sand-50 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex items-end justify-between gap-6">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sunset-600">Tur vitrini</p>
             <h2 className="mt-2 font-display text-3xl font-bold text-slate-900 sm:text-4xl">Nereye gidiyoruz?</h2>
@@ -69,34 +70,60 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
             </p>
           </div>
 
-          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0" role="tablist" aria-label="Tur kategorisi">
-            {TABS.map((t) => {
-              const count = sorted.filter(t.test).length;
-              if (t.key !== 'all' && count === 0) return null;
-              const active = t.key === tab;
-              return (
-                <button
-                  key={t.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => pick(t.key)}
-                  className={`h-11 shrink-0 rounded-full px-5 text-sm font-semibold transition ${
-                    active
-                      ? 'bg-brand-900 text-white shadow-lg shadow-brand-900/20'
-                      : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-slate-300'
-                  }`}
-                >
-                  {t.label}
-                  <span className={`ml-2 text-xs ${active ? 'text-white/70' : 'text-slate-400'}`}>{count}</span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Oklar eskiden sekmelerin üstüne biniyordu; artık başlık satırında kendi yerleri var */}
+          {visible.length > 3 && (
+            <div className="hidden shrink-0 gap-2 lg:flex">
+              <button
+                type="button"
+                onClick={() => scrollBy(-1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50"
+                aria-label="Önceki turlar"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollBy(1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-900 text-white transition hover:bg-brand-800"
+                aria-label="Sonraki turlar"
+              >
+                →
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div
+          className="no-scrollbar -mx-4 mt-6 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+          role="tablist"
+          aria-label="Tur kategorisi"
+        >
+          {TABS.map((t) => {
+            const count = sorted.filter(t.test).length;
+            if (t.key !== 'all' && count === 0) return null;
+            const active = t.key === tab;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => pick(t.key)}
+                className={`h-11 shrink-0 rounded-full px-5 text-sm font-semibold transition ${
+                  active
+                    ? 'bg-brand-900 text-white shadow-lg shadow-brand-900/20'
+                    : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-slate-300'
+                }`}
+              >
+                {t.label}
+                <span className={`ml-2 text-xs ${active ? 'text-white/70' : 'text-slate-400'}`}>{count}</span>
+              </button>
+            );
+          })}
         </div>
 
         {months.length > 1 && (
-          <div className="mt-8">
+          <div className="mt-6">
             <p className="mb-3 text-sm font-medium text-slate-500">Hangi ay gitmek istersin?</p>
             <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0">
               <button
@@ -132,7 +159,7 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
           </div>
         )}
 
-        <div className="relative mt-8">
+        <div className="mt-8">
           {visible.length === 0 ? (
             <div className="rounded-3xl bg-white p-10 text-center ring-1 ring-slate-200">
               <p className="font-display text-xl font-semibold text-slate-900">Bu seçimde tur bulunamadı</p>
@@ -141,14 +168,14 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
           ) : (
             <div
               ref={railRef}
-              className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-4 sm:mx-0 sm:gap-5 sm:px-0"
+              className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-6 pt-2 sm:mx-0 sm:gap-5 sm:px-0"
             >
-              {visible.map((tour, i) => (
+              {visible.map(({ tour, others }, i) => (
                 <div
                   key={tour._id?.toString() ?? tour.slug}
                   className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[calc((100%-3*1.25rem)/4)]"
                 >
-                  <TourCard tour={tour} priority={i < 2} />
+                  <TourCard tour={tour} priority={i < 2} moreDates={others.filter((o) => isUpcoming(o)).length} />
                 </div>
               ))}
               <Link
@@ -164,26 +191,6 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
             </div>
           )}
 
-          {visible.length > 3 && (
-            <div className="pointer-events-none absolute -top-16 right-0 hidden gap-2 lg:flex">
-              <button
-                type="button"
-                onClick={() => scrollBy(-1)}
-                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50"
-                aria-label="Önceki turlar"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollBy(1)}
-                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full bg-brand-900 text-white transition hover:bg-brand-800"
-                aria-label="Sonraki turlar"
-              >
-                →
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </section>

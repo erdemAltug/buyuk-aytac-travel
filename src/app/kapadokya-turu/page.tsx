@@ -224,21 +224,21 @@ export default async function KapadokyaTuruPage() {
 
           {/* Quick Links */}
           <div className="flex flex-wrap gap-2 mb-8">
-            <a href="/tours?destination=Nevşehir" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
+            <Link href="/tours?destination=Nevşehir" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
               Nevşehir Turu
-            </a>
-            <a href="/tours?destination=Ürgüp" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Ürgüp" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
               Ürgüp Turu
-            </a>
-            <a href="/tours?destination=Avanos" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Avanos" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
               Avanos Turu
-            </a>
-            <a href="/tours?destination=Balon" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Balon" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
               Balon Turu
-            </a>
-            <a href="/tours?destination=Yeraltı" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Yeraltı" className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm hover:bg-orange-200 transition-colors">
               Yeraltı Şehirleri
-            </a>
+            </Link>
           </div>
 
           {/* Tours */}

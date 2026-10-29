@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getTours, deleteTour, updateTour } from '@/services/tourService';
 import { ITour } from '@/types/tour';
@@ -13,7 +12,6 @@ export default function AdminTours() {
   const [tours, setTours] = useState<ITour[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
   
   useEffect(() => {
     fetchTours();

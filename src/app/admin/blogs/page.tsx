@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getBlogs, deleteBlog, updateBlog } from '@/services/blogService';
 import { IBlog } from '@/models/Blog';
@@ -13,7 +12,6 @@ export default function AdminBlogs() {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
   
   useEffect(() => {
     fetchBlogs();

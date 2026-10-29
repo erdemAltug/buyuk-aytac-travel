@@ -119,6 +119,21 @@ export function shortTourName(name: string): string {
   return base;
 }
 
+/**
+ * Aynı programın farklı tarihli kayıtlarını (ör. 9–11 ve 11–13 Aralık Konya) tek kartta topla.
+ * Girdi sıralı olmalı (sortForDisplay); her grubun ilk turu gösterilir, kalanlar `others` olur.
+ */
+export function groupDepartures<T extends Pick<ITour, 'name'>>(tours: T[]): { tour: T; others: T[] }[] {
+  const groups = new Map<string, { tour: T; others: T[] }>();
+  for (const t of tours) {
+    const key = shortTourName(t.name).toLocaleLowerCase('tr-TR');
+    const g = groups.get(key);
+    if (g) g.others.push(t);
+    else groups.set(key, { tour: t, others: [] });
+  }
+  return [...groups.values()];
+}
+
 export function whatsappLink(message: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

@@ -9,7 +9,7 @@ const QUICK = [
   { label: 'Konaklamalı', href: '/tours/overnight' },
   { label: 'Kapadokya', href: '/kapadokya-turu' },
   { label: 'Karadeniz', href: '/karadeniz-turu' },
-  { label: 'Yurtdışı', href: '/tours?tourType=international' },
+  { label: 'Yurtdışı', href: '/tours/international' },
 ];
 
 export default function HeroSearch() {

@@ -23,9 +23,6 @@ export async function DELETE() {
       });
     }
     
-    // Get the IDs for deletion
-    const tourIds = inactiveTours.map(t => t._id);
-    
     // Get tour images that will be deleted
     const tourImages = inactiveTours
       .map(t => t.image)

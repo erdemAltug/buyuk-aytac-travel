@@ -205,7 +205,7 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
                 { name: 'Ana Sayfa', href: '/' },
                 { name: 'Turlar', href: '/tours' },
                 { name: tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları',
-                  href: tour.tourType === 'domestic' ? '/tours?tourType=domestic' : '/tours?tourType=international' },
+                  href: tour.tourType === 'domestic' ? '/tours/domestic' : '/tours/international' },
                 { name: tour.name, href: `/tours/${tour.slug}` },
               ]}
               tone="dark"

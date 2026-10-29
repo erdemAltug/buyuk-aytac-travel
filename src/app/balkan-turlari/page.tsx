@@ -183,7 +183,7 @@ export default async function BalkanTurlariPage() {
                 Balkan Tur Rehberi
               </Link>
               <Link
-                href="/tours?tourType=international"
+                href="/tours/international"
                 className="inline-flex items-center border border-white/60 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors"
               >
                 Yurtdışı Turlar

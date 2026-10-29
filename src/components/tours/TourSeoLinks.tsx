@@ -106,15 +106,15 @@ export default function TourSeoLinks({ variant = 'all' }: { variant?: TourSeoVar
   const block = LINKS[variant];
 
   return (
-    <section className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-      <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">{block.title}</h2>
+    <section className="mt-14 rounded-3xl bg-white p-6 ring-1 ring-slate-200 sm:p-8">
+      <h2 className="font-display text-xl font-bold text-slate-900 sm:text-2xl">{block.title}</h2>
       <p className="mt-2 max-w-3xl text-sm text-slate-600 sm:text-base">{block.intro}</p>
       <ul className="mt-5 flex flex-wrap gap-2">
         {block.links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="inline-flex rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+              className="inline-flex rounded-full bg-sand-50 px-4 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition-colors hover:bg-brand-50 hover:text-brand-700 hover:ring-brand-200"
             >
               {link.label}
             </Link>

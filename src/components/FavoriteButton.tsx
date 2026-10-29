@@ -19,7 +19,7 @@ export default function FavoriteButton({
   className = '',
   size = 'md',
 }: FavoriteButtonProps) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [active, setActive] = useState(false);
   const [busy, setBusy] = useState(false);
 

@@ -81,10 +81,10 @@ export default function Footer() {
     { name: 'Kapadokya Turları', href: '/kapadokya-turu' },
     { name: 'Karadeniz Turları', href: '/karadeniz-turu' },
     { name: 'GAP Turları', href: '/gap-turu' },
-    { name: 'Yurtiçi Turlar', href: '/tours?tourType=domestic' },
+    { name: 'Yurtiçi Turlar', href: '/tours/domestic' },
     { name: 'Yurtiçi Günübirlik Turlar', href: '/tours/daily' },
     { name: 'Yurtiçi Konaklamalı Turlar', href: '/tours/overnight' },
-    { name: 'Yurtdışı Turlar', href: '/tours?tourType=international' },
+    { name: 'Yurtdışı Turlar', href: '/tours/international' },
     { name: 'Çerkezköy Günübirlik', href: '/cerkezkoy-gunubirlik-turlar' },
     { name: 'Çerkezköy Konaklamalı', href: '/cerkezkoy-konakamali-turlar' },
   ];

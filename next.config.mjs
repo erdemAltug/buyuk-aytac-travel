@@ -43,11 +43,9 @@ const nextConfig = {
 
     return config;
   },
-  // ESLint derlemede kapalı: eski dosyalarda biriken stil hataları (kullanılmayan değişken, any vb.)
-  // derlemeyi durduruyordu. `npm run lint` ile ayrıca çalıştırılıp temizlenmeli, sonra burası false yapılmalı.
-  // TypeScript kontrolü açık kalıyor (gerçek hataları yakalıyor).
+  // Eski lint hataları temizlendi; ESLint ve TypeScript kontrolleri derlemede açık.
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
     ignoreBuildErrors: false,

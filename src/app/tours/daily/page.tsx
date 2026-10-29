@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getClientTours } from '@/lib/tours';
 import { AccommodationType } from '@/types/tour';
-import TourCard from '@/components/tours/TourCard';
+import TourListing from '@/components/tours/TourListing';
 import TourSeoLinks from '@/components/tours/TourSeoLinks';
 
 export const revalidate = 3600;
@@ -13,44 +13,42 @@ export default async function DailyToursPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-16 pt-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 text-center">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900">Günübirlik Turlarımız</h1>
-          <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Tek günde unutulmaz deneyimler — Çerkezköy, Çorlu ve Tekirdağ çıkışlı
-          </p>
-        </div>
+    <TourListing
+      tours={tours}
+      category="daily"
+      eyebrow="Tek günde dönüş"
+      title="Günübirlik Turlar"
+      description="Sabah Çerkezköy, Çorlu ve Saray'dan yola çıkın, akşam evinizde olun. Hafta sonu kaçamakları için konaklama derdi olmayan programlar."
+    >
+      <Highlights
+        title="Neden günübirlik?"
+        items={[
+          ['Kısa sürede yeni yerler', 'Bir günde birden fazla durak, planlanmış rota.'],
+          ['Konaklama derdi yok', 'Bavul yok, otel yok; sadece küçük bir çanta.'],
+          ['Hafta sonuna uygun', 'Çoğu program cumartesi ve pazar kalkışlı.'],
+        ]}
+        link={{ href: '/cerkezkoy-gunubirlik-turlar', label: 'Çerkezköy günübirlik tur rehberi' }}
+      />
+      <TourSeoLinks variant="daily" />
+    </TourListing>
+  );
+}
 
-        {tours.length === 0 ? (
-          <p className="py-12 text-center text-gray-600">Şu anda gösterilecek günübirlik tur bulunmuyor.</p>
-        ) : (
-          <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {tours.map((tour, index) => (
-              <TourCard key={tour._id ?? tour.slug} tour={tour} priority={index < 4} />
-            ))}
+function Highlights({ title, items, link }: { title: string; items: [string, string][]; link: { href: string; label: string } }) {
+  return (
+    <section className="mt-16">
+      <h2 className="font-display text-2xl font-bold text-slate-900">{title}</h2>
+      <dl className="mt-6 grid gap-4 sm:grid-cols-3">
+        {items.map(([t, d]) => (
+          <div key={t} className="rounded-2xl bg-white p-6 ring-1 ring-slate-200">
+            <dt className="font-semibold text-slate-900">{t}</dt>
+            <dd className="mt-2 text-sm text-slate-600">{d}</dd>
           </div>
-        )}
-
-        <TourSeoLinks variant="daily" />
-
-        <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-8">
-          <h2 className="mb-3 text-2xl font-semibold text-emerald-900">Günübirlik Avantajları</h2>
-          <ul className="space-y-2 text-emerald-800">
-            <li>Kısa sürede yeni yerler keşfetme</li>
-            <li>Konaklama endişesi olmadan rahat seyahat</li>
-            <li>Hafta sonu kaçamakları için ideal</li>
-          </ul>
-          <div className="mt-6">
-            <Link
-              href="/cerkezkoy-gunubirlik-turlar"
-              className="inline-block rounded-lg bg-emerald-600 px-5 py-2.5 font-medium text-white hover:bg-emerald-700"
-            >
-              Çerkezköy Günübirlik Hub →
-            </Link>
-          </div>
-        </div>
-      </div>
-    </main>
+        ))}
+      </dl>
+      <Link href={link.href} className="mt-6 inline-block text-sm font-semibold text-brand-700 hover:underline">
+        {link.label} →
+      </Link>
+    </section>
   );
 }

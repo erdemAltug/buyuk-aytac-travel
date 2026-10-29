@@ -132,7 +132,7 @@ const seasonalTours = [
   { name: 'Yılbaşı Turları', slug: '/tours?tag=yilbasi', emoji: '🎄' },
   {
     name: 'Okul Tatili Turları',
-    slug: '/tours?tourType=domestic',
+    slug: '/tours/domestic',
     emoji: '🎒',
   },
 ];
@@ -259,7 +259,7 @@ export default function PopulerTurlarPage() {
                 Son Dakika
               </Link>
               <Link 
-                href="/tours?tourType=international" 
+                href="/tours/international" 
                 className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm hover:bg-blue-200 transition-colors"
               >
                 Yurtdışı
