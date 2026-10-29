@@ -6,15 +6,15 @@ import Link from 'next/link';
  * TÜRSAB bölümü) tek, sade bir bölümde birleştirir. Kalkış noktaları da burada.
  */
 
+// Durak adları bilerek yazılmıyor: tura göre değişiyor, her turun kendi sayfasında ve WhatsApp'ta bildiriliyor.
 const STOPS = [
-  { name: 'Çerkezköy', detail: 'Köşem Durağı', time: 'Ana kalkış' },
-  { name: 'Çorlu', detail: 'Orion · Eski Kız Meslek Durağı', time: 'Tura göre' },
-  { name: 'Saray', detail: 'Kültür Merkezi', time: 'Tura göre' },
-  { name: 'Silivri', detail: 'Yol üstü alım', time: 'Tura göre' },
+  { name: 'Çerkezköy', time: 'Ana kalkış' },
+  { name: 'Çorlu', time: 'Tura göre' },
+  { name: 'Saray', time: 'Tura göre' },
 ];
 
 const POINTS = [
-  { title: 'Kapınıza yakın kalkış', text: 'Çerkezköy, Çorlu, Saray ve Silivri duraklarından alıyoruz. İstanbul otogarına gitmeye gerek yok.' },
+  { title: 'Kapınıza yakın kalkış', text: 'Çerkezköy, Çorlu ve Saray’dan alıyoruz. İstanbul otogarına gitmeye gerek yok.' },
   { title: 'Kokartlı rehber', text: 'Her turda profesyonel, kokartlı rehber. Siz sadece manzaranın tadını çıkarın.' },
   { title: 'TÜRSAB güvencesi', text: 'TÜRSAB 17674 belgeli acente. Ödemeniz ve seyahatiniz yasal güvence altında.' },
   { title: 'WhatsApp’tan anında destek', text: 'Tur öncesi ve tur boyunca tek mesajla ulaşabileceğiniz bir ekip.' },
@@ -60,7 +60,7 @@ export default function WhyUs() {
 
         <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
           <p className="font-display text-xl font-semibold">Kalkış noktalarımız</p>
-          <p className="mt-1 text-sm text-white/60">Size en yakın duraktan binin. Saatler tura göre tur sayfasında yazar.</p>
+          <p className="mt-1 text-sm text-white/60">Biniş durakları ve saatler tura göre değişir; tur sayfasında ve WhatsApp’tan bildiriyoruz.</p>
 
           <ol className="relative mt-8 space-y-6 before:absolute before:bottom-3 before:left-[15px] before:top-3 before:w-0.5 before:bg-gradient-to-b before:from-sunset-400 before:to-brand-400">
             {STOPS.map((s, i) => (
@@ -72,11 +72,8 @@ export default function WhyUs() {
                 >
                   {i + 1}
                 </span>
-                <div className="flex min-w-0 flex-1 items-baseline justify-between gap-3 border-b border-white/10 pb-5">
-                  <div className="min-w-0">
-                    <p className="font-semibold">{s.name}</p>
-                    <p className="truncate text-sm text-white/60">{s.detail}</p>
-                  </div>
+                <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-white/10 pb-5">
+                  <p className="pt-1 font-semibold">{s.name}</p>
                   <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs text-white/80">{s.time}</span>
                 </div>
               </li>
