@@ -15,27 +15,25 @@
     "seed:blogs:september": "tsx scripts/seed-september-seo-blogs.ts",
     "seed:blogs:october": "tsx scripts/seed-october-seo-blogs.ts",
     "seed:blogs:late-october": "tsx scripts/seed-late-october-blogs.ts",
-    "seed:admin": "tsx scripts/seed-admin-user.ts"
+    "seed:admin": "tsx scripts/seed-admin-user.ts",
+    "typecheck": "tsc --noEmit",
+    "add:tours": "tsx scripts/add-tours.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.700.0",
     "@heroicons/react": "^2.2.0",
     "@sentry/nextjs": "^10.42.0",
-    "aws-sdk": "^2.1692.0",
     "axios": "^1.8.4",
     "bcryptjs": "^3.0.3",
     "dotenv": "^16.4.7",
     "mongoose": "^8.13.1",
-    "multer": "^1.4.5-lts.2",
-    "multer-s3": "^3.0.1",
     "next": "15.2.6",
     "next-auth": "^5.0.0-beta.32",
-    "next-connect": "^1.0.0",
     "nodemailer": "^7.0.13",
-    "playwright": "^1.58.2",
     "posthog-js": "^1.418.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -48,8 +46,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.5",
     "ignore-loader": "^0.1.2",
+    "playwright": "^1.58.2",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
     "tsx": "^4.22.3",
     "typescript": "^5"
   }

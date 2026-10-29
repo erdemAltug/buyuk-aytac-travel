@@ -11,6 +11,19 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: ["**/*.mongodb.js"],
+  },
+  {
+    // .eslintrc.json'daki kurallar düz yapılandırmada hiç uygulanmıyordu; burada birleştirildi.
+    rules: {
+      "@next/next/no-img-element": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      // Türkçe metinlerdeki kesme işaretleri ("Türkiye'nin") JSX'te sorun değil
+      "react/no-unescaped-entities": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

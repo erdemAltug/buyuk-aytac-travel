@@ -5,7 +5,9 @@ import { TourType, AccommodationType } from '@/types/tour';
 // Re-export for server-side code that imports from @/models/Tour
 export { TourType, AccommodationType } from '@/types/tour';
 
-export interface ITour extends ITourBase, Document {
+export interface ITour
+  extends Omit<ITourBase, '_id' | 'destinationRef' | 'startDate' | 'endDate' | 'createdAt' | 'updatedAt'>,
+    Document<string> {
   destinationRef?: Types.ObjectId;
   startDate?: Date;
   endDate?: Date;

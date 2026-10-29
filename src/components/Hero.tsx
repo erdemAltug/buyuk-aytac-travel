@@ -40,7 +40,7 @@ export default function Hero() {
             </Link>
             
             <Link 
-              href="/tours?tourType=domestic"
+              href="/tours/domestic"
               className="px-6 py-3 rounded-full bg-white text-blue-800 font-medium hover:bg-blue-50 transition-colors duration-300 shadow-lg hover:shadow-xl"
               aria-label="Çerkezköy'den kalkan günübirlik yurtiçi turlar"
             >

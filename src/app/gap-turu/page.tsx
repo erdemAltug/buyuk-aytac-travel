@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { ITour } from '@/models/Tour';
 import { getToursByDB } from '@/lib/tours';
 import ToursContent from '@/app/tours/components/ToursContent';
@@ -222,21 +223,21 @@ export default async function GAPTuruPage() {
 
           {/* Quick Links */}
           <div className="flex flex-wrap gap-2 mb-8">
-            <a href="/tours?destination=Gaziantep" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
+            <Link href="/tours?destination=Gaziantep" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
               Gaziantep Turu
-            </a>
-            <a href="/tours?destination=Şanlıurfa" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Şanlıurfa" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
               Şanlıurfa Turu
-            </a>
-            <a href="/tours?destination=Mardin" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Mardin" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
               Mardin Turu
-            </a>
-            <a href="/tours?destination=Diyarbakır" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Diyarbakır" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
               Diyarbakır Turu
-            </a>
-            <a href="/tours?destination=Nemrut" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Nemrut" className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm hover:bg-amber-200 transition-colors">
               Nemrut Turu
-            </a>
+            </Link>
           </div>
 
           {/* Tours */}
@@ -276,18 +277,18 @@ export default async function GAPTuruPage() {
             <h3 className="text-2xl font-bold mb-4">GAP Turu Hakkında Sorularınız mı Var?</h3>
             <p className="mb-6">Büyük Aytaç Travel olarak Çerkezköy ve çevresinden kalkan GAP turları hakkında bilgi almak için bizimle iletişime geçin.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
+              <Link 
                 href="/contact" 
                 className="inline-block bg-white text-amber-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 İletişime Geç
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/tours" 
                 className="inline-block border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
               >
                 Tüm Turları Gör
-              </a>
+              </Link>
             </div>
           </div>
         </div>

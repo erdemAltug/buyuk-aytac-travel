@@ -5,11 +5,11 @@ import Tour from '@/models/Tour';
 // Tur görüntüleme sayısını artır
 export async function POST(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await dbConnect();
-    const { slug } = params;
+    const { slug } = await params;
 
     // Turu bul ve görüntüleme sayısını artır
     const tour = await Tour.findOneAndUpdate(

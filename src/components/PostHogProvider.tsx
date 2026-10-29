@@ -30,13 +30,29 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
 
     if (!token || !host || posthog.__loaded) return;
 
-    posthog.init(token, {
-      api_host: host,
-      person_profiles: 'identified_only',
-      capture_pageview: false,
-      capture_pageleave: true,
-      persistence: 'localStorage+cookie',
-    });
+    // PostHog kendi <script> etiketini sayfadaki ilk script'in önüne ekliyor. Bu, React sayfayı
+    // hidrate etmeden olursa JSON-LD script'leriyle "hydration mismatch" hatası veriyordu.
+    // Bu yüzden sayfa tamamen yüklendikten ve tarayıcı boşa çıktıktan sonra başlatıyoruz.
+    const start = () =>
+      posthog.init(token, {
+        api_host: host,
+        person_profiles: 'identified_only',
+        capture_pageview: false,
+        capture_pageleave: true,
+        persistence: 'localStorage+cookie',
+        loaded: () => posthog.capture('$pageview', { $current_url: window.location.href }),
+      });
+    const idle = () =>
+      typeof window.requestIdleCallback === 'function'
+        ? window.requestIdleCallback(start, { timeout: 3000 })
+        : window.setTimeout(start, 1500);
+
+    if (document.readyState === 'complete') {
+      idle();
+    } else {
+      window.addEventListener('load', idle, { once: true });
+      return () => window.removeEventListener('load', idle);
+    }
   }, []);
 
   return (

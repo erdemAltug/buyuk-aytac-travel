@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBlogBySlug, updateBlog } from '@/services/blogService';
 import { uploadFile } from '@/services/uploadService';
@@ -10,7 +10,8 @@ const inputClass = "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow
 const labelClass = "block text-sm font-medium leading-6 text-gray-900 mb-1";
 const buttonClass = "flex justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed";
 
-export default function EditBlogPage({ params }: { params: { slug: string } }) {
+export default function EditBlogPage({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+  const params = use(paramsPromise);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);

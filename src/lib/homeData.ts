@@ -82,3 +82,64 @@ export async function getLatestBlogsForHome(): Promise<IBlog[]> {
     }) as IBlog;
   });
 }
+
+/** Plain (istemciye geçirilebilir) tur listesi */
+function toPlainTours(docs: unknown[]): ITour[] {
+  return docs.map((t) => {
+    const o = t as Record<string, unknown>;
+    return toPlainValue({
+      ...o,
+      _id: o._id,
+      startDate: o.startDate ? new Date(o.startDate as Date).toISOString() : undefined,
+      endDate: o.endDate ? new Date(o.endDate as Date).toISOString() : undefined,
+      createdAt: o.createdAt ? new Date(o.createdAt as Date).toISOString() : undefined,
+      updatedAt: o.updatedAt ? new Date(o.updatedAt as Date).toISOString() : undefined,
+    }) as unknown as ITour;
+  });
+}
+
+/**
+ * Ana sayfadaki tur keşif alanı için tüm aktif turlar.
+ * Açıklama ve program gibi ağır alanlar çekilmez (sayfa boyutu küçük kalsın).
+ * Geçmiş tarihli turlar da dahildir; sıralamayı arayüz yapar (yaklaşanlar önce).
+ */
+export async function getToursForHomeExplorer(): Promise<ITour[]> {
+  await dbConnect();
+  const tours = await Tour.find({ isActive: true })
+    .select('name slug image price discountRate duration destination departureCity tourType accommodationType startDate endDate isFeatured isLastMinute createdAt')
+    .sort({ startDate: 1 })
+    .limit(200)
+    .lean();
+  return toPlainTours(tours);
+}
+
+/** Tur detay sayfasındaki "Benzer Turlar" için: aynı tipte, kendisi hariç, yaklaşanlar önce */
+export async function getRelatedTours(current: {
+  slug: string;
+  accommodationType?: string;
+  tourType?: string;
+}, limit = 4): Promise<ITour[]> {
+  await dbConnect();
+  const now = new Date();
+  const base = { isActive: true, slug: { $ne: current.slug } };
+  const select = 'name slug image price discountRate duration destination tourType accommodationType startDate endDate';
+  const upcoming = await Tour.find({
+    ...base,
+    accommodationType: current.accommodationType,
+    $or: [{ endDate: { $gte: now } }, { startDate: { $gte: now } }],
+  })
+    .select(select)
+    .sort({ startDate: 1 })
+    .limit(limit)
+    .lean();
+  let list = upcoming;
+  if (list.length < limit) {
+    const more = await Tour.find({ ...base, _id: { $nin: list.map((t) => t._id) } })
+      .select(select)
+      .sort({ startDate: -1 })
+      .limit(limit - list.length)
+      .lean();
+    list = [...list, ...more];
+  }
+  return toPlainTours(list);
+}

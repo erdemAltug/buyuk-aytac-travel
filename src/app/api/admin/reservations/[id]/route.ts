@@ -5,8 +5,9 @@ import Reservation from '@/models/Reservation';
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await auth();
   if (!session?.user || session.user.role !== 'admin') {
     return NextResponse.json({ success: false, message: 'Yetkisiz' }, { status: 401 });
@@ -19,6 +20,6 @@ export async function PATCH(
   if (status) update.status = status;
   if (typeof notes === 'string') update.notes = notes;
 
-  await Reservation.findByIdAndUpdate(params.id, update);
+  await Reservation.findByIdAndUpdate(id, update);
   return NextResponse.json({ success: true });
 }

@@ -7,9 +7,8 @@ import { usePathname } from 'next/navigation';
 import AuthMenu from '@/components/AuthMenu';
 
 const desktopLinks = [
-  { href: '/', label: 'Ana Sayfa' },
-  { href: '/tours?tourType=domestic', label: 'Yurtiçi' },
-  { href: '/tours?tourType=international', label: 'Yurtdışı' },
+  { href: '/tours/domestic', label: 'Yurtiçi' },
+  { href: '/tours/international', label: 'Yurtdışı' },
   { href: '/tours/daily', label: 'Günübirlik' },
   { href: '/tours/overnight', label: 'Konaklamalı' },
   { href: '/tours/last-minute', label: 'Son Dakika' },
@@ -21,8 +20,8 @@ const desktopLinks = [
 
 const mobileLinks = [
   { href: '/', label: 'Ana Sayfa' },
-  { href: '/tours?tourType=domestic', label: 'Yurtiçi Turları' },
-  { href: '/tours?tourType=international', label: 'Yurtdışı Turları' },
+  { href: '/tours/domestic', label: 'Yurtiçi Turları' },
+  { href: '/tours/international', label: 'Yurtdışı Turları' },
   { href: '/tours/daily', label: 'Günübirlik Turlar' },
   { href: '/tours/overnight', label: 'Konaklamalı Turlar' },
   { href: '/cerkezkoy-gunubirlik-turlar', label: 'Çerkezköy Günübirlik' },
@@ -72,7 +71,7 @@ export default function Navbar() {
   const isSolidNav = !isHomepage || scrolled || isMenuOpen;
 
   const navbarBg = isSolidNav
-    ? 'bg-white shadow-lg border-b border-slate-200'
+    ? 'bg-white/95 backdrop-blur shadow-sm border-b border-slate-200/70'
     : 'bg-transparent';
 
   return (
@@ -107,7 +106,7 @@ export default function Navbar() {
           <div
             className={`pointer-events-auto flex items-center gap-x-0.5 xl:gap-x-1 ${
               isSolidNav
-                ? 'rounded-full border border-slate-200 bg-slate-50/90 px-1.5 py-1 shadow-sm'
+                ? 'rounded-full border border-slate-200 bg-slate-50/90 px-1.5 py-1'
                 : ''
             }`}
           >

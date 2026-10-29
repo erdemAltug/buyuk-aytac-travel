@@ -1,7 +1,11 @@
+import { requireAdmin } from '@/lib/requireAdmin';
 import { NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 
 export async function GET() {
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
+
   try {
     // Şablon verisi - Sütun başlıkları ve örnek satır
     const templateData = [

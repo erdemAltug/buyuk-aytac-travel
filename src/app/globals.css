@@ -1,25 +1,97 @@
 @import "tailwindcss";
 
+/*
+ * Büyük Aytaç Travel — tasarım tokenları
+ * Ayrıntılar: docs/TASARIM_SISTEMI.md
+ */
+@theme {
+  /* Marka: derin deniz mavisi */
+  --color-brand-50: #eef5ff;
+  --color-brand-100: #d9e8ff;
+  --color-brand-200: #bcd7ff;
+  --color-brand-300: #8ebdff;
+  --color-brand-400: #5998ff;
+  --color-brand-500: #3374fb;
+  --color-brand-600: #1d56f0;
+  --color-brand-700: #1642d0;
+  --color-brand-800: #1838a8;
+  --color-brand-900: #0f1f4d;
+  --color-brand-950: #0a1430;
+
+  /* Vurgu: gün batımı turuncusu
+     400 → yalnızca KOYU zeminde metin (hero başlığı)
+     600 → üzerinde beyaz yazı olan butonlar/rozetler (beyazla kontrast 5.2:1)
+     600/700 → açık zeminde turuncu metin */
+  --color-sunset-50: #fff6ed;
+  --color-sunset-100: #ffead4;
+  --color-sunset-400: #ff9a4d;
+  --color-sunset-500: #f26a10;
+  --color-sunset-600: #c2410c;
+  --color-sunset-700: #9a3412;
+
+  /* Nötr kum tonu (bölüm zeminleri) */
+  --color-sand-50: #fbf8f3;
+  --color-sand-100: #f4eee3;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --animate-kenburns: kenburns 24s ease-out both;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1.12); }
+  to { transform: scale(1); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/*
+ * Not: Eskiden burada dark mode'da yazı rengi açık griye çevriliyordu ama zemin
+ * beyaz kalıyordu — karanlık modda telefon kullananlar metni neredeyse göremiyordu.
+ * Site şimdilik yalnızca açık temada; renkleri sabitliyoruz.
+ */
 :root {
+  color-scheme: light;
   --background: #ffffff;
-
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground: #ededed;
-  }
+  --foreground: #0f172a;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Yatay kaydırmalı şeritlerde kaydırma çubuğunu gizle */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

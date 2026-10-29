@@ -1,12 +1,13 @@
+import { requireAdmin } from '@/lib/requireAdmin';
 import { NextResponse } from 'next/server';
-import mongoose from 'mongoose';
-
-// MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodbukaytac:buyukay+srv://buytac2025@cluster0.mongodb.net/buyuk-aytac-travel?retryWrites=true&w=majority';
+import dbConnect from '@/lib/mongodb';
 
 export async function DELETE() {
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
+
   try {
-    await mongoose.connect(MONGODB_URI);
+    await dbConnect();
     
     // Get the Tour model
     const Tour = (await import('@/models/Tour')).default;
@@ -21,9 +22,6 @@ export async function DELETE() {
         deletedCount: 0
       });
     }
-    
-    // Get the IDs for deletion
-    const tourIds = inactiveTours.map(t => t._id);
     
     // Get tour images that will be deleted
     const tourImages = inactiveTours

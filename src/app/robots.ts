@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       // /api/ engelleme: ana sayfa turlar/blog için /api/tours ve /api/blogs çağırıyor;
       // Googlebot bu istekleri yapamazsa sayfa boş indexlenir.
-      disallow: ['/admin/', '/test-sentry'],
+      disallow: ['/admin/', '/hesabim', '/giris', '/kayit'],
     },
     sitemap: 'https://www.buyukaytactravel.com/sitemap.xml',
   }

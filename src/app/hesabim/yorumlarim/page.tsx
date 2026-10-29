@@ -21,12 +21,12 @@ const statusLabel: Record<string, string> = {
 export default async function YorumlarimPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tour?: string }> | { tour?: string };
+  searchParams: Promise<{ tour?: string }>;
 }) {
   const session = await auth();
   if (!session?.user) redirect('/giris?callbackUrl=/hesabim/yorumlarim');
 
-  const sp = await Promise.resolve(searchParams);
+  const sp = await searchParams;
 
   await dbConnect();
   const [reviews, eligible] = await Promise.all([

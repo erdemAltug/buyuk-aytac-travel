@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { getTours } from '@/services/tourService';
 import type { ITour } from '@/types/tour';
 import { TourType, AccommodationType } from '@/types/tour';
-import TourCard from './TourCard';
+import TourCard from '@/components/tours/TourCard';
 
 const TOUR_GRID_CLASS =
   'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr';

@@ -6,7 +6,13 @@ import Tour from '@/models/Tour';
  * Bu API endpoint, tarihli turları kontrol eder ve süresi geçmiş turları otomatik olarak pasif hale getirir.
  * Bir CRON job tarafından günlük olarak çağrılabilir.
  */
-export async function GET() {
+export async function GET(request: Request) {
+  // Vercel Cron, CRON_SECRET tanımlıysa "Authorization: Bearer <CRON_SECRET>" gönderir
+  const secret = process.env.CRON_SECRET;
+  if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 });
+  }
+
   try {
     await dbConnect();
     

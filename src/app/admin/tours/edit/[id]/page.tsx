@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { getTourBySlug, updateTour } from '@/services/tourService';
-import { ITour, TourType, AccommodationType } from '@/models/Tour';
+import { type ITour, TourType, AccommodationType } from '@/types/tour';
 import { ChevronDownIcon, PlusIcon, XMarkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import TourImage from '@/components/admin/TourImage';
 
@@ -38,7 +38,8 @@ function CollapsibleSection({ title, children, defaultOpen = false }: Collapsibl
   );
 }
 
-export default function EditTourPage({ params }: { params: { id: string } }) {
+export default function EditTourPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
+  const params = use(paramsPromise);
   const [isLoading, setIsLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [tour, setTour] = useState<ITour | null>(null);

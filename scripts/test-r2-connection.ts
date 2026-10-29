@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import AWS from 'aws-sdk';
+import { S3Client, PutObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 dotenv.config({ path: '.env.local' });
 
@@ -19,32 +19,30 @@ console.log('Endpoint (normalized):', endpoint);
 console.log('Bucket:', bucket);
 console.log('Public base:', publicBase);
 
-const s3 = new AWS.S3({
+const s3 = new S3Client({
   endpoint,
-  accessKeyId: keyId,
-  secretAccessKey: secret,
-  signatureVersion: 'v4',
   region,
-  s3ForcePathStyle: true,
+  forcePathStyle: true,
+  credentials: { accessKeyId: keyId, secretAccessKey: secret },
 });
 
 const testKey = 'connection-tests/ping.txt';
 const body = `buyuk-aytac-r2-ok ${new Date().toISOString()}`;
 
 try {
-  await s3
-    .putObject({
+  await s3.send(
+    new PutObjectCommand({
       Bucket: bucket,
       Key: testKey,
       Body: body,
       ContentType: 'text/plain',
     })
-    .promise();
+  );
   console.log('PUT: OK');
 
-  const listed = await s3
-    .listObjectsV2({ Bucket: bucket, Prefix: 'connection-tests/', MaxKeys: 5 })
-    .promise();
+  const listed = await s3.send(
+    new ListObjectsV2Command({ Bucket: bucket, Prefix: 'connection-tests/', MaxKeys: 5 })
+  );
   console.log(
     'LIST: OK ->',
     (listed.Contents || []).map((o) => o.Key).join(', ')

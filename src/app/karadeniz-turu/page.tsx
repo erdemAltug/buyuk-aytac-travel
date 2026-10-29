@@ -215,24 +215,24 @@ export default async function KaradenizTuruPage() {
 
           {/* Quick Links */}
           <div className="flex flex-wrap gap-2 mb-8">
-            <a href="/tours?destination=Trabzon" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            <Link href="/tours?destination=Trabzon" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Trabzon Turu
-            </a>
-            <a href="/tours?destination=Ayder" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Ayder" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Ayder Yaylası
-            </a>
-            <a href="/tours?destination=Rize" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Rize" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Rize Turu
-            </a>
-            <a href="/tours?destination=Uzungöl" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Uzungöl" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Uzungöl
-            </a>
-            <a href="/tours?destination=Samsun" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Samsun" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Samsun Turu
-            </a>
-            <a href="/tours?destination=Amasra" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
+            </Link>
+            <Link href="/tours?destination=Amasra" className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm hover:bg-green-200 transition-colors">
               Amasra Turu
-            </a>
+            </Link>
           </div>
 
           {/* Tours */}

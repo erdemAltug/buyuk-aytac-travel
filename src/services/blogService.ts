@@ -88,7 +88,9 @@ export async function createBlogServerSide(blogData: Partial<IBlog>): Promise<IB
     blogData.slug = createSlugFromTitle(blogData.title);
   }
 
-  return Blog.create(blogData);
+  const created = await Blog.create(blogData);
+  // Mongoose belgesini düz nesneye çevir (_id string olsun)
+  return JSON.parse(JSON.stringify(created)) as IBlog;
 }
 
 // Blogu güncelle

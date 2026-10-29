@@ -1,29 +1,27 @@
-import Hero from '@/components/Hero';
-import SearchSection from '@/components/SearchSection';
-import ToursByType from '@/components/ToursByType';
-import { TourType, AccommodationType } from '@/types/tour';
-import Image from 'next/image';
 import ContactCTA from '@/components/ContactCTA';
 import BlogPreview from '@/components/BlogPreview';
 import InstagramFeed from '@/components/InstagramFeed';
-import FeaturedTours from '@/components/FeaturedTours';
 import FutureTourVote from '@/components/FutureTourVote';
 import GoogleReviews from '@/components/GoogleReviews';
-import TrustPillsBar from '@/components/home/TrustPillsBar';
-import TrustValueBanner from '@/components/home/TrustValueBanner';
-import CategoryGrid from '@/components/home/CategoryGrid';
-import Link from 'next/link';
-import { getFeaturedToursForHome, getLatestBlogsForHome } from '@/lib/homeData';
+import HeroNext from '@/components/home/HeroNext';
+import TourExplorer from '@/components/home/TourExplorer';
+import DestinationMosaic from '@/components/home/DestinationMosaic';
+import WhyUs from '@/components/home/WhyUs';
+import RecentlyViewed from '@/components/RecentlyViewed';
+import { getLatestBlogsForHome, getToursForHomeExplorer } from '@/lib/homeData';
+import { isUpcoming, sortForDisplay } from '@/lib/tourUi';
 
 // SEO için: her zaman sunucuda render et
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Sunucuda veriyi çek: ilk HTML'de turlar ve bloglar olsun (Googlebot JS beklemeden görsün)
-  const [initialTours, initialBlogs] = await Promise.all([
-    getFeaturedToursForHome().catch(() => []),
+  const [allTours, initialBlogs] = await Promise.all([
+    getToursForHomeExplorer().catch(() => []),
     getLatestBlogsForHome().catch(() => []),
   ]);
+  const upcoming = sortForDisplay(allTours.filter((t) => isUpcoming(t)));
+  const nextTour = upcoming.find((t) => t.startDate) ?? null;
   // Website için kapsamlı structured data
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -134,254 +132,25 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
-      
-      <div className="bg-white min-h-screen">
-        <main>
-          <Hero />
-          <SearchSection />
-          <TrustPillsBar />
-          <FeaturedTours initialTours={initialTours} />
-          <TrustValueBanner />
-          <CategoryGrid />
 
-          <ToursByType
-            title="Yurtiçi Turlarımız"
-            description="Türkiye'nin eşsiz güzelliklerini keşfedeceğiniz özel olarak hazırlanmış yurtiçi turlarımız"
-            viewAllLink="/tours?tourType=domestic"
-            viewAllText="Tüm Yurtiçi Turları"
-            filterParams={{
-              isActive: true,
-              tourType: TourType.DOMESTIC,
-            }}
-          />
-
-          <ToursByType
-            title="Günübirlik Turlarımız"
-            description="Kısa zaman dilimlerinde maksimum keyif alabileceğiniz özel günübirlik tur programlarımız"
-            viewAllLink="/tours/daily"
-            viewAllText="Tüm Günübirlik Turlar"
-            filterParams={{
-              isActive: true,
-              accommodationType: AccommodationType.DAILY,
-            }}
-          />
-
-          <BlogPreview initialBlogs={initialBlogs} />
-
-          <ToursByType
-            title="Yurtdışı Turlarımız"
-            description="Dünya'nın en güzel yerlerini keşfedeceğiniz özel olarak hazırlanmış yurtdışı turlarımız"
-            viewAllLink="/tours?tourType=international"
-            viewAllText="Tüm Yurtdışı Turları"
-            filterParams={{
-              isActive: true,
-              tourType: TourType.INTERNATIONAL,
-            }}
-          />
-          
-          {/* Konaklamalı Turlar */}
-          <ToursByType 
-            title="Konaklamalı Turlarımız"
-            description="Uzun soluklu, konforlu konaklamalı turlarımızla unutulmaz tatil deneyimleri"
-            viewAllLink="/tours/overnight"
-            viewAllText="Tüm Konaklamalı Turlar"
-            filterParams={{
-              isActive: true,
-              accommodationType: AccommodationType.WITH_ACCOMMODATION
-            }}
-          />
-          
-          {/* 2026 Yıllık Tur Takvimi */}
-          <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">2026 Yıllık Tur Programı</h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Bu yıl sizler için hazırladığımız tur programları ve takvimi. 
-                  Kapadokya, Karadeniz, GAP ve daha birçok destinasyonda unutulmaz tatil deneyimleri sizi bekliyor!
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                {/* İlkbahar */}
-                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-green-500">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">İlkbahar 2026</h3>
-                    <span className="text-2xl">🌸</span>
-                  </div>
-                  <ul className="space-y-3">
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Kapadokya Turu</span>
-                      <span className="text-green-600 font-medium">20-22 Mar</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Eskişehir Turu</span>
-                      <span className="text-green-600 font-medium">21 Mar</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Bursa Şehir Turu</span>
-                      <span className="text-green-600 font-medium">22 Mar</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Adana Festival</span>
-                      <span className="text-green-600 font-medium">3-5 Nis</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Safranbolu Turu</span>
-                      <span className="text-green-600 font-medium">10-12 Nis</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* Yaz */}
-                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-orange-500">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">Yaz 2026</h3>
-                    <span className="text-2xl">☀️</span>
-                  </div>
-                  <ul className="space-y-3">
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Karadeniz Turu</span>
-                      <span className="text-orange-600 font-medium">Haziran</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">GAP Turu</span>
-                      <span className="text-orange-600 font-medium">Temmuz</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Ege Turları</span>
-                      <span className="text-orange-600 font-medium">Temmuz-Ağu</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">İstanbul Turları</span>
-                      <span className="text-orange-600 font-medium">Yaz Dönemi</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Bodrum Turu</span>
-                      <span className="text-orange-600 font-medium">Ağustos</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* Sonbahar/Kış */}
-                <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-purple-500">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">Sonbahar/Kış</h3>
-                    <span className="text-2xl">🍂</span>
-                  </div>
-                  <ul className="space-y-3">
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Kapadokya Balon</span>
-                      <span className="text-purple-600 font-medium">Ekim-Kas</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Batum Turu</span>
-                      <span className="text-purple-600 font-medium">Eylül</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Konya Şeb-i Arus</span>
-                      <span className="text-purple-600 font-medium">Aralık</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Yılbaşı Turları</span>
-                      <span className="text-purple-600 font-medium">Aralık</span>
-                    </li>
-                    <li className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">Uludağ Kayak</span>
-                      <span className="text-purple-600 font-medium">Ocak</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="text-center">
-                <Link 
-                  href="/annual-program"
-                  className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                  </svg>
-                  Tam Takvimi İncele
-                </Link>
-              </div>
-            </div>
-          </section>
-
-          <FutureTourVote />
-
-          <GoogleReviews />
-          
-          {/* TÜRSAB Üyelik Bölümü */}
-          <section className="bg-gray-100 py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col md:flex-row items-center justify-between">
-                <div className="md:w-1/2 mb-8 md:mb-0">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">TÜRSAB Üyesi Güvencesi</h2>
-                  <div className="prose prose-lg max-w-none text-gray-600">
-                    <p>
-                      <strong>Büyük Aytaç Travel</strong>, <Link href="/about" className="text-blue-600 hover:underline">Türkiye Seyahat Acentaları Birliği (TÜRSAB)</Link> üyesi olarak, 
-                      tüm yasal gereklilikleri karşılayan, güvenilir bir seyahat acentasıdır. 
-                      TÜRSAB belgeli acentalarla çalışmak, seyahatlerinizin güvence altında olduğu anlamına gelir.
-                    </p>
-                  </div>
-                  <div className="mt-6 space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                      <p className="text-gray-700">Profesyonel ve lisanslı tur operatörleri</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                      <p className="text-gray-700">Güvenilir ve şeffaf hizmet</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                      <p className="text-gray-700">Yasal güvence ve teminat</p>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <Link 
-                      href="/about"
-                      className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Hakkımızda Daha Fazla Bilgi
-                    </Link>
-                  </div>
-                </div>
-                <div className="md:w-1/3 flex justify-center">
-                  <div className="relative h-60 w-60 md:h-72 md:w-72">
-                    <Image 
-                      src="/images/tursab.png"
-                      alt="TÜRSAB - Türkiye Seyahat Acentaları Birliği Üye Belgesi" 
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 240px, 288px"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          {/* Instagram Feed */}
-          <InstagramFeed />
-          
-          <ContactCTA />
-        </main>
-      </div>
+      {/*
+        Yeni ana sayfa akışı (docs/TASARIM_SISTEMI.md):
+        Hero → Son baktıkların → Tur vitrini → Popüler rotalar → Neden biz → Yorumlar → Oylama → Blog → Instagram → İletişim
+        Kaldırılanlar: 4 ayrı tur bölümü (tek vitrine birleşti), elle yazılmış 2026 programı (tarihleri eskiydi),
+        tekrar eden güven bantları (WhyUs'ta birleşti), ayrı arama kutusu (hero'ya taşındı).
+      */}
+      <main className="bg-white">
+        <HeroNext nextTour={nextTour} upcomingCount={upcoming.length} />
+        <RecentlyViewed />
+        <TourExplorer tours={allTours} />
+        <DestinationMosaic tours={allTours} />
+        <WhyUs />
+        <GoogleReviews />
+        <FutureTourVote />
+        <BlogPreview initialBlogs={initialBlogs} />
+        <InstagramFeed />
+        <ContactCTA />
+      </main>
     </>
   );
 }

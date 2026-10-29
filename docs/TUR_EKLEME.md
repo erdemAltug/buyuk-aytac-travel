@@ -31,22 +31,22 @@ Bu projede tur eklemenin iki yolu vardır: **admin paneli** (hızlı, görsel y�
 
 ## Yöntem 2: Seed script (önerilen)
 
-Her tur için `scripts/add-<tur-adi>-tour.ts` dosyası oluşturulur. Mevcut örnekler:
+Tur verileri `scripts/tours/` klasöründe durur; her dosya bir tur dizisi export eder. Tek bir script (`scripts/add-tours.ts`) bu dosyaları veritabanına yazar.
 
-| Script | Tur |
+| Komut | Ne yapar |
 |--------|-----|
-| `scripts/add-assos-tour.ts` | Assos |
-| `scripts/add-kapadokya-tour.ts` | Kapadokya |
-| `scripts/add-safranbolu-tour.ts` | Safranbolu |
-| `scripts/add-omercili-agva-sile-tour.ts` | Ömerli–Ağva–Şile |
-| … | Diğerleri `scripts/` klasöründe |
+| `npm run add:tours` | Mevcut tur dosyalarını listeler |
+| `npm run add:tours -- iznik-tour` | Sadece `scripts/tours/iznik-tour.ts` |
+| `npm run add:tours -- --all` | Klasördeki tüm turlar |
 
 ### Adımlar
 
-1. Mevcut bir scripti kopyalayın (ör. `add-assos-tour.ts`)
+1. `scripts/tours/` içindeki bir dosyayı kopyalayın (ör. `assos-tour.ts` → `yeni-tur.ts`)
 2. Tur verisini güncelleyin:
 
 ```typescript
+import { TourType, AccommodationType } from '../../src/models/Tour';
+
 const yeniTur = {
   name: 'TUR ADI',
   description: `Tur açıklaması...`,
@@ -70,13 +70,15 @@ const yeniTur = {
   ],
   viewCount: 0,
 };
+
+export default [yeniTur];
 ```
 
 3. Görseli `public/images/` klasörüne ekleyin
 4. Scripti çalıştırın:
 
 ```bash
-npx tsx scripts/add-<tur-adi>-tour.ts
+npm run add:tours -- yeni-tur
 ```
 
 Script **slug ile upsert** yapar: tur varsa günceller, yoksa ekler.

@@ -7,6 +7,12 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ReservationButton from '@/components/ReservationButton';
 import FavoriteButton from '@/components/FavoriteButton';
 import TourReviews from '@/components/tours/TourReviews';
+import TourCard, { WhatsAppIcon } from '@/components/tours/TourCard';
+import MobileBookingBar from '@/components/tours/MobileBookingBar';
+import ShareButtons from '@/components/tours/ShareButtons';
+import RecentlyViewed, { TrackTourView } from '@/components/RecentlyViewed';
+import { getRelatedTours } from '@/lib/homeData';
+import { daysUntil, finalPrice, formatDateRange, formatTL, isUpcoming, tourWhatsappLink } from '@/lib/tourUi';
 
 // Tur sayfaları için Server Component kullanımı
 export async function generateStaticParams() {
@@ -40,11 +46,12 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
     await import('@/lib/dbConnect').then((module) => module.default());
     const Tour = (await import('@/models/Tour')).default;
 
-    tour = await Tour.findOne({ slug, isActive: true }).lean();
-    
-    // tour içindeki _id'yi string'e çevir
+    const doc = await Tour.findOne({ slug, isActive: true }).lean();
+
+    // İstemci bileşenlerine (PriceCalculator vb.) yalnızca düz veri geçebilir:
+    // program/additionalServices içindeki alt belge _id'leri (ObjectId) JSON ile string'e çevrilir.
+    tour = doc ? (JSON.parse(JSON.stringify(doc)) as ITour) : null;
     if (tour) {
-      tour._id = (tour._id as unknown as { toString(): string }).toString();
       
       // Date nesnelerini formatlı şekilde çevir
       if (tour.createdAt) tour.createdAt = new Date(tour.createdAt);
@@ -116,468 +123,311 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
     }
   };
 
-  // BreadcrumbList schema for SEO
-  const breadcrumbJsonLd = {
+  const price = finalPrice(tour);
+  const hasDiscount = !!tour.discountRate && tour.discountRate > 0;
+  const dateLabel = formatDateRange(tour.startDate, tour.endDate);
+  const upcoming = isUpcoming(tour);
+  const days = upcoming ? daysUntil(tour.startDate) : null;
+  const tourUrl = `https://www.buyukaytactravel.com/tours/${tour.slug}`;
+  const typeLabel = tour.tourType === 'domestic' ? 'Yurtiçi' : 'Yurtdışı';
+  const stayLabel = tour.accommodationType === 'with_accommodation' ? 'Konaklamalı' : 'Günübirlik';
+  const related = await getRelatedTours({
+    slug: tour.slug,
+    accommodationType: tour.accommodationType,
+    tourType: tour.tourType,
+  }).catch(() => []);
+
+  const facts = [
+    { label: 'Tarih', value: dateLabel ?? 'Tarih için sorun' },
+    { label: 'Süre', value: tour.duration },
+    { label: 'Kalkış', value: tour.departureCity || 'Çerkezköy' },
+    { label: 'Tur tipi', value: `${typeLabel} · ${stayLabel}` },
+  ];
+
+  const faqs = [
+    {
+      q: 'Bu tura nasıl kayıt olabilirim?',
+      a: 'Bu sayfadaki "Rezervasyon" butonuyla formu doldurabilir, 0530 060 95 59 veya 0539 345 95 59 numaralı telefondan bize ulaşabilir ya da Çerkezköy ofisimizi ziyaret edebilirsiniz. Ödeme işlemini tamamladıktan sonra rezervasyonunuz onaylanmış olur.',
+    },
+    {
+      q: 'Tur iptal edilirse ücret iadesi yapılıyor mu?',
+      a: 'İptal ve iade koşulları tura ve rezervasyon tarihine göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.',
+    },
+    {
+      q: 'Bu tur için yanımıza neler almalıyız?',
+      a: 'Rahat yürüyüş ayakkabıları, mevsime uygun kıyafetler, şapka, güneş gözlüğü, güneş kremi, fotoğraf makinesi, şarj aletleri ve kişisel ilaçlarınızı yanınıza almanızı öneririz. Konaklamalı turlarda yeterli kıyafet ve kişisel bakım ürünlerinizi getirmeyi unutmayın.',
+    },
+    {
+      q: `${tour.destination.split(',')[0]} için en uygun seyahat zamanı ne zamandır?`,
+      a: 'Genellikle ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) ayları idealdir. Bu dönemlerde hava gezmeye elverişlidir ve yoğunluk yaz aylarına göre daha azdır.',
+    },
+    {
+      q: 'Çocuklar için indirim var mı?',
+      a: 'Çocuk indirimleri tura ve yaşa göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.',
+    },
+  ];
+
+  const faqJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Ana Sayfa',
-        'item': 'https://www.buyukaytactravel.com'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'Turlar',
-        'item': 'https://www.buyukaytactravel.com/tours'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 3,
-        'name': tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları',
-        'item': `https://www.buyukaytactravel.com/tours?tourType=${tour.tourType}`
-      },
-      {
-        '@type': 'ListItem',
-        'position': 4,
-        'name': tour.name,
-        'item': `https://www.buyukaytactravel.com/tours/${tour.slug}`
-      }
-    ]
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <TrackTourView
+        tour={{
+          slug: tour.slug,
+          name: tour.name,
+          image: tour.image,
+          price,
+          startDate: tour.startDate ? new Date(tour.startDate).toISOString() : undefined,
+          endDate: tour.endDate ? new Date(tour.endDate).toISOString() : undefined,
+        }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <main className="pt-28 pb-16 bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Ekmek Kırıntısı Navigasyonu */}
-          <div className="mb-6">
-            <Breadcrumb 
+
+      <main className="min-h-screen bg-sand-50 pb-16">
+        {/* Başlık bandı */}
+        <section className="relative overflow-hidden bg-brand-950 pb-28 pt-28 text-white sm:pt-32">
+          <div className="absolute inset-0 opacity-40">
+            <Image src={tour.image} alt="" aria-hidden fill sizes="100vw" quality={30} className="scale-110 object-cover blur-3xl" />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-950/60 to-brand-950" />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Breadcrumb
               customItems={[
                 { name: 'Ana Sayfa', href: '/' },
                 { name: 'Turlar', href: '/tours' },
-                { name: tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları', 
-                  href: tour.tourType === 'domestic' ? '/tours?tourType=domestic' : '/tours?tourType=international' },
-                { name: tour.name, href: `/tours/${tour.slug}` }
+                { name: tour.tourType === 'domestic' ? 'Yurtiçi Turları' : 'Yurtdışı Turları',
+                  href: tour.tourType === 'domestic' ? '/tours/domestic' : '/tours/international' },
+                { name: tour.name, href: `/tours/${tour.slug}` },
               ]}
-              className="text-gray-600"
+              tone="dark"
             />
-          </div>
-          
-          {/* Tur Başlığı */}
-          <div className="text-center mb-8">
-            <Link 
-              href="/tours" 
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Tüm Turlar
-            </Link>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">{tour.name}</h1>
-            <p className="text-lg text-gray-600">
-              {tour.destination}
-              <span className="mx-2">•</span>
-              <span>{tour.duration}</span>
-            </p>
-          </div>
-          
-          {/* Tur Görseli */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
-            <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-              <Image
-                src={tour.image}
-                alt={`${tour.name} - ${tour.destination} - ${tour.duration} - Büyük Aytaç Travel Turu`}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                priority
-                quality={85}
-                loading="eager"
-              />
+            <div className="mt-6 flex flex-wrap gap-2">
+              {days !== null && (
+                <span className="rounded-full bg-sunset-600 px-3 py-1 text-xs font-bold">
+                  {days === 0 ? 'Bugün yola çıkıyor' : `Kalkışa ${days} gün`}
+                </span>
+              )}
+              {!upcoming && tour.startDate && (
+                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
+                  Bu tarih geçti · benzer tarihler için sorun
+                </span>
+              )}
+              {hasDiscount && (
+                <span className="rounded-full bg-rose-500 px-3 py-1 text-xs font-bold">%{tour.discountRate} indirim</span>
+              )}
+              <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium">{stayLabel}</span>
             </div>
+            <h1 className="mt-4 max-w-4xl font-display text-3xl font-bold leading-tight sm:text-5xl">{tour.name}</h1>
+            <p className="mt-3 max-w-3xl text-white/75">{tour.destination}</p>
           </div>
-          
-          {/* Sosyal Medya Paylaşım Butonları - Client Component'e taşınmalı */}
-          <div className="flex justify-end items-center space-x-3 mb-8">
-            <span className="text-gray-600 text-sm">Paylaş:</span>
-            
-            {/* Facebook */}
-            <a 
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800"
-              aria-label="Facebook'ta paylaş"
-            >
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-              </svg>
-            </a>
-            
-            {/* Twitter / X */}
-            <a 
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${tour.name} - ${tour.destination} | Büyük Aytaç Travel`)}&url=${encodeURIComponent(`https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:text-gray-800"
-              aria-label="X'de paylaş"
-            >
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            
-            {/* WhatsApp */}
-            <a 
-              href={`https://wa.me/?text=${encodeURIComponent(`${tour.name} - ${tour.destination} | Büyük Aytaç Travel: https://www.buyukaytactravel.com/tours/${tour.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-500 hover:text-green-700"
-              aria-label="WhatsApp'ta paylaş"
-            >
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-            </a>
-          </div>
+        </section>
 
-          {/* Ana İçerik Alanı */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            {/* Sol Kolon - Tur Detayları */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-                {/* Sekmeler */}
-                <div className="border-b border-gray-200">
-                  <nav className="flex -mb-px">
-                    <a 
-                      href="#description"
-                      className="flex-1 py-4 px-1 text-center border-b-2 border-blue-500 font-medium text-blue-600 text-sm"
-                    >
-                      Tur Hakkında
-                    </a>
-                    <a 
-                      href="#program"
-                      className="flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
-                    >
-                      Program
-                    </a>
-                    <a 
-                      href="#services"
-                      className="flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm"
-                    >
-                      Hizmetler
-                    </a>
-                  </nav>
+        <div className="relative mx-auto -mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+            {/* Sol kolon */}
+            <div className="min-w-0 space-y-6">
+              <div className="overflow-hidden rounded-3xl bg-brand-950 shadow-xl ring-1 ring-black/5">
+                <div className="relative aspect-[4/5] w-full sm:aspect-[16/11]">
+                  <Image src={tour.image} alt="" aria-hidden fill sizes="(max-width: 1024px) 100vw, 60vw" quality={30} className="scale-110 object-cover opacity-50 blur-2xl" />
+                  <Image
+                    src={tour.image}
+                    alt={`${tour.name} - ${tour.destination} - ${tour.duration} - Büyük Aytaç Travel Turu`}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    priority
+                    quality={85}
+                  />
                 </div>
-                
-                {/* Tur Açıklaması */}
-                <div className="p-6" id="description">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında</h2>
-                  <div className="prose max-w-none text-gray-600">
-                    {tour.description.split('\n').map((paragraph, index) => (
-                      <p key={index} className="mb-4">{paragraph}</p>
-                    ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {facts.map((f) => (
+                  <div key={f.label} className="rounded-2xl bg-white p-4 ring-1 ring-slate-200/70">
+                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">{f.label}</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">{f.value}</p>
                   </div>
+                ))}
+              </div>
+
+              <ShareButtons title={tour.name} url={tourUrl} />
+
+              <nav className="no-scrollbar sticky top-20 z-20 -mx-4 flex gap-1 overflow-x-auto bg-sand-50/90 px-4 py-2 backdrop-blur sm:mx-0 sm:rounded-2xl sm:bg-white sm:px-2 sm:ring-1 sm:ring-slate-200/70">
+                {[
+                  ['#description', 'Tur hakkında'],
+                  ['#program', 'Program'],
+                  ['#services', 'Dahil olanlar'],
+                  ['#reviews', 'Yorumlar'],
+                  ['#faq', 'Sorular'],
+                ].map(([href, label]) => (
+                  <a key={href} href={href} className="shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                    {label}
+                  </a>
+                ))}
+              </nav>
+
+              <section id="description" className="scroll-mt-36 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 sm:p-8">
+                <h2 className="font-display text-2xl font-bold text-slate-900">Tur hakkında</h2>
+                <div className="mt-4 space-y-4 leading-relaxed text-slate-700">
+                  {tour.description.split('\n').filter((p) => p.trim()).map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
-                
-                {/* Tur Programı */}
-                <div className="p-6 border-t border-gray-200" id="program">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Programı</h2>
-                  
-                  {tour.program && tour.program.length > 0 ? (
-                    <div className="space-y-6">
-                      {tour.program.map((day, index) => (
-                        <div key={index} className="border-l-4 border-blue-500 pl-4">
-                          <h3 className="text-lg font-bold text-gray-900 mb-1">{day.day}: {day.title}</h3>
-                          <p className="text-gray-600">{day.description}</p>
+              </section>
+
+              <section id="program" className="scroll-mt-36 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 sm:p-8">
+                <h2 className="font-display text-2xl font-bold text-slate-900">Program</h2>
+                {tour.program && tour.program.length > 0 ? (
+                  <ol className="relative mt-6 space-y-8 before:absolute before:bottom-2 before:left-[19px] before:top-2 before:w-0.5 before:bg-brand-100">
+                    {tour.program.map((day, index) => (
+                      <li key={index} className="relative flex gap-5">
+                        <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-600 font-display text-sm font-bold text-white ring-4 ring-white">
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0 pt-1.5">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-sunset-600">{day.day}</p>
+                          <h3 className="mt-1 font-display text-lg font-semibold text-slate-900">{day.title}</h3>
+                          <p className="mt-2 leading-relaxed text-slate-600">{day.description}</p>
                         </div>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="mt-4 text-slate-600">
+                    Bu tur için detaylı program henüz eklenmedi. Bilgi almak için WhatsApp&apos;tan yazabilirsiniz.
+                  </p>
+                )}
+              </section>
+
+              <section id="services" className="scroll-mt-36 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70">
+                  <h2 className="font-display text-lg font-bold text-slate-900">Fiyata dahil</h2>
+                  {tour.includedServices && tour.includedServices.length > 0 ? (
+                    <ul className="mt-4 space-y-3">
+                      {tour.includedServices.map((service, index) => (
+                        <li key={index} className="flex gap-3 text-sm text-slate-700">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">✓</span>
+                          {service}
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   ) : (
-                    <p className="text-gray-600">
-                      Bu tur için detaylı program bilgisi henüz eklenmemiştir. Daha fazla bilgi için lütfen bizimle iletişime geçin.
-                    </p>
+                    <p className="mt-4 text-sm text-slate-500">Henüz listelenmedi.</p>
                   )}
                 </div>
-                
-                {/* Hizmetler */}
-                <div className="p-6 border-t border-gray-200" id="services">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Dahil Olan ve Olmayan Hizmetler</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Dahil Olan Hizmetler */}
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
-                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Tur Ücretine Dahil Olanlar
-                      </h3>
-                      
-                      {tour.includedServices && tour.includedServices.length > 0 ? (
-                        <ul className="space-y-2">
-                          {tour.includedServices.map((service, index) => (
-                            <li key={index} className="flex items-start">
-                              <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                              </svg>
-                              <span className="text-gray-600">{service}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-gray-600">Dahil olan hizmetler henüz listelenmemiştir.</p>
-                      )}
-                    </div>
-                    
-                    {/* Dahil Olmayan Hizmetler */}
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
-                        <svg className="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                        Tur Ücretine Dahil Olmayanlar
-                      </h3>
-                      
-                      {tour.excludedServices && tour.excludedServices.length > 0 ? (
-                        <ul className="space-y-2">
-                          {tour.excludedServices.map((service, index) => (
-                            <li key={index} className="flex items-start">
-                              <svg className="w-5 h-5 text-red-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                              </svg>
-                              <span className="text-gray-600">{service}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-gray-600">Dahil olmayan hizmetler henüz listelenmemiştir.</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Sağ Kolon - Fiyat ve İletişim */}
-            <div className="lg:col-span-1">
-              {/* Fiyat Bilgisi */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Fiyat Bilgisi</h2>
-                  
-                  <div className="mb-4">
-                    <p className="text-4xl font-bold text-blue-600 mb-1">
-                      {tour.discountRate ? (
-                        <>
-                          <span className="line-through text-gray-400 text-2xl mr-2">
-                            {tour.price.toLocaleString()} TL
-                          </span>
-                          {Math.round(tour.price * (1 - tour.discountRate / 100)).toLocaleString()} TL
-                        </>
-                      ) : (
-                        `${tour.price.toLocaleString()} TL`
-                      )}
-                    </p>
-                    <p className="text-sm text-gray-500">kişi başı</p>
-                  </div>
-                  
-                  {/* Fiyat hesaplayıcı - Client Component */}
-                  <PriceCalculator tour={tour} />
-                  
-                  <div className="mt-6">
-                    <h3 className="font-medium text-gray-900 mb-2">Tur Bilgileri</h3>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-center">
-                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        <span className="text-gray-600">
-                          Süre: {tour.duration}
-                        </span>
-                      </li>
-                      <li className="flex items-center">
-                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <span className="text-gray-600">
-                          Gidilecek Yer: {tour.destination}
-                        </span>
-                      </li>
-                      {tour.startDate && (
-                        <li className="flex items-center">
-                          <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                          </svg>
-                          <span className="text-gray-600">
-                            Başlangıç: {new Date(tour.startDate).toLocaleDateString('tr-TR')}
-                          </span>
+                <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70">
+                  <h2 className="font-display text-lg font-bold text-slate-900">Fiyata dahil değil</h2>
+                  {tour.excludedServices && tour.excludedServices.length > 0 ? (
+                    <ul className="mt-4 space-y-3">
+                      {tour.excludedServices.map((service, index) => (
+                        <li key={index} className="flex gap-3 text-sm text-slate-700">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-100 text-xs font-bold text-rose-600">–</span>
+                          {service}
                         </li>
-                      )}
-                      {tour.endDate && (
-                        <li className="flex items-center">
-                          <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                          </svg>
-                          <span className="text-gray-600">
-                            Bitiş: {new Date(tour.endDate).toLocaleDateString('tr-TR')}
-                          </span>
-                        </li>
-                      )}
-                      <li className="flex items-center">
-                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        <span className="text-gray-600">
-                          Tur Tipi: {tour.tourType === 'domestic' ? 'Yurtiçi' : 'Yurtdışı'}
-                        </span>
-                      </li>
-                      <li className="flex items-center">
-                        <svg className="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
-                        <span className="text-gray-600">
-                          Konaklama: {tour.accommodationType === 'with_accommodation' ? 'Konaklamalı' : 'Günübirlik'}
-                        </span>
-                      </li>
+                      ))}
                     </ul>
-                  </div>
+                  ) : (
+                    <p className="mt-4 text-sm text-slate-500">Henüz listelenmedi.</p>
+                  )}
                 </div>
-              </div>
-              
-              {/* İletişim Formu */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Tur Hakkında Bilgi Alın</h2>
-                  
-                  <div className="flex items-center gap-2">
-                    <div className="min-w-0 flex-1">
-                      <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
-                    </div>
-                    <FavoriteButton tourId={String(tour._id)} tourSlug={tour.slug} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <TourReviews tourId={String(tour._id)} tourSlug={tour.slug} />
+              </section>
 
-          {/* Sık Sorulan Sorular - SEO için önemli */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden mb-12">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sık Sorulan Sorular</h2>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Bu tura nasıl kayıt olabilirim?</h3>
-                  <p className="text-gray-600">
-                    Tura kayıt olmak için web sitemizdeki rezervasyon formunu doldurabilir, 0530 060 95 59 veya 0539 345 95 59 numaralı telefondan bize ulaşabilir ya da Çerkezköy ofisimizi ziyaret edebilirsiniz. Ödeme işlemini tamamladıktan sonra rezervasyonunuz onaylanmış olacaktır.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Tur iptal edilirse ücret iadesi yapılıyor mu?</h3>
-                  <p className="text-gray-600">
-                    İptal ve iade koşulları tura ve rezervasyon tarihine göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Bu tur için yanımıza neler almalıyız?</h3>
-                  <p className="text-gray-600">
-                    Rahat yürüyüş ayakkabıları, mevsime uygun kıyafetler, şapka, güneş gözlüğü, güneş kremi, fotoğraf makinesi, şarj aletleri ve kişisel ilaçlarınızı yanınıza almanızı öneririz. Otel konaklamalı turlarda yeterli miktarda kıyafet ve kişisel bakım ürünlerinizi getirmeyi unutmayınız.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{tour.destination} için en uygun seyahat zamanı ne zamandır?</h3>
-                  <p className="text-gray-600">
-                    {tour.destination} için genellikle ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) ayları idealdir. Bu dönemlerde hava sıcaklığı gezmeye elverişlidir ve turist yoğunluğu yaz aylarına göre daha azdır.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Çocuklar için indirim var mı?</h3>
-                  <p className="text-gray-600">
-                    Çocuk indirimleri tura ve yaşa göre değişiklik gösterebilir. Güncel bilgi için ofisimizle iletişime geçiniz.
-                  </p>
-                </div>
+              <div id="reviews" className="scroll-mt-36">
+                <TourReviews tourId={String(tour._id)} tourSlug={tour.slug} />
               </div>
+
+              <section id="faq" className="scroll-mt-36 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 sm:p-8">
+                <h2 className="font-display text-2xl font-bold text-slate-900">Sık sorulan sorular</h2>
+                <div className="mt-4 divide-y divide-slate-100">
+                  {faqs.map((f) => (
+                    <details key={f.q} className="group py-4">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900">
+                        {f.q}
+                        <span className="text-xl text-slate-400 transition group-open:rotate-45" aria-hidden>+</span>
+                      </summary>
+                      <p className="mt-3 text-slate-600">{f.a}</p>
+                    </details>
+                  ))}
+                </div>
+              </section>
             </div>
+
+            {/* Sağ kolon — rezervasyon kartı (masaüstünde sabit) */}
+            <aside className="max-lg:hidden">
+              <div className="sticky top-24 space-y-4">
+                <div className="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200/70">
+                  <div className="p-6">
+                    <p className="text-sm text-slate-500">Kişi başı</p>
+                    <p className="mt-1 flex items-baseline gap-2">
+                      <span className="font-display text-4xl font-bold text-slate-900">{formatTL(price)}</span>
+                      {hasDiscount && <span className="text-lg text-slate-400 line-through">{formatTL(tour.price)}</span>}
+                    </p>
+                    {dateLabel && (
+                      <div className="mt-4 flex items-center justify-between rounded-2xl bg-sand-50 px-4 py-3 text-sm">
+                        <span className="text-slate-500">Tarih</span>
+                        <span className="font-semibold text-slate-900">{dateLabel}</span>
+                      </div>
+                    )}
+                    <div className="mt-4">
+                      <PriceCalculator tour={tour} />
+                    </div>
+                    <div className="mt-5 flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
+                      </div>
+                      <FavoriteButton tourId={String(tour._id)} tourSlug={tour.slug} />
+                    </div>
+                    <a
+                      href={tourWhatsappLink(tour)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-50 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100"
+                    >
+                      <WhatsAppIcon className="h-5 w-5" /> WhatsApp&apos;tan sor
+                    </a>
+                  </div>
+                  <div className="border-t border-slate-100 bg-slate-50 px-6 py-4 text-xs text-slate-500">
+                    TÜRSAB 17674 belgeli acente · Rezervasyon talebiniz ücretsizdir, ekibimiz sizi arar.
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
-          
-          {/* Benzer Turlar - SEO için internal linking */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Benzer Turlar</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* İlgili turlar için server component yapılacak */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
-                <Link href="/tours/kapadokya-turu">
-                  <div className="relative h-48 w-full">
-                    <div className="absolute inset-0 bg-blue-900 opacity-20 z-10"></div>
-                    <Image 
-                      src={tour.image} 
-                      alt="Kapadokya Turu - Büyük Aytaç Travel" 
-                      className="object-cover"
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent z-20">
-                      <h3 className="text-white font-bold">Kapadokya Turu</h3>
-                      <p className="text-white text-sm">3 Gün 2 Gece</p>
-                    </div>
-                  </div>
-                </Link>
+
+          {related.length > 0 && (
+            <section className="mt-16">
+              <div className="mb-6 flex items-end justify-between">
+                <h2 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Bunlar da ilgini çekebilir</h2>
+                <Link href="/tours" className="text-sm font-semibold text-brand-700">Tüm turlar →</Link>
               </div>
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
-                <Link href="/tours/istanbul-sehir-turu">
-                  <div className="relative h-48 w-full">
-                    <div className="absolute inset-0 bg-blue-900 opacity-20 z-10"></div>
-                    <Image 
-                      src={tour.image} 
-                      alt="İstanbul Şehir Turu - Büyük Aytaç Travel" 
-                      className="object-cover"
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent z-20">
-                      <h3 className="text-white font-bold">İstanbul Şehir Turu</h3>
-                      <p className="text-white text-sm">Günübirlik</p>
-                    </div>
-                  </div>
-                </Link>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {related.map((t) => (
+                  <TourCard key={t.slug} tour={t} />
+                ))}
               </div>
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
-                <Link href="/tours/pamukkale-turu">
-                  <div className="relative h-48 w-full">
-                    <div className="absolute inset-0 bg-blue-900 opacity-20 z-10"></div>
-                    <Image 
-                      src={tour.image} 
-                      alt="Pamukkale Turu - Büyük Aytaç Travel" 
-                      className="object-cover"
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent z-20">
-                      <h3 className="text-white font-bold">Pamukkale Turu</h3>
-                      <p className="text-white text-sm">2 Gün 1 Gece</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
+            </section>
+          )}
         </div>
+
+        <RecentlyViewed excludeSlug={tour.slug} />
       </main>
+
+      <MobileBookingBar
+        name={tour.name}
+        slug={tour.slug}
+        price={price}
+        oldPrice={hasDiscount ? tour.price : undefined}
+        dateLabel={dateLabel}
+      />
     </>
   );
 }
