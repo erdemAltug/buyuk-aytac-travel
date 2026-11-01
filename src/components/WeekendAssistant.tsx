@@ -17,6 +17,8 @@ import type {
   WeekendPreferences,
 } from '@/lib/tourMatcher';
 import ReservationModal from './ReservationModal';
+import { track } from '@/lib/analytics';
+import { finalPrice } from '@/lib/tourUi';
 
 type Step = 'companion' | 'concept' | 'stay' | 'loading' | 'results';
 
@@ -49,7 +51,8 @@ function formatPrice(price: number, discountRate?: number) {
 const OPEN_EVENT = 'bat:open-weekend-assistant';
 
 /** Sayfanın herhangi bir yerinden asistanı açmak için (ör. hero'daki "Hafta sonu ne yapsam?" butonu) */
-export function openWeekendAssistant() {
+export function openWeekendAssistant(source: string = 'other') {
+  track('assistant_open', { source });
   if (typeof window !== 'undefined') window.dispatchEvent(new Event(OPEN_EVENT));
 }
 
@@ -76,6 +79,7 @@ export default function WeekendAssistant({ hideTrigger = false }: { hideTrigger?
   };
 
   const openAssistant = () => {
+    track('assistant_open', { source: 'trigger' });
     scrollYRef.current = window.scrollY;
     setOpen(true);
   };
@@ -388,6 +392,8 @@ export default function WeekendAssistant({ hideTrigger = false }: { hideTrigger?
           onClose={() => setReservationTour(null)}
           tourName={reservationTour.name}
           tourSlug={reservationTour.slug}
+          tourPrice={finalPrice(reservationTour)}
+          source="assistant"
         />
       )}
     </>

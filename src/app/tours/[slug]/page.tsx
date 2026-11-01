@@ -11,6 +11,7 @@ import TourCard, { WhatsAppIcon } from '@/components/tours/TourCard';
 import MobileBookingBar from '@/components/tours/MobileBookingBar';
 import ShareButtons from '@/components/tours/ShareButtons';
 import RecentlyViewed, { TrackTourView } from '@/components/RecentlyViewed';
+import TrackEvent from '@/components/TrackEvent';
 import { getRelatedTours } from '@/lib/homeData';
 import { daysUntil, finalPrice, formatDateRange, formatTL, isUpcoming, tourWhatsappLink } from '@/lib/tourUi';
 
@@ -181,6 +182,17 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <TrackEvent
+        event="tour_view"
+        props={{
+          tour_slug: tour.slug,
+          price,
+          tour_type: tour.tourType,
+          accommodation: tour.accommodationType,
+          discounted: Boolean(hasDiscount),
+          days_until: daysUntil(tour.startDate),
+        }}
+      />
       <TrackTourView
         tour={{
           slug: tour.slug,
@@ -382,11 +394,13 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
                     </div>
                     <div className="mt-5 flex items-center gap-2">
                       <div className="min-w-0 flex-1">
-                        <ReservationButton tourName={tour.name} tourSlug={tour.slug} />
+                        <ReservationButton tourName={tour.name} tourSlug={tour.slug} tourPrice={price} source="detail" />
                       </div>
                       <FavoriteButton tourId={String(tour._id)} tourSlug={tour.slug} />
                     </div>
                     <a
+                      data-track-source="detail"
+                      data-tour-slug={tour.slug}
                       href={tourWhatsappLink(tour)}
                       target="_blank"
                       rel="noopener noreferrer"

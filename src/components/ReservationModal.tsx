@@ -1,19 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 
 interface ReservationModalProps {
   isOpen: boolean;
   onClose: () => void;
   tourName: string;
   tourSlug?: string;
+  /** Analitik: butonun yeri (card / detail / mobile_bar / assistant) */
+  source?: string;
+  tourPrice?: number;
 }
 
 export default function ReservationModal({
   isOpen,
   onClose,
   tourName,
-  tourSlug
+  tourSlug,
+  source = "unknown",
+  tourPrice,
 }: ReservationModalProps) {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -23,6 +29,10 @@ export default function ReservationModal({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isOpen) track("reservation_open", { source, tour_slug: tourSlug, price: tourPrice });
+  }, [isOpen, source, tourSlug, tourPrice]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,9 +60,12 @@ export default function ReservationModal({
       const data = await response.json();
 
       if (!data.success) {
+        track("reservation_error", { source, tour_slug: tourSlug });
         throw new Error(data.error?.message || "Bir hata oluştu");
       }
 
+      // Gizlilik: ad/telefon gönderilmez
+      track("reservation_submit", { source, tour_slug: tourSlug, price: tourPrice });
       setSuccess(true);
       setFormData({ firstName: "", lastName: "", phone: "" });
     } catch (err) {

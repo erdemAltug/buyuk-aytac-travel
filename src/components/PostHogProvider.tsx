@@ -4,6 +4,7 @@ import { Suspense, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import posthog from 'posthog-js';
 import { PostHogProvider as PHProvider } from 'posthog-js/react';
+import { flushPending, installLinkTracking } from '@/lib/analytics';
 
 function PostHogPageView() {
   const pathname = usePathname();
@@ -24,6 +25,8 @@ function PostHogPageView() {
 }
 
 export default function PostHogProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => installLinkTracking(), []);
+
   useEffect(() => {
     const token = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN;
     const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
@@ -40,7 +43,10 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         capture_pageview: false,
         capture_pageleave: true,
         persistence: 'localStorage+cookie',
-        loaded: () => posthog.capture('$pageview', { $current_url: window.location.href }),
+        loaded: () => {
+          posthog.capture('$pageview', { $current_url: window.location.href });
+          flushPending();
+        },
       });
     const idle = () =>
       typeof window.requestIdleCallback === 'function'

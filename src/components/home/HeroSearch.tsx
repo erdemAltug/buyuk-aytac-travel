@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { openWeekendAssistant } from '@/components/WeekendAssistant';
+import { track } from '@/lib/analytics';
 
 const QUICK = [
   { label: 'Günübirlik', href: '/tours/daily' },
@@ -19,6 +20,7 @@ export default function HeroSearch() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const term = q.trim();
+    track('hero_search', { term: term.toLocaleLowerCase('tr-TR').slice(0, 60), empty: !term });
     router.push(term ? `/tours?search=${encodeURIComponent(term)}` : '/tours');
   };
 
@@ -55,7 +57,7 @@ export default function HeroSearch() {
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={openWeekendAssistant}
+          onClick={() => openWeekendAssistant('hero')}
           className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-900/30 transition hover:brightness-110"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -67,6 +69,7 @@ export default function HeroSearch() {
           <a
             key={item.href}
             href={item.href}
+            onClick={() => track('hero_quick_link', { label: item.label, href: item.href })}
             className="inline-flex h-10 items-center rounded-full bg-white/10 px-4 text-sm font-medium text-white ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20"
           >
             {item.label}
