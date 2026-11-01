@@ -111,7 +111,7 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true, 
               )}
               {hasDiscount && (
                 <span className="rounded-full bg-rose-500 px-2.5 py-1 text-[11px] font-bold text-white shadow">
-                  %{tour.discountRate} indirim
+                  %{Math.round(tour.discountRate ?? 0)} indirim
                 </span>
               )}
               <span className="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">
