@@ -27,7 +27,19 @@ Kod: `src/lib/analytics.ts` (`track()`, WhatsApp/telefon linklerini tek yerden y
 `src/components/TrackEvent.tsx` (sunucu sayfalarından olay). Yeni bir WhatsApp linkine kaynak vermek için
 linkin kendisine ya da bir üst öğesine `data-track-source="..."` (ve gerekiyorsa `data-tour-slug`) ekleyin.
 
-## 2. Dashboard oluşturma (genel)
+## 2. Otomatik kurulum (script)
+
+Dashboard'lar `scripts/posthog-dashboards.mjs` ile API'den oluşturuldu (1 Kasım 2026):
+Genel Bakış, Satış Hunisi, Ana Sayfa Etkileşimi, Sadakat. Tekrar kurmak için:
+
+```bash
+node --env-file=.env.local scripts/posthog-dashboards.mjs
+```
+
+`.env.local` içinde `POSTHOG_PERSONAL_API_KEY` (insight + dashboard yazma yetkili) ve `POSTHOG_PROJECT_ID` olmalı.
+Aynı adlı dashboard varsa atlanır. "Kullanıcı yolları" (User Paths) grafiği script'te yok, elle eklenebilir.
+
+## 2b. Elle oluşturma (genel)
 
 1. PostHog → sol menü **Dashboards** → **New dashboard** → **Blank dashboard**.
 2. Ad: aşağıdaki başlık. Kaydet.
