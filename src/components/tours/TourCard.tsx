@@ -143,7 +143,7 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true, 
           </div>
         </Link>
 
-        <div className="flex gap-2 px-4 pb-4">
+        <div className="flex gap-2 px-4 pb-4" data-track-source="card" data-tour-slug={tour.slug}>
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
@@ -170,6 +170,8 @@ export default function TourCard({ tour, priority = false, showWhatsApp = true, 
         onClose={() => setIsModalOpen(false)}
         tourName={tour.name}
         tourSlug={tour.slug}
+        tourPrice={finalPrice(tour)}
+        source="card"
       />
     </>
   );

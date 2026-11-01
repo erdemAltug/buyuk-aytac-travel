@@ -6,12 +6,16 @@ import ReservationModal from "./ReservationModal";
 interface ReservationButtonProps {
   tourName: string;
   tourSlug?: string;
+  tourPrice?: number;
+  source?: string;
   variant?: "full" | "compact";
 }
 
 export default function ReservationButton({
   tourName,
   tourSlug,
+  tourPrice,
+  source = "detail",
   variant = "full"
 }: ReservationButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +34,8 @@ export default function ReservationButton({
           onClose={() => setIsModalOpen(false)}
           tourName={tourName}
           tourSlug={tourSlug}
+          tourPrice={tourPrice}
+          source={source}
         />
       </>
     );
@@ -48,6 +54,8 @@ export default function ReservationButton({
         onClose={() => setIsModalOpen(false)}
         tourName={tourName}
         tourSlug={tourSlug}
+        tourPrice={tourPrice}
+        source={source}
       />
     </>
   );

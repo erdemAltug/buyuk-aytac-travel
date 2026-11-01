@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import { finalPrice, formatDateRange, formatTL, shortTourName, toDate } from '@/lib/tourUi';
+import { track } from '@/lib/analytics';
 
 function diffParts(target: Date, now: number) {
   const ms = Math.max(0, target.getTime() - now);
@@ -52,6 +53,7 @@ export default function NextDepartureCard({
   return (
     <Link
       href={`/tours/${tour.slug}`}
+      onClick={() => track('next_departure_click', { tour_slug: tour.slug, price: finalPrice(tour) })}
       className="group block overflow-hidden rounded-3xl bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-xl transition hover:bg-white/15"
     >
       <div className="flex items-center justify-between px-5 pt-5">

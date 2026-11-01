@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { ITour } from '@/types/tour';
 import TourCard from '@/components/tours/TourCard';
 import { groupDepartures, isUpcoming, monthKey, monthLabel, sortForDisplay } from '@/lib/tourUi';
+import { track } from '@/lib/analytics';
 
 type TabKey = 'all' | 'daily' | 'overnight' | 'domestic' | 'international';
 
@@ -55,6 +56,7 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
 
   const pick = (key: TabKey) => {
     setTab(key);
+    track('explorer_tab', { tab: key });
     railRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
   };
 
@@ -128,7 +130,10 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
             <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0">
               <button
                 type="button"
-                onClick={() => setMonth(null)}
+                onClick={() => {
+                  setMonth(null);
+                  track('explorer_month', { month: 'all' });
+                }}
                 className={`h-16 w-20 shrink-0 rounded-2xl text-sm font-semibold transition ${
                   month === null ? 'bg-sunset-600 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200'
                 }`}
@@ -142,7 +147,10 @@ export default function TourExplorer({ tours }: { tours: ITour[] }) {
                   <button
                     key={key}
                     type="button"
-                    onClick={() => setMonth(active ? null : key)}
+                    onClick={() => {
+                      setMonth(active ? null : key);
+                      if (!active) track('explorer_month', { month: key });
+                    }}
                     aria-pressed={active}
                     className={`h-16 w-24 shrink-0 rounded-2xl text-sm font-semibold capitalize transition ${
                       active ? 'bg-sunset-600 text-white' : 'bg-white text-slate-800 ring-1 ring-slate-200 hover:ring-slate-300'

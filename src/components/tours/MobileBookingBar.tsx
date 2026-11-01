@@ -26,7 +26,7 @@ export default function MobileBookingBar({
 
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_24px_-12px_rgba(15,31,77,0.25)] backdrop-blur lg:hidden">
+      <div data-track-source="mobile_bar" data-tour-slug={slug} className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_24px_-12px_rgba(15,31,77,0.25)] backdrop-blur lg:hidden">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="leading-tight">
@@ -55,7 +55,7 @@ export default function MobileBookingBar({
       </div>
       {/* Çubuk içeriğin son satırını örtmesin */}
       <div className="h-24 lg:hidden" aria-hidden />
-      <ReservationModal isOpen={open} onClose={() => setOpen(false)} tourName={name} tourSlug={slug} />
+      <ReservationModal isOpen={open} onClose={() => setOpen(false)} tourName={name} tourSlug={slug} tourPrice={price} source="mobile_bar" />
     </>
   );
 }

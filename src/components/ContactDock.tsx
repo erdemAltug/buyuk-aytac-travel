@@ -74,7 +74,7 @@ export default function ContactDock() {
                 type="button"
                 onClick={() => {
                   setOpen(false);
-                  openWeekendAssistant();
+                  openWeekendAssistant('dock');
                 }}
                 className="flex w-full items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-violet-50"
               >
