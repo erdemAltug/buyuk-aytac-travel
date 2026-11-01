@@ -28,7 +28,7 @@ Günün ikinci yarısını Seferihisar Mandalina Festivali'ne ayırıyoruz. Rehb
 Otelde kahvaltının ardından odalarımızı boşaltarak İzmir gezimize başlıyoruz. Dario Moreno Sokağı'ndaki kısa yürüyüşün ardından Tarihi Asansör'e geçiyor, yoğunluk ve işletme koşulları elverirse üst terastan İzmir Körfezi manzarasını izliyoruz. Ardından Konak Meydanı ve Saat Kulesi çevresini geziyoruz.
 
 Günün devamında Ege'nin keyifli sahil kasabalarından Eski Foça'yı keşfediyoruz. Limandaki tekneler, taş evler ve denize açılan sokaklar eşliğinde yürüyüşün ardından öğle yemeği, alışveriş ve dinlenme için serbest zaman veriyoruz (öğle yemeği ve kişisel harcamalar ekstradır). Belirlenen saatte dönüş yolculuğumuza başlıyor, misafirlerimizi aldığımız noktalara bırakarak bir sonraki BÜYÜK AYTAÇ TRAVEL gezisinde buluşmak üzere vedalaşıyoruz.`,
-  image: '/images/seferihisar-mandalina-28-29-kasim.jpeg',
+  image: 'https://pub-dc66847235b3473b9931fb4d978b5bfe.r2.dev/tours/seferihisar-mandalina-28-29-kasim.jpeg',
   slug: 'seferihisar-mandalina-festivali-izmir-turu-28-29-kasim-2026',
   duration: '2 Gün 1 Gece',
   price: LIST_PRICE,

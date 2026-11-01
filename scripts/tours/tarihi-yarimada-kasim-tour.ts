@@ -20,7 +20,7 @@ Gezimizin devamında İstanbul'un yer altındaki gizemli dünyasına inerek Yere
 Programımızın sonunda tarihe tanıklık etmiş yapıların arasından yürüyerek Eminönü Meydanı ve Mısır Çarşısı girişine ulaşıyoruz. Serbest zamanın ardından toplanma noktasında buluşarak dönüş yolculuğumuza başlıyor, bir başka BÜYÜK AYTAÇ TRAVEL organizasyonunda buluşmak üzere vedalaşıyoruz.
 
 Tur programında bölge yoğunluğu, trafik ve hava koşulları sebebiyle sıralama değişikliği olabilir.`,
-  image: '/images/tarihi-yarimada-14-kasim.jpeg',
+  image: 'https://pub-dc66847235b3473b9931fb4d978b5bfe.r2.dev/tours/tarihi-yarimada-14-kasim.jpeg',
   slug: 'tarihi-yarimada-turu-14-kasim-2026',
   duration: '1 Gün (Günübirlik)',
   price: 1300,

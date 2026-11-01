@@ -26,7 +26,7 @@ Uçhisar Kalesi manzarası ve eski Kapadokya evleri eşliğinde kahve molası ve
 Ören yerleri girişi için Müzekart gerekmektedir. Play Store veya App Store üzerinden Müzekart uygulamasını indirerek satın alım yapabilir, girişlerde kullanabilirsiniz.
 
 Tur programında bölge yoğunluğu, trafik ve hava koşulları sebebiyle sıralama değişikliği olabilir.`,
-  image: '/images/kapadokya-14-15-kasim.jpeg',
+  image: 'https://pub-dc66847235b3473b9931fb4d978b5bfe.r2.dev/tours/kapadokya-14-15-kasim.jpeg',
   slug: 'kapadokya-turu-14-15-kasim-2026',
   duration: '2 Gün 1 Gece',
   price: 6000,
