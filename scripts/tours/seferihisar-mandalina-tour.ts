@@ -5,6 +5,7 @@
 
 import { TourType, AccommodationType } from '../../src/models/Tour';
 
+// Slug, Tour modelindeki kayıt kancası tarafından addan üretiliyor; buradaki değer onunla aynı olmalı.
 // Afişte "6.000 TL yerine 5.750 TL": liste fiyatı + indirim oranı olarak tutuluyor (6000 × 0,9583 ≈ 5.750)
 const LIST_PRICE = 6000;
 const SALE_PRICE = 5750;
@@ -29,7 +30,7 @@ Otelde kahvaltının ardından odalarımızı boşaltarak İzmir gezimize başl�
 
 Günün devamında Ege'nin keyifli sahil kasabalarından Eski Foça'yı keşfediyoruz. Limandaki tekneler, taş evler ve denize açılan sokaklar eşliğinde yürüyüşün ardından öğle yemeği, alışveriş ve dinlenme için serbest zaman veriyoruz (öğle yemeği ve kişisel harcamalar ekstradır). Belirlenen saatte dönüş yolculuğumuza başlıyor, misafirlerimizi aldığımız noktalara bırakarak bir sonraki BÜYÜK AYTAÇ TRAVEL gezisinde buluşmak üzere vedalaşıyoruz.`,
   image: 'https://pub-dc66847235b3473b9931fb4d978b5bfe.r2.dev/tours/seferihisar-mandalina-28-29-kasim.jpeg',
-  slug: 'seferihisar-mandalina-festivali-izmir-turu-28-29-kasim-2026',
+  slug: 'seferihisar-mandalina-festivali-ve-izmir-turu-28-29-kasim-2026',
   duration: '2 Gün 1 Gece',
   price: LIST_PRICE,
   discountRate: Number((((LIST_PRICE - SALE_PRICE) / LIST_PRICE) * 100).toFixed(2)),
