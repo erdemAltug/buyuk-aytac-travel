@@ -1,5 +1,8 @@
 'use client';
 
+// Yalnızca fiyat hesaplar. Rezervasyon, sayfadaki ReservationButton (/api/reservation) ile yapılır;
+// buradaki eski "Rezervasyon Yap" formu talebi hiçbir yere göndermiyordu, kaldırıldı.
+
 import { useState, useEffect } from 'react';
 import { ITour } from '@/models/Tour';
 
@@ -14,14 +17,6 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
   const [childCount, setChildCount] = useState<number>(0);
   const [selectedAdditionalServices] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [reservationForm, setReservationForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    notes: ''
-  });
 
   // Fiyat hesaplama fonksiyonu
   useEffect(() => {
@@ -65,42 +60,6 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
   // Çocuk sayısı değişikliği
   const handleChildCountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setChildCount(parseInt(e.target.value));
-  };
-
-  // Modal açma/kapama
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  // Rezervasyon formu değişikliği
-  const handleReservationFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setReservationForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Rezervasyon gönderimi
-  const handleReservationSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Burada rezervasyon verisini API'ye gönderecek kodu ekleyebilirsiniz
-    const reservationData = {
-      tourId: tour._id,
-      tourName: tour.name,
-      adults: adultCount,
-      children: childCount,
-      additionalServices: selectedAdditionalServices,
-      totalPrice: totalPrice,
-      ...reservationForm
-    };
-    
-    console.log('Rezervasyon verileri:', reservationData);
-    
-    // Form gönderildikten sonra modalı kapat
-    alert('Rezervasyon talebiniz alınmıştır. En kısa sürede sizinle iletişime geçeceğiz.');
-    setIsModalOpen(false);
   };
 
   return (
@@ -186,133 +145,8 @@ export default function PriceCalculator({ tour }: PriceCalculatorProps) {
           </p>
         </div>
         
-        {/* Rezervasyon Yap Butonu */}
-        <button
-          onClick={toggleModal}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-4 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02]"
-        >
-          Rezervasyon Yap
-        </button>
       </div>
       
-      {/* Rezervasyon Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-white/10 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-screen overflow-y-auto border border-gray-200">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
-                <h3 className="text-xl font-bold text-gray-900">Rezervasyon Formu</h3>
-                <button 
-                  onClick={toggleModal}
-                  className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 hover:scale-105"
-                >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="mb-4">
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">{tour.name}</span> turuna {adultCount} yetişkin
-                  {childCount > 0 ? ` ve ${childCount} çocuk ` : ' '}
-                  için rezervasyon yapıyorsunuz.
-                </p>
-                <p className="text-sm font-semibold text-blue-600">
-                  Toplam Tutar: ₺{Math.round(totalPrice).toLocaleString('tr-TR')}
-                </p>
-              </div>
-              
-              <form onSubmit={handleReservationSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Ad Soyad *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={reservationForm.name}
-                    onChange={handleReservationFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={reservationForm.email}
-                    onChange={handleReservationFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Telefon *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={reservationForm.phone}
-                    onChange={handleReservationFormChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                    Tercih Ettiğiniz Tarih
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={reservationForm.date}
-                    onChange={handleReservationFormChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
-                    Ekstra Notlar
-                  </label>
-                  <textarea
-                    id="notes"
-                    name="notes"
-                    rows={3}
-                    value={reservationForm.notes}
-                    onChange={handleReservationFormChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  ></textarea>
-                </div>
-                
-                <div className="pt-4 border-t border-gray-100">
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02]"
-                  >
-                    Rezervasyon Talebini Gönder
-                  </button>
-                  <p className="text-xs text-gray-500 mt-3 text-center">
-                    * Rezervasyon talebiniz alındıktan sonra, onay için sizinle iletişime geçeceğiz.
-                  </p>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 } 
