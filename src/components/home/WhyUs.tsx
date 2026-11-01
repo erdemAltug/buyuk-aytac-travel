@@ -11,10 +11,11 @@ const STOPS = [
   { name: 'Çerkezköy', time: 'Ana kalkış' },
   { name: 'Çorlu', time: 'Tura göre' },
   { name: 'Saray', time: 'Tura göre' },
+  { name: 'Silivri', time: 'Tura göre' },
 ];
 
 const POINTS = [
-  { title: 'Kapınıza yakın kalkış', text: 'Çerkezköy, Çorlu ve Saray’dan alıyoruz. İstanbul otogarına gitmeye gerek yok.' },
+  { title: 'Kapınıza yakın kalkış', text: 'Çerkezköy, Çorlu, Saray ve Silivri’den alıyoruz. İstanbul otogarına gitmeye gerek yok.' },
   { title: 'Kokartlı rehber', text: 'Her turda profesyonel, kokartlı rehber. Siz sadece manzaranın tadını çıkarın.' },
   { title: 'TÜRSAB güvencesi', text: 'TÜRSAB 17674 belgeli acente. Ödemeniz ve seyahatiniz yasal güvence altında.' },
   { title: 'WhatsApp’tan anında destek', text: 'Tur öncesi ve tur boyunca tek mesajla ulaşabileceğiniz bir ekip.' },

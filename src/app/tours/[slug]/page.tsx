@@ -222,7 +222,7 @@ export default async function TourDetail({ params }: { params: Promise<{ slug: s
                 </span>
               )}
               {hasDiscount && (
-                <span className="rounded-full bg-rose-500 px-3 py-1 text-xs font-bold">%{tour.discountRate} indirim</span>
+                <span className="rounded-full bg-rose-500 px-3 py-1 text-xs font-bold">%{Math.round(tour.discountRate ?? 0)} indirim</span>
               )}
               <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium">{stayLabel}</span>
             </div>
