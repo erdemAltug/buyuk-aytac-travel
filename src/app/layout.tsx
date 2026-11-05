@@ -209,6 +209,8 @@ export default function RootLayout({
               __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
+                var c = null; try { c = localStorage.getItem('bat-cookie-consent'); } catch (e) {}
+                gtag('consent', 'default', { analytics_storage: c === 'granted' ? 'granted' : 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
                 gtag('js', new Date());
                 gtag('config', '${GA_ID}');
               `
