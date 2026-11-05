@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { openConsentBanner } from '@/lib/consent';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import type { ITour } from '@/types/tour';
 import { getCurrentYear } from '@/lib/formatDate';
@@ -392,6 +393,9 @@ export default function Footer() {
             <ul className="flex flex-wrap justify-center gap-4 text-sm">
               <li className="mb-2 mx-1">
                 <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Gizlilik Politikası</Link>
+              </li>
+              <li className="mb-2 mx-1">
+                <button type="button" onClick={openConsentBanner} className="text-gray-400 hover:text-white transition-colors duration-300 px-2 py-1">Çerez Tercihleri</button>
               </li>
               <li className="mb-2 mx-1">
                 <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-300 font-bold border-b-2 border-blue-400 pb-1 px-2 py-1">Kullanım Şartları</Link>
